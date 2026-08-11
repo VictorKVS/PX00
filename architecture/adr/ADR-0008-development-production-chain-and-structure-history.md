@@ -18,6 +18,12 @@ PX00 establishes two linked evidence layers:
 
 Every material structural change SHALL receive a `TF-xxxx` record linked from the development journal.
 
+Accepted `TF-xxxx` records form an append-only development corpus. During normal engineering evolution they SHALL NOT be deleted, overwritten, renamed for convenience, or reused. New material states receive new monotonically increasing identifiers. A successor may supersede a prior decision but SHALL reference rather than erase the prior record.
+
+The accumulated corpus is an intentional engineering dataset for architecture comparison, production-chain analysis, regression design, A/B and alternative evaluation, security/DevOps retrospectives, lessons learned and rollback.
+
+The only destructive exception is an authorized security/legal sanitation event where retaining content would itself be unsafe or unlawful. Such action SHALL preserve a non-sensitive tombstone/incident reference and SHALL NOT reproduce the removed secret or protected data.
+
 Each `TF-xxxx` record SHALL state, as applicable:
 
 - trigger and decision basis;
@@ -65,10 +71,12 @@ Positive:
 - structural drift is visible;
 - decisions can be compared and reversed;
 - tests and future role evaluations can use historical baselines;
-- knowledge about why a file exists is not lost.
+- knowledge about why a file exists is not lost;
+- historical structural states accumulate into a reusable development evidence corpus.
 
 Cost:
 
-- every material structural change requires a short evidence record.
+- every material structural change requires a short evidence record;
+- retained history grows over time and therefore requires disciplined materiality, classification and later retention controls.
 
 This cost is accepted. Records SHALL remain concise and materiality-driven in accordance with Occam's razor.
