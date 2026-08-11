@@ -1,0 +1,61 @@
+schema_version: 0.1
+status: draft
+purpose: execution-instance contract for one bounded governed RUN
+
+identity:
+  run_id: RUN-XXXX
+  task_id: TASK-XXXX
+  trace_id: TRACE-XXXX
+  protocol_id: PROTO-XXXX
+  protocol_version: 0.1.0
+  role_id: ROLE-XXXX
+  role_version: 0.1.0
+
+execution:
+  started_at: null
+  ended_at: null
+  state: null
+  attempt: 1
+  parent_run_id: null
+  retry_of: null
+  current_step: null
+  completed_steps: []
+
+inputs:
+  material_object_ids: []
+
+outputs:
+  material_object_ids: []
+
+authority:
+  decision_ids: []
+  approval_ids: []
+
+traceability:
+  material_event_ids: []
+  evidence_ids: []
+  decision_ids: []
+  evaluation_ids: []
+
+failure:
+  failure_class: null
+  failure_reference: null
+  escalation_reference: null
+
+security:
+  classification: null
+  retention_class: null
+  secret_values_embedded: false
+
+invariants:
+  - run_is_bounded
+  - protocol_version_is_fixed_for_run_unless_explicit_migration_occurs
+  - material_failures_are_not_overwritten
+  - retry_identity_is_distinct
+  - missing_authority_cannot_be_interpreted_as_allow
+  - completed_state_requires_declared_completion_criteria
+
+validation_stage:
+  current: contract_only
+  runtime_validator: not_selected
+  library_dependency: none
