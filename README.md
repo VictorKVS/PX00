@@ -27,19 +27,28 @@ PX00 provides the governance layer for roles, protocols, project registries, kno
 
 Managed projects such as OSINT collection, analytics, engineering, security, and other domain products remain independently evolvable systems connected through explicit contracts.
 
+## Baseline contracts
+
+- [`architecture/CANONICAL_OBJECT_MODEL.md`](architecture/CANONICAL_OBJECT_MODEL.md) — stable canonical vocabulary and production-chain object distinctions.
+- [`schemas/CANONICAL_OBJECT_ENVELOPE.yaml`](schemas/CANONICAL_OBJECT_ENVELOPE.yaml) — initial common metadata contract for material PX00 objects.
+- [`roles/ROLE_PACKAGE_CONTRACT.md`](roles/ROLE_PACKAGE_CONTRACT.md) — governed professional-role contract: authority, knowledge, protocols, schemas, evaluations and traceability.
+- [`roles/ROLE_TEMPLATE.yaml`](roles/ROLE_TEMPLATE.yaml) — minimum declarative Role Package template.
+- [`architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md`](architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md) — architecture decision accepting these contracts for Baseline 0.1 validation.
+
 ## Development evidence
 
 PX00 development is treated as an auditable production chain, not only as Git history.
 
 - [`DEVELOPMENT_JOURNAL.md`](DEVELOPMENT_JOURNAL.md) — chronological index: what changed, why, evidence, algorithms/dependencies, DevOps/security conclusion, evaluation and next gate.
-- [`Tree_F/`](Tree_F/README.md) — material repository-structure history and per-file engineering dossiers.
+- [`Tree_F/`](Tree_F/README.md) — append-only material repository-structure history and per-file engineering dossiers.
 - [`Tree_F/TF-0001_2026-08-11_DOCUMENTATION_BASELINE.md`](Tree_F/TF-0001_2026-08-11_DOCUMENTATION_BASELINE.md) — first complete structure baseline.
-- [`architecture/adr/ADR-0008-development-production-chain-and-structure-history.md`](architecture/adr/ADR-0008-development-production-chain-and-structure-history.md) — governing decision for this evidence model.
+- [`Tree_F/TF-0003_2026-08-11_CANONICAL_OBJECT_AND_ROLE_CONTRACTS.md`](Tree_F/TF-0003_2026-08-11_CANONICAL_OBJECT_AND_ROLE_CONTRACTS.md) — object/role contract structural generation.
+- [`architecture/adr/ADR-0008-development-production-chain-and-structure-history.md`](architecture/adr/ADR-0008-development-production-chain-and-structure-history.md) — governing decision for the development evidence model.
 
 Git remains the byte-level source of truth. The journal and `Tree_F` explain the production chain and support future `KEEP | IMPROVE | REPLACE | ROLLBACK | EXPERIMENT` decisions, including controlled A/B comparisons.
 
 ## Current phase
 
-`Architecture Baseline 0.1` — contract and governance definition only.
+`Architecture Baseline 0.1` — contract and governance definition only. Runtime code remains blocked until authority, protocol, event/provenance, knowledge, decision-evaluation, schema and acceptance contracts are approved.
 
 The repository does **not** claim conformity or certification to any standard merely because a standard is referenced or mapped. Formal conformance/certification requires the applicable assessment process.
