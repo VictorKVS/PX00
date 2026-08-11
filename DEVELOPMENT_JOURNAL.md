@@ -115,6 +115,37 @@ Trigger
 
 ---
 
+## DJ-0004 — Canonical Object Model and Governed Role Package
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED FOR BASELINE VALIDATION  
+**Decision:** KEEP / VALIDATE
+
+**Why:** PX00 cannot safely define agent roles, event tracing, knowledge admission, controls or releases while each subsystem is free to invent its own identities and object meanings. Likewise a professional role cannot be reduced to a prompt/model if its knowledge, authority, protocol, evaluation and audit behavior must be governable.
+
+**Evidence / files:**
+
+- [Canonical Object Model](architecture/CANONICAL_OBJECT_MODEL.md)
+- [Common Object Envelope](schemas/CANONICAL_OBJECT_ENVELOPE.yaml)
+- [Role Package Contract](roles/ROLE_PACKAGE_CONTRACT.md)
+- [Role Template](roles/ROLE_TEMPLATE.yaml)
+- [ADR-0009](architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md)
+- [TF-0003](Tree_F/TF-0003_2026-08-11_CANONICAL_OBJECT_AND_ROLE_CONTRACTS.md)
+
+**Data & processing:** The model separates orchestration objects, source/evidence/knowledge objects, governance/assurance objects and event/trace identities. Source, artifact, evidence, finding and admitted knowledge remain distinct to preserve provenance and uncertainty.
+
+**Algorithms / libraries:** No runtime implementation. Contract rules use a materiality filter for object types, fail-closed authority, provenance separation and version-on-material-change. No third-party libraries introduced.
+
+**DevOps:** No CI/CD added. The next concrete schemas will determine what validation/lint technology is justified; selecting a library now would be premature coupling.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Explicit immutable identities, fail-closed authority, evidence separation, classification fields and protected-data reference rules reduce future design risk. Runtime security is still untested because runtime does not yet exist.
+
+**Tests / evaluation:** Next Authority/Autonomy, Event/Trace/Provenance and Knowledge Admission contracts must reuse the vocabulary without ambiguous type proliferation. First real Role Package must fit the contract without ad-hoc privilege semantics.
+
+**Next gate:** Define Authority/Autonomy Levels and the Universal Event/Trace/Provenance contract; then define Knowledge Admission and Decision Evaluation before instantiating production roles.
+
+---
+
 ## Entry template
 
 ```text
