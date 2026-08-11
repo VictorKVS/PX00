@@ -1,6 +1,12 @@
 schema_version: 0.1
 fixture_id: PILOT-0001
-status: NOT_TESTED
+status: PASS_WITH_ACTIONS
+execution:
+  type: manual_contract_dry_run
+  date: 2026-08-11
+  evidence: ../runs/PILOT-0001_DRY_RUN_2026-08-11.md
+  acceptance_record: ../records/ACCEPTANCE-PILOT-0001.yaml
+  production_approval: false
 purpose: Validate that the first two governed Role Packages can instantiate PX00 contracts without ad-hoc privilege, knowledge or trace semantics.
 
 roles:
@@ -80,3 +86,10 @@ security:
   secrets: prohibited
   customer_data: prohibited
   runtime_side_effects: prohibited
+
+limitations:
+  - contract_level_authority_only_runtime_non_bypassability_not_tested
+  - machine_schema_validation_not_yet_implemented
+  - live_llm_provider_security_not_tested
+  - tenant_isolation_not_tested
+  - tamper_evident_event_persistence_not_tested
