@@ -146,6 +146,38 @@ Trigger
 
 ---
 
+## DJ-0005 — Authority-gated execution and durable trace contract
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED FOR BASELINE VALIDATION  
+**Decision:** KEEP / VALIDATE
+
+**Why:** Role capability must not be confused with permission, and material execution must be reconstructable from the authority decision through events, trace and output provenance. These two concerns must be coupled before any autonomous runtime or tool mediation is built.
+
+**Evidence / files:**
+
+- [Authority and Autonomy Contract](governance/AUTHORITY_AUTONOMY_CONTRACT.md)
+- [Authority Decision schema](schemas/AUTHORITY_DECISION.yaml)
+- [Event/Trace/Provenance Contract](architecture/EVENT_TRACE_PROVENANCE_CONTRACT.md)
+- [Event Envelope schema](schemas/EVENT_ENVELOPE.yaml)
+- [Trace Manifest schema](schemas/TRACE_MANIFEST.yaml)
+- [ADR-0010](architecture/adr/ADR-0010-authority-gated-execution-and-trace-contracts.md)
+- [TF-0004](Tree_F/TF-0004_2026-08-11_AUTHORITY_AND_TRACE_CONTRACTS.md)
+
+**Data & processing:** A requested material action is evaluated against role, protocol, project, organization/jurisdiction, tool, data-classification and approval constraints. Effective autonomy is capped by the strictest applicable rule. Allowed actions produce material events linked to task/run/trace, authority decision, inputs/outputs and provenance. Failures/retries remain distinct.
+
+**Algorithms / libraries:** Runtime `NONE`. Defined contract algorithms are fail-closed authority intersection, `ALLOW | DENY | ESCALATE`, A0–A4 autonomy caps, event materiality T0–T5, durable trace linkage and non-destructive retry/provenance rules. Third-party libraries: `NONE`.
+
+**DevOps:** No event database, broker, OpenTelemetry stack, validator, WORM platform or PKI selected. These choices are deferred until runtime/deployment requirements justify them.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Main improvements are explicit authority, approval linkage, revocation, bounded autonomy, security classification/retention metadata and traceability. Runtime must later prove non-bypassable authorization, TOCTOU protection, tamper-evident event writes, revocation propagation and sensitive-data minimization.
+
+**Tests / evaluation:** Future acceptance fixtures must prove missing authority/approval denies execution, stricter caps win, A3 bounds are enforced, retries remain distinct, independent equal payloads retain independent provenance, and rebranding preserves canonical lineage.
+
+**Next gate:** Define Knowledge Admission and Decision Evaluation contracts, then Protocol Execution and the acceptance model required before the first governed production Role Package is instantiated.
+
+---
+
 ## Entry template
 
 ```text
