@@ -1,0 +1,55 @@
+schema_version: 0.1
+status: draft
+object_type: TRACE
+purpose: compact manifest linking governed execution events and material lineage
+
+required_fields:
+  trace_id:
+    type: TRACE-reference
+  task_id:
+    type: TASK-reference
+  run_id:
+    type: RUN-reference
+  started_at:
+    type: utc_timestamp
+  status:
+    type: enum
+    values: [OPEN, SUCCEEDED, FAILED, CANCELLED, ESCALATED]
+  event_refs:
+    type: EVT-reference-list
+    rule: ordered or otherwise sequence-addressable material events
+
+conditional_fields:
+  project_id:
+    type: PRJ-reference
+    required_when: trace belongs to a governed project
+  ended_at:
+    type: utc_timestamp
+    required_when: status is not OPEN
+  parent_trace_id:
+    type: TRACE-reference
+    required_when: trace is a governed child/subprocess
+  input_refs:
+    type: canonical_reference_list
+  output_refs:
+    type: canonical_reference_list
+  authority_decision_refs:
+    type: canonical_reference_list
+  evaluation_refs:
+    type: EVAL-reference-list
+  failure_ref:
+    type: canonical_reference
+    required_when: status is FAILED
+  supersedes_trace:
+    type: TRACE-reference
+    required_when: a new governed trace replaces a prior attempt semantically
+
+invariants:
+  - trace_id_is_immutable
+  - retries_do_not_overwrite_prior_trace_or_run_history
+  - event_references_preserve_material_sequence
+  - successful_status_does_not_erase_prior_failures
+  - trace_manifest_contains_references_not_unnecessary_sensitive_payloads
+
+runtime_validator: not_selected
+library_dependency: none
