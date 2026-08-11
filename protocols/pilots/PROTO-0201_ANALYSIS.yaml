@@ -1,0 +1,114 @@
+schema_version: 0.1
+protocol_id: PROTO-0201
+version: 0.1.0
+status: pilot_not_tested
+purpose: Govern evidence-based analytical work performed by ROLE-0201.
+applicability:
+  roles:
+    - ROLE-0201
+  materiality: material_analysis
+
+inputs:
+  required:
+    - TASK
+  at_least_one_of:
+    - EVD
+    - KN
+    - REQ
+    - RISK
+    - DEC
+  optional:
+    - SRC
+    - ART
+
+preconditions:
+  - task_object_is_valid
+  - effective_authority_is_ALLOW_or_permitted_A1
+  - input_classification_is_within_effective_scope
+
+bounds:
+  max_evidence_request_cycles: 3
+  unbounded_loops: prohibited
+  timeout_policy: inherited_from_task_or_project
+
+steps:
+  - step_id: A01
+    purpose: Validate task, scope, authority and input object identities.
+    action_class: governed_read_and_validate
+    outputs:
+      - validation_result
+    success_condition: required_inputs_and_scope_are_valid
+    failure_transition: ESCALATE_OR_BLOCK
+    event_requirement: material_gate_event
+
+  - step_id: A02
+    purpose: Classify material statements as observation/fact/inference/hypothesis/recommendation and bind them to provenance.
+    action_class: analytical_classification
+    inputs:
+      - governed_inputs
+    outputs:
+      - claim_map
+    success_condition: material_claims_have_explicit_class_and_basis
+    failure_transition: REQUEST_EVIDENCE_OR_FAIL
+    event_requirement: material_step_event
+
+  - step_id: A03
+    purpose: Detect contradictions, scope limits, temporal limits and missing evidence.
+    action_class: analytical_review
+    outputs:
+      - contradiction_gap_map
+    success_condition: material_conflicts_and_gaps_are_explicit
+    failure_transition: CONTINUE_WITH_LIMITS_OR_ESCALATE
+    event_requirement: material_step_event
+
+  - step_id: A04
+    purpose: Produce governed findings with qualitative confidence and evidence references.
+    action_class: produce_findings
+    outputs:
+      - FIND
+    success_condition: findings_meet_role_schema_and_provenance_rules
+    failure_transition: FAIL
+    event_requirement: material_output_event
+
+  - step_id: A05
+    purpose: Propose knowledge candidates, decision recommendations or bounded follow-up tasks when justified.
+    action_class: propose_governed_objects
+    optional: true
+    optional_when: no_material_candidate_or_follow_up_is_justified
+    outputs:
+      - KN_candidate
+      - DEC_candidate
+      - TASK_candidate
+    success_condition: proposals_are_distinguished_from_accepted_objects
+    failure_transition: CONTINUE_WITHOUT_OPTIONAL_PROPOSAL
+    event_requirement: material_output_event_when_used
+
+  - step_id: A06
+    purpose: Evaluate analysis quality against ROLE-0201 rubric and prepare acceptance evidence.
+    action_class: produce_evaluation
+    outputs:
+      - EVAL
+    success_condition: blocking_failures_are_explicit_and_output_is_reviewable
+    failure_transition: FAIL
+    event_requirement: material_completion_event
+
+completion_criteria:
+  - required_FIND_outputs_persisted
+  - required_EVAL_output_persisted
+  - provenance_references_present
+  - contradictions_and_uncertainty_not_silently_removed
+  - no_KN_object_self_admitted
+
+terminal_states:
+  - COMPLETED
+  - FAILED
+  - DENIED
+  - ESCALATED
+  - CANCELLED
+  - BLOCKED
+
+security:
+  raw_secrets_in_output: prohibited
+  classification: inherited
+  cross_customer_data_mixing: prohibited
+  evidence_provenance_mutation: prohibited
