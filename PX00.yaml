@@ -59,7 +59,27 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0012-protocol-execution-and-acceptance-model.md
+  latest_contract_decision: architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md
+
+pilot_roles:
+  ROLE-0201:
+    canonical_name: analyst
+    path: roles/ROLE-0201-analyst
+    protocol: PROTO-0201
+    autonomy_cap: A1
+    acceptance: NOT_TESTED
+  ROLE-0202:
+    canonical_name: critical_reviewer
+    display_name: Socrates
+    path: roles/ROLE-0202-critical-reviewer
+    protocol: PROTO-0202
+    autonomy_cap: A1
+    acceptance: NOT_TESTED
+
+pilot_acceptance:
+  fixture: assurance/fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml
+  state: NOT_TESTED
+  production_use_allowed: false
 
 current_phase:
   name: Architecture Baseline 0.1
@@ -67,7 +87,7 @@ current_phase:
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0012
+    - architecture_adr_0001_0013
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -77,10 +97,13 @@ current_phase:
     - decision_evaluation_contract
     - protocol_execution_contract
     - acceptance_model
-  next_gate:
     - analyst_role_package_pilot
-    - socrates_critical_reviewer_role_package_pilot
+    - critical_reviewer_role_package_pilot
     - pilot_protocols
-    - pilot_acceptance_fixtures
-    - baseline_0_1_validation
+    - pilot_acceptance_fixture_definition
+  next_gate:
+    - execute_pilot_0001_dry_run
+    - record_acceptance_evidence
+    - evaluate_baseline_0_1_contract_gaps
+    - decide_minimal_runtime_opening
   exit_gate: pilot_roles_and_protocols_validate_contracts_without_ad_hoc_semantics
