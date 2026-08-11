@@ -1,0 +1,76 @@
+schema_version: 0.1
+status: draft
+object_type: DEC
+purpose: canonical contract for material governed decisions
+
+required_fields:
+  id:
+    type: DEC-reference
+  decision_statement:
+    type: string
+  lifecycle_status:
+    type: enum
+    values: [PROPOSED, APPROVED, REJECTED, EXECUTED, SUPERSEDED, ROLLED_BACK, CLOSED]
+  owner_ref:
+    type: canonical_identity_reference
+  authority_decision_ref:
+    type: canonical_reference
+  project_id:
+    type: PRJ-reference
+  task_id:
+    type: TASK-reference
+  trace_id:
+    type: TRACE-reference
+  requirement_refs:
+    type: REQ-reference-list
+  rationale_summary:
+    type: string
+  evidence_refs:
+    type: EVD-reference-list
+  knowledge_refs:
+    type: KN-reference-list
+  intended_outcome:
+    type: string
+  acceptance_criteria:
+    type: string_list
+  created_at:
+    type: utc_timestamp
+  classification:
+    type: classification_label
+
+conditional_fields:
+  alternatives:
+    type: list
+    required_when: alternatives are material to the decision
+  assumptions:
+    type: string_list
+  uncertainty:
+    type: string_list
+  risk_refs:
+    type: RISK-reference-list
+  approval_refs:
+    type: canonical_reference_list
+    required_when: protocol/policy requires approval
+  rollback_plan_ref:
+    type: canonical_reference
+    required_when: material reversible action requires rollback planning
+  ex_ante_evaluation_refs:
+    type: EVAL-reference-list
+  ex_post_evaluation_refs:
+    type: EVAL-reference-list
+  supersedes:
+    type: DEC-reference-list
+  superseded_by:
+    type: DEC-reference-list
+
+invariants:
+  - material_decision_requires_explicit_authority
+  - material_decision_requires_evidence_or_explicit_escalation_for_missing_evidence
+  - rationale_summary_is_not_hidden_chain_of_thought
+  - approval_does_not_imply_successful_outcome
+  - execution_does_not_imply_positive_evaluation
+  - supersession_and_rollback_preserve_original_record
+  - display_brand_changes_do_not_change_decision_id
+
+runtime_validator: not_selected
+library_dependency: none
