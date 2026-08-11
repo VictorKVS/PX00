@@ -1,0 +1,31 @@
+schema_version: 0.1
+role_id: ROLE-0202
+status: pilot_not_tested
+
+accepted_inputs:
+  - TASK
+  - EVD
+  - FIND
+  - KN
+  - DEC
+  - EVAL
+
+required_outputs:
+  - EVAL
+  - FIND
+
+optional_output_proposals:
+  - TASK
+
+shared_contracts:
+  canonical_object_envelope: ../../../schemas/CANONICAL_OBJECT_ENVELOPE.yaml
+  event_envelope: ../../../schemas/EVENT_ENVELOPE.yaml
+  trace_manifest: ../../../schemas/TRACE_MANIFEST.yaml
+  authority_decision: ../../../schemas/AUTHORITY_DECISION.yaml
+  evaluation_record: ../../../schemas/EVALUATION_RECORD.yaml
+
+rules:
+  review_output_must_reference_reviewed_object_ids: true
+  free_text_allowed_inside_governed_object: true
+  untyped_material_output: prohibited
+  invented_object_id: prohibited
