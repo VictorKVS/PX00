@@ -1,0 +1,69 @@
+schema_version: 0.1
+status: draft
+object_type: EVAL
+purpose: comparable evidence-linked evaluation of decisions, roles, runs or outcomes
+
+required_fields:
+  id:
+    type: EVAL-reference
+  evaluation_type:
+    type: enum
+    values: [EX_ANTE, EX_POST, BENCHMARK, REGRESSION, REVIEW]
+  target_ref:
+    type: canonical_reference
+  rubric_ref:
+    type: canonical_reference
+  rubric_version:
+    type: string
+  evaluator_ref:
+    type: canonical_identity_reference
+  trace_id:
+    type: TRACE-reference
+  created_at:
+    type: utc_timestamp
+  dimensions:
+    type: list
+    item_contract:
+      name: string
+      score: [0, 1, 2, 3, 4, 5, N/A]
+      basis: string
+      evidence_refs: canonical_reference_list
+      blocking: boolean
+  conclusion:
+    type: string
+  lifecycle_decision:
+    type: enum
+    values: [KEEP, IMPROVE, REPLACE, ROLLBACK, EXPERIMENT, NO_CHANGE]
+
+conditional_fields:
+  aggregate_score:
+    type: number
+    required_when: rubric explicitly defines aggregation method
+  aggregation_method_ref:
+    type: canonical_reference
+    required_when: aggregate_score is present
+  variant_id:
+    type: string
+    required_when: evaluation belongs to A/B or alternative experiment
+  comparison_group_ref:
+    type: canonical_reference
+    required_when: comparing variants
+  outcome_refs:
+    type: canonical_reference_list
+    required_when: evaluation_type is EX_POST
+  improvement_proposal_refs:
+    type: canonical_reference_list
+  classification:
+    type: classification_label
+
+invariants:
+  - every_numeric_dimension_has_stated_basis_or_evidence
+  - blocking_failure_cannot_be_hidden_by_aggregate_average
+  - rubric_version_is_immutable_for_recorded_evaluation
+  - post_hoc_weight_changes_require_new_rubric_version
+  - failed_or_negative_results_are_not_deleted_to_improve_scores
+  - low_score_does_not_silently_mutate_governed_objects
+  - experiment_variants_remain_individually_traceable
+
+runtime_validator: not_selected
+library_dependency: none
