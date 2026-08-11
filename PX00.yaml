@@ -22,6 +22,7 @@ assurance_policy:
   traceability_required_for_material_decisions: true
   explicit_authority_required_for_autonomous_actions: true
   material_decision_pre_and_post_evaluation: true
+  material_pass_requires_declared_criteria_and_evidence: true
 
 development_evidence:
   journal: DEVELOPMENT_JOURNAL.md
@@ -53,7 +54,12 @@ baseline_contracts:
   decision_evaluation_contract: assurance/DECISION_EVALUATION_CONTRACT.md
   decision_record_schema: schemas/DECISION_RECORD.yaml
   evaluation_record_schema: schemas/EVALUATION_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0011-knowledge-admission-and-decision-evaluation.md
+  protocol_execution_contract: protocols/PROTOCOL_EXECUTION_CONTRACT.md
+  protocol_definition_schema: schemas/PROTOCOL_DEFINITION.yaml
+  run_record_schema: schemas/RUN_RECORD.yaml
+  acceptance_model: assurance/ACCEPTANCE_MODEL.md
+  acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
+  latest_contract_decision: architecture/adr/ADR-0012-protocol-execution-and-acceptance-model.md
 
 current_phase:
   name: Architecture Baseline 0.1
@@ -61,7 +67,7 @@ current_phase:
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0011
+    - architecture_adr_0001_0012
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -69,8 +75,12 @@ current_phase:
     - event_trace_provenance_contract
     - knowledge_admission_contract
     - decision_evaluation_contract
-  next_gate:
     - protocol_execution_contract
     - acceptance_model
-    - first_role_package_pilots
-  exit_gate: approved_contracts_roles_protocols_schemas_and_acceptance_model
+  next_gate:
+    - analyst_role_package_pilot
+    - socrates_critical_reviewer_role_package_pilot
+    - pilot_protocols
+    - pilot_acceptance_fixtures
+    - baseline_0_1_validation
+  exit_gate: pilot_roles_and_protocols_validate_contracts_without_ad_hoc_semantics
