@@ -1,0 +1,14 @@
+schema_version: 0.1
+role_id: ROLE-0202
+status: pilot_not_tested
+
+required_protocols:
+  - protocol_id: PROTO-0202
+    version: 0.1.0
+    path: ../../../protocols/pilots/PROTO-0202_CRITICAL_REVIEW.yaml
+
+rules:
+  material_review_requires_protocol: true
+  silent_step_skip: prohibited
+  unbounded_review_loop: prohibited
+  unresolved_material_conflict_transition: challenge_or_escalate
