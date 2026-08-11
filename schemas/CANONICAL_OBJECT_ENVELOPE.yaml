@@ -1,0 +1,56 @@
+schema_version: 0.1
+status: draft
+purpose: common metadata contract for material PX00 objects
+
+required_fields:
+  id:
+    type: string
+    rule: immutable canonical identifier
+  type:
+    type: string
+    rule: canonical object type
+  schema_version:
+    type: string
+    rule: version of the contract used to interpret the object
+  status:
+    type: string
+    rule: explicit lifecycle state
+  created_at:
+    type: utc_timestamp
+    rule: creation time in UTC
+  created_by:
+    type: canonical_identity_reference
+    rule: human role or system identity
+
+conditional_fields:
+  project_id:
+    type: PRJ-reference
+    required_when: object belongs to a governed project
+  trace_id:
+    type: TRACE-reference
+    required_when: object is produced inside a governed execution trace
+  classification:
+    type: classification_label
+    required_when: object carries or references controlled information
+  provenance:
+    type: canonical_reference_list
+    required_when: object derives from prior material objects or evidence
+  supersedes:
+    type: canonical_reference_list
+    required_when: object replaces prior governed objects
+  superseded_by:
+    type: canonical_reference_list
+    required_when: known replacement exists
+
+invariants:
+  - canonical_ids_are_never_reused
+  - display_names_are_not_canonical_identity
+  - material_objects_are_not_silently_overwritten
+  - llm_output_is_not_evidence_by_itself
+  - protected_content_is_referenced_not_copied_when_repository_policy_forbids_storage
+  - lifecycle_replacement_uses_explicit_links
+
+validation_stage:
+  current: contract_only
+  runtime_validator: not_selected
+  library_dependency: none
