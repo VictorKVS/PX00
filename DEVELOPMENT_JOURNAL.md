@@ -242,6 +242,38 @@ Trigger
 
 ---
 
+## DJ-0008 — First governed Role Package pilots
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED FOR PILOT VALIDATION  
+**Decision:** KEEP / VALIDATE
+
+**Why:** Abstract contracts now need proof that they can describe real professional roles without ad-hoc object types, hidden privileges or premature framework choices.
+
+**Evidence / files:**
+
+- [ROLE-0201 Analyst](roles/ROLE-0201-analyst/ROLE.yaml)
+- [ROLE-0202 Critical Reviewer](roles/ROLE-0202-critical-reviewer/ROLE.yaml)
+- [PROTO-0201 Analysis](protocols/pilots/PROTO-0201_ANALYSIS.yaml)
+- [PROTO-0202 Critical Review](protocols/pilots/PROTO-0202_CRITICAL_REVIEW.yaml)
+- [PILOT-0001 Acceptance Fixture](assurance/fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml)
+- [ADR-0013](architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md)
+- [TF-0007](Tree_F/TF-0007_2026-08-11_FIRST_GOVERNED_ROLE_PILOTS.md)
+
+**Data & processing:** `ROLE-0201` turns governed evidence into `FIND/EVAL` plus explicit proposals; `ROLE-0202` reviews the resulting findings/knowledge/decision candidates and produces `EVAL/FIND` without mutating active knowledge. Evidence-request loops are bounded to three pilot cycles. Critical review reuses canonical `EVAL/FIND/TASK` types rather than introducing a new object solely for naming convenience.
+
+**Algorithms / libraries:** Runtime `NONE`. Analyst algorithm: validate → classify claims → expose contradictions/gaps → findings → optional proposals → evaluation. Reviewer algorithm: validate target/independence → test evidence support → assumptions/alternatives → falsifiability/source independence/causal/scope checks → evaluation/dissent → optional bounded follow-up task. Third-party libraries: `NONE`.
+
+**DevOps:** No runtime validator, LLM SDK, vector DB, broker or workflow engine added. `PILOT-0001` is declarative and intentionally precedes implementation.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Both pilots are capped at A1, external side effects are prohibited, knowledge self-admission/mutation is blocked, provenance and classification are explicit, cross-customer mixing is prohibited and material dissent is preserved. Runtime must still prove non-bypassable tool authorization, tenant isolation, prompt-injection/provider leakage controls, retrieval poisoning/freshness controls and tamper-evident execution evidence.
+
+**Tests / evaluation:** `PILOT-0001` is currently `NOT_TESTED`. Blocking cases cover unsupported model output, self-admission of knowledge, reviewer mutation, dissent suppression, provenance, trace identity, missing evidence, external-action authority and display-name rebranding.
+
+**Next gate:** Execute `PILOT-0001` as a controlled dry-run using synthetic/public-safe objects; record acceptance evidence; identify contract gaps; then decide whether to permit only the smallest runtime validator/orchestrator implementation.
+
+---
+
 ## Entry template
 
 ```text
