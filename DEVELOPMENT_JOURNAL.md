@@ -178,6 +178,38 @@ Trigger
 
 ---
 
+## DJ-0006 — Knowledge admission and decision evaluation
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED FOR BASELINE VALIDATION  
+**Decision:** KEEP / VALIDATE
+
+**Why:** PX00 needs a controlled boundary between retrieved/generated information and institutional knowledge, plus an evidence-based feedback loop that can compare decisions before execution with actual outcomes afterward.
+
+**Evidence / files:**
+
+- [Knowledge Admission Contract](knowledge/KNOWLEDGE_ADMISSION_CONTRACT.md)
+- [Knowledge Record schema](schemas/KNOWLEDGE_RECORD.yaml)
+- [Decision Evaluation Contract](assurance/DECISION_EVALUATION_CONTRACT.md)
+- [Decision Record schema](schemas/DECISION_RECORD.yaml)
+- [Evaluation Record schema](schemas/EVALUATION_RECORD.yaml)
+- [ADR-0011](architecture/adr/ADR-0011-knowledge-admission-and-decision-evaluation.md)
+- [TF-0005](Tree_F/TF-0005_2026-08-11_KNOWLEDGE_AND_DECISION_EVALUATION.md)
+
+**Data & processing:** Knowledge now follows `SRC/ART → EVD → FIND → Knowledge Gate → KN`. Contradictions, temporal validity, scope and confidence basis are preserved. Material decisions capture authority/rationale/evidence/intended outcome and receive separate ex-ante/ex-post `EVAL-*` records where required.
+
+**Algorithms / libraries:** Runtime `NONE`. Contract rules include evidence-gated knowledge admission, contradiction/scope/temporal review, qualitative confidence by default, dimension scoring `0–5/N/A`, blocking criteria and governed A/B comparison. Third-party libraries: `NONE`.
+
+**DevOps:** No vector DB, embeddings/RAG framework, evaluation service or scoring library selected. The architecture now defines what such components must satisfy before technology selection.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Major risk reductions: hallucination-as-fact is blocked by contract; stale/superseded knowledge is explicit; security failures cannot be averaged away; evaluation cannot silently self-modify roles/KB. Runtime still needs poisoning defenses, KB isolation, freshness/invalidation, evaluator separation and access-control tests.
+
+**Tests / evaluation:** First Analyst/Socrates pilots must prove that unsupported model output remains a finding/hypothesis rather than active knowledge, contradictions remain visible, supersession preserves history, and evaluation records cannot erase failed variants.
+
+**Next gate:** Define Protocol Execution Contract and Acceptance Model/fixtures; then instantiate the first governed Role Packages as architecture validation pilots before runtime code is broadly allowed.
+
+---
+
 ## Entry template
 
 ```text
