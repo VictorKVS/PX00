@@ -14,6 +14,7 @@ Detailed structural dossiers live in [`Tree_F/`](Tree_F/README.md). Git remains 
 - Never record secrets, session material, private keys, unnecessary personal data or confidential customer content.
 - Every material change ends with a lifecycle decision: `KEEP | IMPROVE | REPLACE | ROLLBACK | EXPERIMENT`.
 - A/B or alternative tests preserve both variants and common acceptance criteria.
+- Accepted `Tree_F/TF-xxxx` records accumulate as an append-only development corpus; normal evolution creates new records instead of deleting or overwriting old ones.
 
 ---
 
@@ -81,6 +82,36 @@ Trigger
 **Evaluation:** Initial TF-0001 scores traceability 5/5, security 4/5, maintainability 4/5. These are coarse decision aids, not statistical claims.
 
 **Next gate:** Define canonical object model and Role Package contract before any application code.
+
+---
+
+## DJ-0003 — Tree_F becomes an append-only development corpus
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED  
+**Decision:** KEEP
+
+**Why:** Structural-history snapshots are valuable not only as documentation but as a cumulative dataset of engineering evolution. Deleting an old snapshot when the system changes would destroy the production lineage needed for later comparison, testing, rollback and process improvement.
+
+**Decision:** Accepted `TF-xxxx` records are non-destructive for normal development. Every new material structural state gets the next unique TF identifier. Superseded decisions remain visible and are linked from successors.
+
+**Evidence / files:**
+
+- [TF-0002 — Append-only Development Corpus](Tree_F/TF-0002_2026-08-11_APPEND_ONLY_DEVELOPMENT_CORPUS.md)
+- [Tree_F protocol](Tree_F/README.md)
+- [ADR-0008](architecture/adr/ADR-0008-development-production-chain-and-structure-history.md)
+
+**Production value:** The accumulated records become a development evidence corpus for architecture generations, A/B alternatives, regression cases, DevOps/IB retrospectives, role/process evaluation, lessons learned and rollback analysis.
+
+**Algorithms / libraries:** `NONE` runtime. Current mechanism is deterministic numbering + Git/Markdown references.
+
+**DevOps:** No build/deployment change. Future automation may generate candidate tree/diff evidence but must not silently rewrite accepted TF records.
+
+**Security conclusion:** `PASS_WITH_EXCEPTION_RULE`. Normal history is append-only. Security/legal sanitation remains a controlled destructive exception for accidentally exposed secrets/protected content; it must leave a safe tombstone/reference without retaining the sensitive value.
+
+**Tests / evaluation:** Verify that later material changes add `TF-0003`, `TF-0004`, ... while `TF-0001` and `TF-0002` remain present and addressable.
+
+**Next gate:** Continue with Canonical Object Model and Role Package Contract; their structural introduction will create the next TF record.
 
 ---
 
