@@ -1,0 +1,34 @@
+# PX00
+
+**Canonical technical identity:** `PX-00`  
+**Repository:** `VictorKVS/PX00`  
+**Architecture codename:** `FATHER`
+
+PX00 is the governance and control-plane project for a family of traceable, auditable, policy-driven AI-assisted systems.
+
+The project is intentionally brand-neutral. Customer-facing product names, regional names, logos, terminology, and distribution identities are configuration layers. Canonical technical identifiers, provenance, audit records, security identities, licenses, SBOM data, and traceability records are not changed by rebranding.
+
+## Core principles
+
+- No code before contract.
+- Reliability > performance.
+- Security and compliance by design.
+- Global by architecture, regional by policy.
+- LLM output is never evidence by itself.
+- No material knowledge without provenance.
+- No material decision without traceability.
+- No autonomous action without explicit authority.
+- Material decisions are evaluated before execution and after outcome.
+- Customer differentiation is implemented through controlled profiles and extensions, not uncontrolled source forks.
+
+## Target architecture
+
+PX00 provides the governance layer for roles, protocols, project registries, knowledge governance, decision records, audit/event traceability, jurisdiction/industry/organization profiles, assurance, and distribution composition.
+
+Managed projects such as OSINT collection, analytics, engineering, security, and other domain products remain independently evolvable systems connected through explicit contracts.
+
+## Current phase
+
+`Architecture Baseline 0.1` — contract and governance definition only.
+
+The repository does **not** claim conformity or certification to any standard merely because a standard is referenced or mapped. Formal conformance/certification requires the applicable assessment process.
