@@ -210,6 +210,38 @@ Trigger
 
 ---
 
+## DJ-0007 — Governed protocol execution and evidence-backed acceptance
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED FOR BASELINE VALIDATION  
+**Decision:** KEEP / VALIDATE
+
+**Why:** PX00 had defined objects, roles, authority, traceability, knowledge and decision evaluation, but still needed a common contract for bounded step-by-step execution and a rule for when a material result may be called accepted.
+
+**Evidence / files:**
+
+- [Protocol Execution Contract](protocols/PROTOCOL_EXECUTION_CONTRACT.md)
+- [Protocol Definition schema](schemas/PROTOCOL_DEFINITION.yaml)
+- [Run Record schema](schemas/RUN_RECORD.yaml)
+- [Acceptance Model](assurance/ACCEPTANCE_MODEL.md)
+- [Acceptance Record schema](schemas/ACCEPTANCE_RECORD.yaml)
+- [ADR-0012](architecture/adr/ADR-0012-protocol-execution-and-acceptance-model.md)
+- [TF-0006](Tree_F/TF-0006_2026-08-11_PROTOCOL_EXECUTION_AND_ACCEPTANCE.md)
+
+**Data & processing:** Material work now follows explicit protocol selection, input/precondition validation, authority gating, bounded RUN/TRACE execution, declared branching/retries/checkpoints, durable material outputs/events, completion criteria and acceptance evidence. A technically completed run can still fail acceptance.
+
+**Algorithms / libraries:** Runtime `NONE`. Contract algorithms include fail-closed authority, explicit bounded loops, distinct retry identity, idempotency/reconciliation requirements for unsafe retries, durable-save-before-checkpoint ordering, and acceptance states `NOT_TESTED | PASS | PASS_WITH_ACTIONS | FAIL | BLOCKED`. Third-party libraries: `NONE`.
+
+**DevOps:** Workflow engine, schema validator, test runner, event broker and database remain unselected. Pilot roles will provide concrete fixtures before choosing implementation tools.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Design addresses silent gate skipping, infinite loops, unsafe retries, lost evidence, false PASS and post-hoc criteria. Runtime must later prove gate non-bypassability, cancellation, durability, evidence integrity, separation of duties where required and protected test-data handling.
+
+**Tests / evaluation:** Pilot fixtures must prove missing approval/authority blocks the relevant step, required steps cannot be silently skipped, loops/retries are bounded, failed attempts remain traceable, blocking acceptance failures prevent PASS, and missing evidence never becomes success.
+
+**Next gate:** Instantiate governed `Analyst` and `Socrates/Critical Reviewer` Role Package pilots with their own knowledge manifests, protocols, authority boundaries, I/O schemas, rubrics and acceptance fixtures. Use them to validate Baseline 0.1 before opening a minimal runtime implementation.
+
+---
+
 ## Entry template
 
 ```text
