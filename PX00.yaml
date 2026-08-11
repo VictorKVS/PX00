@@ -23,6 +23,21 @@ assurance_policy:
   explicit_authority_required_for_autonomous_actions: true
   material_decision_pre_and_post_evaluation: true
 
+development_evidence:
+  journal: DEVELOPMENT_JOURNAL.md
+  structure_history: Tree_F
+  material_structure_change_record_required: true
+  file_dossier_required_for_material_changes: true
+  comparative_evaluation_enabled: true
+  experiment_variants_supported: true
+  lifecycle_decisions:
+    - KEEP
+    - IMPROVE
+    - REPLACE
+    - ROLLBACK
+    - EXPERIMENT
+  sensitive_evidence_in_public_repo: prohibited
+
 current_phase:
   name: Architecture Baseline 0.1
   code_allowed: false
