@@ -1,0 +1,14 @@
+schema_version: 0.1
+role_id: ROLE-0201
+status: pilot_not_tested
+
+required_protocols:
+  - protocol_id: PROTO-0201
+    version: 0.1.0
+    path: ../../../protocols/pilots/PROTO-0201_ANALYSIS.yaml
+
+rules:
+  material_analysis_requires_protocol: true
+  silent_step_skip: prohibited
+  unbounded_research_loop: prohibited
+  missing_evidence_transition: request_or_escalate
