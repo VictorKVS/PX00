@@ -1,0 +1,89 @@
+schema_version: 0.1
+
+identity:
+  role_id: ROLE-XXXX
+  canonical_name: replace_me
+  display_name: null
+  package_version: 0.1.0
+  status: draft
+  owner: null
+
+mission:
+  purpose: null
+  responsibilities: []
+  required_outputs: []
+  boundaries: []
+  escalation_conditions: []
+
+authority:
+  autonomy_level: null
+  allowed_actions: []
+  prohibited_actions: []
+  human_approval_required_for: []
+  allowed_tools: []
+  classification_ceiling: null
+  jurisdiction_scope: []
+  project_scope: []
+
+knowledge:
+  role_manifest: knowledge/manifest.yaml
+  shared_packages: []
+  domain_packages: []
+  jurisdiction_packages: []
+  project_packages: []
+  retrieval_is_evidence: false
+
+instructions:
+  prompt: PROMPT.md
+  cannot_override:
+    - constitution
+    - authority
+    - protocol
+    - security_policy
+    - human_approval
+
+protocols:
+  manifest: protocols/manifest.yaml
+  required: []
+
+schemas:
+  manifest: schemas/manifest.yaml
+  accepted_inputs: []
+  required_outputs: []
+
+evaluation:
+  rubric: evals/rubric.yaml
+  benchmark_cases: []
+  regression_cases: []
+  pre_action_evaluation_required: false
+  post_outcome_evaluation_required: true
+
+traceability:
+  task_id_required: true
+  run_id_required: true
+  trace_id_required: true
+  protocol_version_required: true
+  knowledge_versions_required: true
+  material_input_ids_required: true
+  material_output_ids_required: true
+  explicit_rationale_required_for_material_decisions: true
+  hidden_chain_of_thought_required: false
+
+provider_policy:
+  providers: []
+  provider_is_authority: false
+  comparable_variant_testing_allowed: true
+
+failure_policy:
+  fail_or_escalate_on:
+    - missing_required_evidence
+    - insufficient_authority
+    - protocol_conflict
+    - security_or_compliance_block
+    - missing_human_approval
+    - output_schema_failure
+
+security:
+  review_status: not_reviewed
+  secrets_in_role_package: prohibited
+  raw_protected_data_in_public_repo: prohibited
