@@ -43,16 +43,23 @@ Shared machine-readable contracts are kept under [`schemas/`](schemas/).
 
 ## First governed role pilots
 
-Baseline 0.1 now has two concrete non-production Role Packages:
-
 - [`ROLE-0201 Analyst`](roles/ROLE-0201-analyst/ROLE.yaml) — evidence-bound analysis, findings, knowledge/decision proposals and bounded evidence requests; maximum pilot autonomy `A1`.
 - [`ROLE-0202 Critical Reviewer`](roles/ROLE-0202-critical-reviewer/ROLE.yaml) — display name `Socrates`; challenges evidence support, assumptions, contradictions, alternatives, falsifiability, source independence and scope without directly mutating accepted knowledge; maximum pilot autonomy `A1`.
 
-Their governed protocols are [`PROTO-0201`](protocols/pilots/PROTO-0201_ANALYSIS.yaml) and [`PROTO-0202`](protocols/pilots/PROTO-0202_CRITICAL_REVIEW.yaml).
+Their protocols are [`PROTO-0201`](protocols/pilots/PROTO-0201_ANALYSIS.yaml) and [`PROTO-0202`](protocols/pilots/PROTO-0202_CRITICAL_REVIEW.yaml).
 
-The declared pilot acceptance fixture is [`PILOT-0001`](assurance/fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml). Its current state is `NOT_TESTED`; these roles are not approved for production work.
+## Pilot acceptance
 
-Architecture decision: [`ADR-0013`](architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md).
+[`PILOT-0001`](assurance/fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml) has now been executed as a manual contract dry-run with synthetic/public-safe objects.
+
+- Dry-run evidence: [`PILOT-0001_DRY_RUN_2026-08-11.md`](assurance/runs/PILOT-0001_DRY_RUN_2026-08-11.md)
+- Acceptance record: [`ACCEPTANCE-PILOT-0001.yaml`](assurance/records/ACCEPTANCE-PILOT-0001.yaml)
+- Result: `PASS_WITH_ACTIONS`
+- Production approval: **NO**
+
+The dry-run verified the declared contract behavior for supported claims, unsupported model statements, contradictions, A1 authority denial and distinct provenance. It does not prove runtime enforcement or production security.
+
+Architecture decisions: [`ADR-0013`](architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md) and [`ADR-0014`](architecture/adr/ADR-0014-pilot-dry-run-and-minimal-runtime-opening.md).
 
 ## Development evidence
 
@@ -60,13 +67,16 @@ PX00 development is treated as an auditable production chain, not only as Git hi
 
 - [`DEVELOPMENT_JOURNAL.md`](DEVELOPMENT_JOURNAL.md) — chronological index: what changed, why, evidence, algorithms/dependencies, DevOps/security conclusion, evaluation and next gate.
 - [`Tree_F/`](Tree_F/README.md) — append-only material repository-structure history and per-file engineering dossiers.
-- `Tree_F/TF-0001..TF-0007` — accumulated structural generations; accepted historical records are not deleted during normal evolution.
+- `Tree_F/TF-0001..TF-0008` — accumulated structural generations; accepted historical records are not deleted during normal evolution.
 - [`TF-0007`](Tree_F/TF-0007_2026-08-11_FIRST_GOVERNED_ROLE_PILOTS.md) — first concrete Role Package generation.
+- [`TF-0008`](Tree_F/TF-0008_2026-08-11_PILOT_DRY_RUN_AND_MINIMAL_RUNTIME_GATE.md) — pilot dry-run evidence and narrow runtime gate.
 
 Git remains the byte-level source of truth. The journal and `Tree_F` explain the production chain and support future `KEEP | IMPROVE | REPLACE | ROLLBACK | EXPERIMENT` decisions, including controlled A/B comparisons.
 
 ## Current phase
 
-`Architecture Baseline 0.1` — core contracts and first pilot roles are defined. Runtime code remains blocked until `PILOT-0001` is executed as a controlled dry-run, acceptance evidence is recorded, contract gaps are assessed, and a decision is made on opening only the smallest justified runtime implementation.
+`Architecture Baseline 0.1 — Executable Validation Gate`.
+
+The contract-first gate is now open **only** for a minimal local validator/fixture runner using synthetic/public-safe data and no external side effects. Production agents, live customer data, network mutation and broad orchestration infrastructure remain blocked.
 
 The repository does **not** claim conformity or certification to any standard merely because a standard is referenced or mapped. Formal conformance/certification requires the applicable assessment process.
