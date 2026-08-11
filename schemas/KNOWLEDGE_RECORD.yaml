@@ -1,0 +1,85 @@
+schema_version: 0.1
+status: draft
+object_type: KN
+purpose: canonical metadata contract for admitted governed knowledge
+
+required_fields:
+  id:
+    type: KN-reference
+  knowledge_type:
+    type: enum
+    values: [FACT, RULE, CONCEPT, METHOD, PATTERN, HYPOTHESIS]
+  statement:
+    type: string
+  lifecycle_status:
+    type: enum
+    values: [ACTIVE, DISPUTED, SUPERSEDED, RETIRED]
+  confidence:
+    type: enum
+    values: [LOW, MEDIUM, HIGH]
+  confidence_basis:
+    type: string
+  evidence_refs:
+    type: EVD-reference-list
+    rule: cannot be empty for material admitted knowledge
+  finding_refs:
+    type: FIND-reference-list
+  admitted_by:
+    type: canonical_identity_reference
+  admission_protocol:
+    type: PROTO-reference
+  admission_protocol_version:
+    type: string
+  trace_id:
+    type: TRACE-reference
+  created_at:
+    type: utc_timestamp
+  classification:
+    type: classification_label
+
+conditional_fields:
+  contradictory_refs:
+    type: canonical_reference_list
+    required_when: material contradiction exists
+  valid_from:
+    type: utc_timestamp_or_date
+    required_when: temporally bounded knowledge
+  valid_until:
+    type: utc_timestamp_or_date
+    required_when: expiry/end date is known
+  jurisdiction_scope:
+    type: string_list
+  industry_scope:
+    type: string_list
+  organization_scope:
+    type: string_list
+  project_scope:
+    type: PRJ-reference-list
+  authority_source_refs:
+    type: SRC-reference-list
+    required_when: normative/regulatory rule depends on an issuing authority
+  supersedes:
+    type: KN-reference-list
+    required_when: this knowledge replaces prior governed knowledge
+  superseded_by:
+    type: KN-reference-list
+    required_when: replacement is known
+  numeric_confidence:
+    type: number
+    required_when: a named scoring method exists
+  confidence_method_ref:
+    type: canonical_reference
+    required_when: numeric_confidence is present
+
+invariants:
+  - llm_output_alone_cannot_satisfy_evidence_requirement
+  - active_material_knowledge_requires_provenance
+  - unexplained_numeric_confidence_is_prohibited
+  - hypotheses_are_never_silently_promoted_to_fact
+  - contradictions_are_not_silently_removed
+  - supersession_preserves_prior_record
+  - knowledge_scope_cannot_silently_expand
+  - display_brand_changes_do_not_change_knowledge_id
+
+runtime_validator: not_selected
+library_dependency: none
