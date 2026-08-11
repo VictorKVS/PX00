@@ -274,6 +274,36 @@ Trigger
 
 ---
 
+## DJ-0009 — PILOT-0001 dry-run and minimal runtime opening
+
+**Date:** 2026-08-11  
+**Status:** ACCEPTED  
+**Decision:** OPEN MINIMAL VALIDATION RUNTIME
+
+**Why:** Before choosing libraries or building an orchestrator, the first role chain had to prove that the contracts can represent supported evidence, unsupported model output, contradiction, authority denial and distinct provenance without hidden semantics.
+
+**Evidence / files:**
+
+- [PILOT-0001 dry-run](assurance/runs/PILOT-0001_DRY_RUN_2026-08-11.md)
+- [PILOT-0001 acceptance record](assurance/records/ACCEPTANCE-PILOT-0001.yaml)
+- [Updated PILOT-0001 fixture](assurance/fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml)
+- [ADR-0014](architecture/adr/ADR-0014-pilot-dry-run-and-minimal-runtime-opening.md)
+- [TF-0008](Tree_F/TF-0008_2026-08-11_PILOT_DRY_RUN_AND_MINIMAL_RUNTIME_GATE.md)
+
+**Data & processing:** Five synthetic/public-safe cases were executed manually against the declared Role/Protocol/Authority/Knowledge/Acceptance contracts. All blocking contract semantics passed; remaining runtime controls are explicit actions, so the acceptance state is `PASS_WITH_ACTIONS`, not production PASS.
+
+**Algorithms / libraries:** Still `NONE` runtime and third-party libraries. The dry-run used deterministic case walkthrough and blocking-criteria comparison. It authorizes only the next step: executable validation of existing contracts.
+
+**DevOps:** A narrow code gate is opened for a local validator/fixture runner. CI is still deferred until the local validator proves useful. Database, vector store, broker, workflow engine, web framework and LLM SDK remain unjustified.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. No external connectivity, customer data or side effects were introduced. Production remains blocked pending dependency/SBOM controls, secret scanning, non-bypassable authorization, tenant isolation, provider/prompt-injection controls, retrieval integrity, event integrity and retry/cancellation/durability tests.
+
+**Tests / evaluation:** Contract dry-run result is `PASS_WITH_ACTIONS`. Next executable tests must fail closed on missing critical fields/references, verify role/protocol ID consistency, enforce A1 pilot caps and enumerate acceptance criteria deterministically.
+
+**Next gate:** Select the smallest machine-readable validation approach; implement local contract validator + synthetic negative tests; record real dependency/DevOps/IB evidence in `TF-0009` before adding broader runtime.
+
+---
+
 ## Entry template
 
 ```text
