@@ -43,7 +43,12 @@ baseline_contracts:
   canonical_object_envelope: schemas/CANONICAL_OBJECT_ENVELOPE.yaml
   role_package_contract: roles/ROLE_PACKAGE_CONTRACT.md
   role_template: roles/ROLE_TEMPLATE.yaml
-  contract_decision: architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md
+  authority_autonomy_contract: governance/AUTHORITY_AUTONOMY_CONTRACT.md
+  authority_decision_schema: schemas/AUTHORITY_DECISION.yaml
+  event_trace_provenance_contract: architecture/EVENT_TRACE_PROVENANCE_CONTRACT.md
+  event_envelope_schema: schemas/EVENT_ENVELOPE.yaml
+  trace_manifest_schema: schemas/TRACE_MANIFEST.yaml
+  latest_contract_decision: architecture/adr/ADR-0010-authority-gated-execution-and-trace-contracts.md
 
 current_phase:
   name: Architecture Baseline 0.1
@@ -51,13 +56,15 @@ current_phase:
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0009
+    - architecture_adr_0001_0010
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
-  next_gate:
     - authority_autonomy_contract
     - event_trace_provenance_contract
+  next_gate:
     - knowledge_admission_contract
     - decision_evaluation_contract
+    - protocol_execution_contract
+    - acceptance_model
   exit_gate: approved_contracts_roles_protocols_schemas_and_acceptance_model
