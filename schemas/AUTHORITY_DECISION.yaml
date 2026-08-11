@@ -1,0 +1,79 @@
+schema_version: 0.1
+status: draft
+object_type: authority_decision
+purpose: machine-readable contract for pre-action authority evaluation
+
+required_fields:
+  decision_id:
+    type: canonical_id
+  timestamp_utc:
+    type: utc_timestamp
+  actor_id:
+    type: canonical_identity_reference
+  role_id:
+    type: ROLE-reference
+  role_version:
+    type: string
+  action_class:
+    type: string
+  target_ref:
+    type: canonical_reference
+  project_id:
+    type: PRJ-reference
+  requested_autonomy:
+    type: enum
+    values: [A0, A1, A2, A3, A4]
+  effective_autonomy:
+    type: enum
+    values: [A0, A1, A2, A3, A4]
+  result:
+    type: enum
+    values: [ALLOW, DENY, ESCALATE]
+  reason_code:
+    type: string
+  rationale_summary:
+    type: string
+    rule: explicit concise rationale; hidden chain-of-thought is not required or stored
+  trace_id:
+    type: TRACE-reference
+
+constraint_references:
+  role_authority:
+    type: canonical_reference_list
+  protocol_authority:
+    type: canonical_reference_list
+  project_authority:
+    type: canonical_reference_list
+  organization_policy:
+    type: canonical_reference_list
+  jurisdiction_policy:
+    type: canonical_reference_list
+  tool_permissions:
+    type: canonical_reference_list
+  data_classification_permissions:
+    type: canonical_reference_list
+
+conditional_fields:
+  approval_refs:
+    type: canonical_reference_list
+    required_when: requested/effective action requires approval
+  expiry:
+    type: utc_timestamp
+    required_when: authority grant is time-limited
+  risk_ref:
+    type: RISK-reference
+    required_when: material action has governed risk assessment
+  event_id:
+    type: EVT-reference
+    required_when: decision has been emitted as a material event
+
+invariants:
+  - missing_explicit_authority_cannot_result_in_allow
+  - effective_autonomy_cannot_exceed_any_applicable_cap
+  - provider_or_model_capability_does_not_grant_authority
+  - approval_must_match_action_and_scope
+  - denied_or_escalated_actions_do_not_execute_as_if_allowed
+  - material_decisions_link_to_trace
+
+runtime_validator: not_selected
+library_dependency: none
