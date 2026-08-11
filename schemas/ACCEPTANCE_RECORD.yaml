@@ -1,0 +1,55 @@
+schema_version: 0.1
+status: draft
+purpose: canonical acceptance evidence record
+
+identity:
+  acceptance_id: TEST-XXXX
+  subject_id: null
+  subject_type: null
+  subject_version: null
+  trace_id: null
+
+criteria:
+  - criterion_id: C01
+    description: null
+    severity: BLOCKING
+    expected: null
+    evidence_refs: []
+    result: NOT_TESTED
+
+summary:
+  state: NOT_TESTED
+  blocking_failures: []
+  non_blocking_actions: []
+  evaluated_at: null
+  evaluated_by: null
+
+assurance:
+  claim: null
+  argument_refs: []
+  evidence_refs: []
+
+security:
+  classification: null
+  retention_class: null
+  sensitive_evidence_embedded: false
+
+allowed_states:
+  - NOT_TESTED
+  - PASS
+  - PASS_WITH_ACTIONS
+  - FAIL
+  - BLOCKED
+
+invariants:
+  - pass_requires_declared_criteria
+  - pass_requires_evidence_for_blocking_criteria
+  - blocking_failure_prevents_pass
+  - pass_with_actions_lists_remaining_actions
+  - missing_evidence_is_not_success
+  - protected_evidence_may_be_referenced_without_copying_raw_content
+
+validation_stage:
+  current: contract_only
+  runtime_validator: not_selected
+  library_dependency: none
