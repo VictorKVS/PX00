@@ -38,7 +38,26 @@ development_evidence:
     - EXPERIMENT
   sensitive_evidence_in_public_repo: prohibited
 
+baseline_contracts:
+  canonical_object_model: architecture/CANONICAL_OBJECT_MODEL.md
+  canonical_object_envelope: schemas/CANONICAL_OBJECT_ENVELOPE.yaml
+  role_package_contract: roles/ROLE_PACKAGE_CONTRACT.md
+  role_template: roles/ROLE_TEMPLATE.yaml
+  contract_decision: architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md
+
 current_phase:
   name: Architecture Baseline 0.1
   code_allowed: false
+  completed_gates:
+    - canonical_identity
+    - governance_constitution
+    - architecture_adr_0001_0009
+    - development_evidence_corpus
+    - canonical_object_model
+    - governed_role_package_contract
+  next_gate:
+    - authority_autonomy_contract
+    - event_trace_provenance_contract
+    - knowledge_admission_contract
+    - decision_evaluation_contract
   exit_gate: approved_contracts_roles_protocols_schemas_and_acceptance_model
