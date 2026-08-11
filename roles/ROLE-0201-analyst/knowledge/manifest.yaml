@@ -1,0 +1,36 @@
+schema_version: 0.1
+role_id: ROLE-0201
+status: pilot_not_tested
+
+layers:
+  constitutional:
+    required: true
+    source: governance/FATHER_CONSTITUTION.md
+  role_method:
+    required: true
+    packages: []
+  domain:
+    required: false
+    packages: []
+  jurisdiction:
+    required_when_applicable: true
+    packages: []
+  organization_project:
+    required_when_applicable: true
+    packages: []
+  task_evidence:
+    required: true
+
+rules:
+  retrieval_is_evidence: false
+  admitted_knowledge_only_for_fact_basis: true
+  findings_may_reference_unadmitted_evidence: true
+  provenance_required_for_material_claims: true
+  temporal_validity_must_be_checked_when_relevant: true
+  contradictions_must_be_preserved: true
+  stale_or_superseded_knowledge_must_not_be_presented_as_current: true
+
+security:
+  inherit_classification_from_source: true
+  cross_customer_knowledge_mixing: prohibited
+  secrets_in_manifest: prohibited
