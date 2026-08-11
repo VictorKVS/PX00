@@ -1,0 +1,117 @@
+schema_version: 0.1
+protocol_id: PROTO-0202
+version: 0.1.0
+status: pilot_not_tested
+purpose: Govern adversarial but evidence-disciplined review by ROLE-0202 without direct mutation of accepted knowledge or decisions.
+applicability:
+  roles:
+    - ROLE-0202
+  materiality: material_review
+
+inputs:
+  required:
+    - TASK
+  at_least_one_of:
+    - FIND
+    - KN
+    - DEC
+  optional:
+    - EVD
+    - EVAL
+
+preconditions:
+  - reviewed_object_ids_are_known
+  - effective_authority_is_ALLOW_or_permitted_A1
+  - review_scope_and_classification_are_valid
+
+bounds:
+  max_additional_evidence_cycles: 3
+  unbounded_loops: prohibited
+  timeout_policy: inherited_from_task_or_project
+
+steps:
+  - step_id: S01
+    purpose: Validate review target, authority, evidence set and any independence requirement.
+    action_class: governed_read_and_validate
+    outputs:
+      - review_scope
+    success_condition: review_target_and_scope_are_valid
+    failure_transition: ESCALATE_OR_BLOCK
+    event_requirement: material_gate_event
+
+  - step_id: S02
+    purpose: Test claim-to-evidence support and identify unsupported or over-broad assertions.
+    action_class: evidence_challenge
+    outputs:
+      - support_map
+    success_condition: material_claims_have_reviewed_support_status
+    failure_transition: REQUEST_EVIDENCE_OR_CHALLENGE
+    event_requirement: material_step_event
+
+  - step_id: S03
+    purpose: Surface assumptions, contradictions and plausible alternative explanations without inventing counter-evidence.
+    action_class: critical_analysis
+    outputs:
+      - challenge_map
+    success_condition: material_assumptions_conflicts_and_alternatives_are_explicit
+    failure_transition: CONTINUE_WITH_LIMITS_OR_ESCALATE
+    event_requirement: material_step_event
+
+  - step_id: S04
+    purpose: Check falsifiability, source independence, causal discipline, scope and temporal validity where applicable.
+    action_class: critical_validation
+    outputs:
+      - validity_review
+    success_condition: applicable_checks_are_explicit_or_marked_not_applicable
+    failure_transition: CONTINUE_WITH_LIMITS_OR_ESCALATE
+    event_requirement: material_step_event
+
+  - step_id: S05
+    purpose: Produce governed evaluation and dissent findings; preserve unresolved disagreement.
+    action_class: produce_review
+    outputs:
+      - EVAL
+      - FIND
+    success_condition: review_result_and_material_dissent_are_persisted
+    failure_transition: FAIL
+    event_requirement: material_output_event
+
+  - step_id: S06
+    purpose: Propose a bounded follow-up evidence task when the review cannot responsibly conclude.
+    action_class: propose_governed_task
+    optional: true
+    optional_when: existing_evidence_is_sufficient_for_review_outcome
+    outputs:
+      - TASK_candidate
+    success_condition: requested_evidence_is_specific_and_bounded
+    failure_transition: CONTINUE_WITH_REVIEW_RESULT
+    event_requirement: material_output_event_when_used
+
+completion_criteria:
+  - required_EVAL_output_persisted
+  - reviewed_object_ids_referenced
+  - dissent_not_silently_removed
+  - no_active_KN_or_DEC_object_mutated
+  - provenance_of_counterclaims_preserved
+
+review_outcomes:
+  - SUPPORTED
+  - SUPPORTED_WITH_LIMITS
+  - CHALLENGED
+  - INSUFFICIENT_EVIDENCE
+  - ESCALATE
+
+terminal_states:
+  - COMPLETED
+  - FAILED
+  - DENIED
+  - ESCALATED
+  - CANCELLED
+  - BLOCKED
+
+security:
+  raw_secrets_in_output: prohibited
+  classification: inherited
+  cross_customer_data_mixing: prohibited
+  evidence_provenance_mutation: prohibited
+  artificial_independence_claim: prohibited
