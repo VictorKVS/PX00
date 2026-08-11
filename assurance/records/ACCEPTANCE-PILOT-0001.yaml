@@ -1,0 +1,71 @@
+schema_version: 0.1
+acceptance_id: ACC-PILOT-0001
+subject:
+  fixture_id: PILOT-0001
+  roles:
+    - ROLE-0201
+    - ROLE-0202
+  protocols:
+    - PROTO-0201
+    - PROTO-0202
+execution_type: manual_contract_dry_run
+executed_at: 2026-08-11
+state: PASS_WITH_ACTIONS
+production_approval: false
+runtime_code_used: false
+external_side_effects: false
+
+evidence:
+  dry_run: ../runs/PILOT-0001_DRY_RUN_2026-08-11.md
+  fixture: ../fixtures/PILOT-0001_ANALYST_SOCRATES_ACCEPTANCE.yaml
+  architecture_decision: ../../architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md
+  structure_generation: ../../Tree_F/TF-0007_2026-08-11_FIRST_GOVERNED_ROLE_PILOTS.md
+
+blocking_results:
+  RP01: PASS
+  AUTH01: PASS_CONTRACT_LEVEL
+  KN01: PASS
+  KN02: PASS
+  SOC01: PASS
+  SOC02: PASS
+  PROV01: PASS
+  TRACE01: PASS_CONTRACT_LEVEL
+  FAIL01: PASS
+  BRAND01: PASS
+
+actions_remaining:
+  - id: ACT-01
+    item: machine_readable_schema_validation
+    blocking_for: production_runtime
+  - id: ACT-02
+    item: non_bypassable_authority_and_tool_mediation
+    blocking_for: material_runtime_actions
+  - id: ACT-03
+    item: prompt_injection_and_provider_data_leakage_controls
+    blocking_for: live_llm_runtime
+  - id: ACT-04
+    item: tenant_project_knowledge_isolation
+    blocking_for: multi_tenant_or_customer_data
+  - id: ACT-05
+    item: retrieval_poisoning_freshness_invalidation_controls
+    blocking_for: live_knowledge_retrieval
+  - id: ACT-06
+    item: tamper_evident_event_trace_persistence
+    blocking_for: assurance_claims
+  - id: ACT-07
+    item: reviewer_independence_enforcement_when_required
+    blocking_for: separation_of_duties_claims
+  - id: ACT-08
+    item: executable_retry_cancellation_durability_tests
+    blocking_for: production_protocol_execution
+
+allowed_next_scope:
+  - local_contract_validator
+  - local_fixture_runner
+  - synthetic_test_data_only
+  - no_network_required
+  - no_external_side_effects
+  - no_live_customer_data
+  - autonomy_not_above_A1
+
+conclusion: Contract architecture is sufficient to begin minimal local validation runtime, but not production agents or material autonomous execution.
