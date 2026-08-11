@@ -1,0 +1,29 @@
+product_id: PX-00
+repository: VictorKVS/PX00
+package_namespace: px00
+architecture_codename: FATHER
+status: architecture-baseline
+baseline_version: 0.1
+
+identity_policy:
+  canonical_identity_mutable: false
+  display_brand_mutable: true
+  customer_brand_is_canonical: false
+
+architecture_policy:
+  global_core: true
+  regionalization: policy_profiles
+  customer_customization: controlled_profiles_and_extensions
+  uncontrolled_source_forks: prohibited
+
+assurance_policy:
+  llm_output_is_evidence: false
+  provenance_required_for_material_knowledge: true
+  traceability_required_for_material_decisions: true
+  explicit_authority_required_for_autonomous_actions: true
+  material_decision_pre_and_post_evaluation: true
+
+current_phase:
+  name: Architecture Baseline 0.1
+  code_allowed: false
+  exit_gate: approved_contracts_roles_protocols_schemas_and_acceptance_model
