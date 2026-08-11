@@ -1,0 +1,82 @@
+schema_version: 0.1
+status: draft
+purpose: declarative contract for governed PROTO objects
+
+identity:
+  protocol_id: PROTO-XXXX
+  version: 0.1.0
+  lifecycle_status: draft
+
+scope:
+  purpose: null
+  applicability: []
+  accepted_roles_or_capabilities: []
+  jurisdiction_scope: []
+  project_scope: []
+
+inputs:
+  required_object_types: []
+  optional_object_types: []
+
+preconditions: []
+
+execution:
+  steps:
+    - step_id: S01
+      purpose: null
+      actor_requirement: null
+      inputs: []
+      action_class: null
+      outputs: []
+      preconditions: []
+      success_condition: null
+      failure_transition: null
+      event_requirement: materiality_driven
+      evidence_requirement: []
+      timeout: null
+      retry_policy:
+        enabled: false
+        max_attempts: 0
+        backoff_policy: null
+        idempotency_requirement: null
+  branches: []
+  loop_bounds: []
+  checkpoint_policy: null
+
+authority:
+  authority_check_required: true
+  human_approval_gates: []
+  protocol_cannot_expand_external_authority: true
+
+outputs:
+  required_object_types: []
+  optional_object_types: []
+
+failure:
+  terminal_states:
+    - COMPLETED
+    - FAILED
+    - DENIED
+    - ESCALATED
+    - CANCELLED
+    - BLOCKED
+  escalation_path: []
+
+traceability:
+  task_id_required: true
+  run_id_required: true
+  trace_id_required: true
+  protocol_version_required: true
+  authority_decision_reference_required: true
+  material_input_output_references_required: true
+  retries_preserve_prior_attempts: true
+
+security:
+  classification_constraints: []
+  secrets_in_protocol_definition: prohibited
+  raw_protected_data_in_public_repo: prohibited
+
+validation_stage:
+  current: contract_only
+  runtime_validator: not_selected
+  library_dependency: none
