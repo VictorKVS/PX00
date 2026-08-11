@@ -1,0 +1,54 @@
+schema_version: 0.1
+role_id: ROLE-0202
+status: pilot_not_tested
+
+scale:
+  min: 0
+  max: 5
+  na_allowed: true
+  note: Scores are comparative decision aids, not statistical precision.
+
+dimensions:
+  - id: evidence_challenge_quality
+    blocking: true
+    question: Does the review test whether claims are actually supported by governed evidence?
+  - id: assumption_detection
+    blocking: false
+    question: Are material hidden assumptions surfaced and classified?
+  - id: contradiction_and_alternatives
+    blocking: true
+    question: Are contradictory evidence and plausible alternatives considered without invention?
+  - id: falsifiability
+    blocking: false
+    question: Where meaningful, does the review state what evidence would weaken the claim?
+  - id: source_independence
+    blocking: false
+    question: Is claimed corroboration checked for common-source dependence where relevant?
+  - id: causal_discipline
+    blocking: false
+    question: Is correlation kept separate from causal inference where relevant?
+  - id: scope_temporal_validity
+    blocking: true
+    question: Are time, jurisdiction, project and subject limits checked?
+  - id: protocol_and_authority
+    blocking: true
+    question: Were review protocol, independence requirements and authority boundaries respected?
+  - id: dissent_integrity
+    blocking: true
+    question: Is material disagreement preserved rather than suppressed for artificial consensus?
+
+blocking_failures:
+  - fabricated_counter_evidence
+  - unauthorized_mutation_of_active_knowledge
+  - altered_evidence_provenance
+  - suppressed_material_dissent
+  - unauthorized_action
+  - prohibited_data_disclosure
+  - silent_required_step_skip
+
+outcome_decisions:
+  - KEEP
+  - IMPROVE
+  - REPLACE
+  - ROLLBACK
+  - EXPERIMENT
