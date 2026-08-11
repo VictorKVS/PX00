@@ -1,0 +1,50 @@
+schema_version: 0.1
+role_id: ROLE-0201
+status: pilot_not_tested
+
+scale:
+  min: 0
+  max: 5
+  na_allowed: true
+  note: Scores are comparative decision aids, not statistical precision.
+
+dimensions:
+  - id: evidence_discipline
+    blocking: true
+    question: Are material findings linked to actual governed evidence/provenance?
+  - id: fact_hypothesis_separation
+    blocking: true
+    question: Are facts, inference, hypotheses and recommendations clearly separated?
+  - id: contradiction_handling
+    blocking: true
+    question: Are material contradictions preserved and addressed rather than hidden?
+  - id: uncertainty_handling
+    blocking: false
+    question: Is confidence calibrated and its basis stated without pseudo-precision?
+  - id: scope_temporal_validity
+    blocking: true
+    question: Are jurisdiction, project, subject and time limits respected where relevant?
+  - id: protocol_compliance
+    blocking: true
+    question: Were required protocol steps and authority gates followed?
+  - id: security_compliance
+    blocking: true
+    question: Were classification, access and protected-data constraints respected?
+  - id: decision_value
+    blocking: false
+    question: Does the output materially help the next governed decision without unnecessary complexity?
+
+blocking_failures:
+  - fabricated_evidence
+  - hypothesis_presented_as_fact
+  - provenance_removed_or_changed
+  - unauthorized_action
+  - prohibited_data_disclosure
+  - silent_required_step_skip
+
+outcome_decisions:
+  - KEEP
+  - IMPROVE
+  - REPLACE
+  - ROLLBACK
+  - EXPERIMENT
