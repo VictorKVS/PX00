@@ -4,6 +4,28 @@
 
 It is not a duplicate of Git history. Git records *what bytes changed*; `Tree_F` records *why the structure changed, what each material file is for, how it participates in the production chain, what dependencies/security implications exist, and how the decision can later be evaluated or reversed*.
 
+## Core rule — accumulate, do not erase
+
+`Tree_F` is an append-only development corpus for normal project evolution.
+
+Accepted `TF-XXXX` files SHALL NOT be deleted, overwritten, renamed for convenience, or reused when the system changes. A new material structural state creates a new record with the next unique number.
+
+```text
+TF-0001
+  ↓
+TF-0002
+  ↓
+TF-0003
+  ↓
+...
+```
+
+An old record may become superseded, but it remains part of the development lineage. The successor references the earlier record instead of replacing it.
+
+This accumulated corpus is intended to support architecture comparison, production-chain analysis, A/B evaluation, regression-test design, security/DevOps retrospectives, lessons learned and rollback decisions.
+
+The only destructive exception is a formally authorized security/legal sanitation case (for example an accidentally committed secret or protected data). Such sanitation must preserve a public-safe tombstone or incident reference without reproducing the sensitive content.
+
 ## Record rule
 
 For every material structural change create one record:
@@ -11,6 +33,8 @@ For every material structural change create one record:
 `TF-XXXX_YYYY-MM-DD_SHORT-NAME.md`
 
 and link it from [`../DEVELOPMENT_JOURNAL.md`](../DEVELOPMENT_JOURNAL.md).
+
+TF identifiers are monotonically increasing and never reused.
 
 A `TF` record is append-only by convention after the represented baseline is accepted. Corrections are made by a new record that references the superseded one.
 
@@ -59,3 +83,5 @@ Formatting-only or typo-only changes remain visible in Git and normally need no 
 ## Security rule
 
 `Tree_F` is safe-to-publish metadata. Never place credentials, API keys, session data, private keys, customer secrets, raw personal data, or protected evidence here. Refer to sensitive evidence by controlled ID/hash/location only.
+
+See [`TF-0002`](TF-0002_2026-08-11_APPEND_ONLY_DEVELOPMENT_CORPUS.md) for the accepted append-only lineage decision.
