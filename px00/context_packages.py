@@ -21,11 +21,16 @@ class KnowledgeBindingRef:
 @dataclass(frozen=True)
 class KnowledgeObjectRef:
     object_id: str
+    version_id: str
+    content_digest: str
     object_type: str
     knowledge_space_id: str
     domain_id: str
     classification: str
     route_snapshot_ref: str
+
+    def version_ref(self) -> str:
+        return f"{self.object_id}@{self.version_id}#{self.content_digest}"
 
 
 @dataclass(frozen=True)
@@ -52,6 +57,7 @@ class ContextPackage:
     assignment_ref: str
     binding_refs: tuple[str, ...]
     knowledge_object_refs: tuple[str, ...]
+    knowledge_object_version_refs: tuple[str, ...]
     route_snapshot_refs: tuple[str, ...]
     package_hash: str
     hash_algorithm: str = "sha256"
@@ -70,6 +76,16 @@ class ContextPackageBuilder:
             return cls.CLASSIFICATION_ORDER[value] <= cls.CLASSIFICATION_ORDER[ceiling]
         except KeyError as exc:
             raise ValueError("UNKNOWN_CLASSIFICATION") from exc
+
+    @staticmethod
+    def _valid_sha256(value: str) -> bool:
+        if len(value) != 64:
+            return False
+        try:
+            int(value, 16)
+        except ValueError:
+            return False
+        return True
 
     def build(
         self,
@@ -100,6 +116,12 @@ class ContextPackageBuilder:
         allowed_types = set(request.requested_object_types)
         results: list[KnowledgeObjectRef] = []
         for candidate in candidates:
+            if candidate.object_id.startswith("http://") or candidate.object_id.startswith("https://"):
+                raise ValueError("PHYSICAL_LOCATION_USED_AS_KNOWLEDGE_ID")
+            if not candidate.version_id.strip():
+                raise ValueError("KNOWLEDGE_VERSION_REQUIRED")
+            if not self._valid_sha256(candidate.content_digest):
+                raise ValueError("INVALID_KNOWLEDGE_CONTENT_DIGEST")
             for binding in selected_bindings:
                 if candidate.knowledge_space_id != binding.knowledge_space_id or candidate.domain_id != binding.domain_id:
                     continue
@@ -109,13 +131,12 @@ class ContextPackageBuilder:
                     continue
                 if not self._classification_allowed(candidate.classification, request.classification_ceiling):
                     continue
-                if candidate.object_id.startswith("http://") or candidate.object_id.startswith("https://"):
-                    raise ValueError("PHYSICAL_LOCATION_USED_AS_KNOWLEDGE_ID")
                 results.append(candidate)
                 break
 
-        results = sorted(results, key=lambda item: item.object_id)[: request.max_objects]
+        results = sorted(results, key=lambda item: (item.object_id, item.version_id))[: request.max_objects]
         refs = tuple(item.object_id for item in results)
+        version_refs = tuple(item.version_ref() for item in results)
         routes = tuple(sorted({item.route_snapshot_ref for item in results}))
         material = {
             "knowledge_request_ref": request.knowledge_request_id,
@@ -124,6 +145,7 @@ class ContextPackageBuilder:
             "assignment_ref": assignment_ref,
             "binding_refs": tuple(sorted(request.binding_refs)),
             "knowledge_object_refs": refs,
+            "knowledge_object_version_refs": version_refs,
             "route_snapshot_refs": routes,
         }
         digest = sha256(self._canonical(material)).hexdigest()
@@ -135,6 +157,7 @@ class ContextPackageBuilder:
             assignment_ref=assignment_ref,
             binding_refs=tuple(sorted(request.binding_refs)),
             knowledge_object_refs=refs,
+            knowledge_object_version_refs=version_refs,
             route_snapshot_refs=routes,
             package_hash=digest,
         )
