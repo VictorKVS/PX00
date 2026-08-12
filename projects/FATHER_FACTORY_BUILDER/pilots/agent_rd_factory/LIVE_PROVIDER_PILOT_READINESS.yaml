@@ -1,0 +1,63 @@
+pilot_id: FFB-LIVE-PILOT-0001
+project_ref: PROJECT-FFB-0001
+summit_ref: SUMMIT-FFB-02
+status: READY_FOR_PROVIDER_CONFIGURATION
+
+experiment_context:
+  crisp_mlq_phase: DEPLOYMENT
+  delivery_stage: POC
+  px00_maturity: M1_PROTOTYPE
+  note: deployment-phase integration experiment does not imply Production delivery or M3-M5 maturity
+
+objective: prove exactly one real non-deterministic AI inference call through the governed executor boundary without granting tools, organizational authority or material external side effects
+
+provider_configuration:
+  provider_ref: TBD
+  driver_ref: TBD
+  endpoint_url: TBD
+  allowed_host_refs: TBD
+  model_ref: TBD
+  auth_secret_env_ref: TBD
+  live_enable_env_ref: PX00_LIVE_PROVIDER_ENABLED
+  allowed_data_classifications: [PUBLIC, INTERNAL]
+  timeout_seconds: TBD
+  max_response_bytes: TBD
+
+secret_policy:
+  - no credential value may be committed to Git
+  - profile stores only the environment/secret reference
+  - live execution is opt-in and disabled by default
+  - CI regression suite uses fake transport and never requires a live credential
+
+first_live_task:
+  capability: bounded text analysis / structured candidate generation
+  input_data_classification: PUBLIC_OR_INTERNAL_ONLY
+  tools: NONE
+  material_external_effects: NONE
+  output_status: CANDIDATE_ONLY
+  verifier_assignment_must_differ_from_producer: true
+  socrates_independence_required: true
+
+success_criteria:
+  - authorized provider profile validates
+  - HTTPS allowlist gate passes
+  - real provider call returns through the adapter
+  - request and response hashes are preserved
+  - provider request identifier is preserved when available
+  - requested and returned model identity are both visible when available
+  - candidate becomes a typed factory artifact
+  - provider output does not create authority or acceptance
+  - independent verifier can PASS or FAIL the candidate
+  - a FAIL can enter governed rework
+  - existing security-block regression remains green
+  - no secret value appears in Git or call evidence
+
+stop_conditions:
+  - restricted data would leave the approved boundary
+  - provider or endpoint identity is ambiguous
+  - live credential handling cannot satisfy secret hygiene
+  - output schema cannot be bounded and validated
+  - provider call would require tool authority or material external effects
+  - unresolved S4 applies to the tested path
+
+summit_rule: SUMMIT-FFB-02 remains OPEN until actual live evidence exists; readiness and mocked transport tests are not live evidence
