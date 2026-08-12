@@ -17,6 +17,29 @@ PX00 now contains executable Python. The security boundary must therefore move f
 - Network access: validator requires none.
 - External side effects: prohibited.
 
+## Execution-environment isolation
+
+The first owner-executed real repository run passed all 13 tests and the full validator, but installation into the shared host Python environment surfaced an unrelated pre-existing package conflict (`chromadb` vs `bcrypt`).
+
+Therefore the validation baseline now requires an isolated environment for reproducible local runs:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-validator.txt
+python -m unittest discover -s tests -v
+python -m px00 .
+```
+
+The repository already ignores `.venv/`.
+
+Rules:
+
+- do not repair unrelated global Python packages as part of PX00 validation;
+- do not treat a global-environment package conflict as a PX00 defect unless the conflicting package is in PX00's dependency graph;
+- future dependency evidence should be collected from the isolated PX00 environment or a disposable CI environment;
+- containers remain deferred until requirements justify them; stdlib `venv` is sufficient for the current gate.
+
 ## Minimal controls now enforced in code
 
 1. Canonical `PX-00` identity remains immutable.
@@ -44,7 +67,8 @@ Primary threats at this phase:
 - acceptance without evidence;
 - accidental secret insertion into public governance YAML;
 - silent deletion/gap in accumulated `Tree_F` development history;
-- dependency compromise or unexpected dependency drift.
+- dependency compromise or unexpected dependency drift;
+- non-reproducible results caused by unrelated state in a shared Python environment.
 
 ## Controls deliberately deferred
 
@@ -68,11 +92,16 @@ These require a separate requirement and acceptance case before introduction.
 - New dependency requires purpose, owner, license/source review, security impact and Tree_F/journal evidence.
 - Dependency removal is preferred over addition when standard-library functionality is sufficient.
 - A full SBOM becomes mandatory before any releasable distribution; the current validator gate records direct dependency provenance only.
+- Local acceptance evidence should come from an isolated `.venv` or equivalent disposable environment.
 - CI is intentionally deferred until local repository validation produces value and stable commands. When CI is added, action dependencies and permissions must be minimized and reviewed.
 
 ## Test commands
 
+Preferred isolated local sequence:
+
 ```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements-validator.txt
 python -m unittest discover -s tests -v
 python -m px00 .
@@ -87,13 +116,15 @@ The validator returns exit code `0` on PASS and non-zero on FAIL.
 
 Current design is appropriate for a local, read-only contract validator. It is **not** evidence that production authorization, tenant isolation, tamper resistance, secret scanning, dependency integrity or runtime enforcement are solved.
 
+The first real local repository run is preserved in `assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md`; validator acceptance is recorded in `assurance/records/ACCEPTANCE-VALIDATOR-0001.yaml`.
+
 ## Required next evidence
 
 Before widening runtime scope:
 
-- run validator against the real local repository and preserve the result;
+- reproduce validator PASS in an isolated local `.venv`;
 - prove negative tests fail for intended contract violations;
-- add minimal CI only after commands stabilize;
+- add minimal CI only after the isolated commands remain stable;
 - add dependency/SBOM automation before a releasable build;
 - verify repository secret scanning / branch protection state separately;
 - threat-model any network, model-provider, database or customer-data integration before implementation.
