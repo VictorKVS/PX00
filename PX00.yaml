@@ -67,7 +67,7 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0018-hash-locked-validator-dependency-install.md
+  latest_contract_decision: architecture/adr/ADR-0019-tracked-file-secret-hygiene-gate.md
 
 pilot_roles:
   ROLE-0201:
@@ -104,6 +104,7 @@ runtime_gate:
     - minimal_ci_contract_validation
     - dependency_provenance_validation
     - dependency_artifact_hash_validation
+    - tracked_file_secret_hygiene_scan
   prohibited:
     - production_agents
     - live_customer_or_protected_data
@@ -123,6 +124,7 @@ minimal_validator:
   tests:
     contracts: tests/test_validator.py
     dependency_provenance: tests/test_dependency_provenance.py
+    secret_hygiene: tests/test_secret_hygiene.py
   integration_test: RepositoryIntegrationTests.test_current_repository_contracts
   test_framework: python_stdlib_unittest
   devsecops_baseline: security/DEVSECOPS_BASELINE_0_1.md
@@ -139,11 +141,13 @@ minimal_validator:
     - Tree_F/TF-0018_2026-08-12_LOCAL_DEPENDENCY_PROVENANCE_PASS.md
     - Tree_F/TF-0019_2026-08-12_DEPENDENCY_ARTIFACT_HASH_LOCK_GATE.md
     - Tree_F/TF-0020_2026-08-12_WINDOWS_DEPENDENCY_ARTIFACT_HASH_PASS.md
+    - Tree_F/TF-0021_2026-08-12_TRACKED_FILE_SECRET_HYGIENE_GATE.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
     - architecture/adr/ADR-0017-minimal-dependency-provenance-and-sbom-gate.md
     - architecture/adr/ADR-0018-hash-locked-validator-dependency-install.md
+    - architecture/adr/ADR-0019-tracked-file-secret-hygiene-gate.md
   network_required: false
   external_side_effects: false
   authoring_unit_tests:
@@ -180,7 +184,10 @@ ci_gate:
   accepted_hash_lock_run_id: 31571447150
   failed_hash_lock_workflow_run_id: 31571384335
   accepted_hash_lock_commit: ad810f2fc292864beae1e882c1c7d728dae8506f
-  accepted_total_tests: 19
+  secret_hygiene_step: true
+  accepted_secret_hygiene_run_id: 31573355366
+  accepted_secret_hygiene_commit: 2ce2af539f5909837a00d05da15fb410bc3337d0
+  accepted_total_tests: 24
   production_deployment: false
 
 dependency_provenance:
@@ -216,6 +223,29 @@ dependency_provenance:
   vulnerability_monitoring: NOT_IMPLEMENTED
   release_signing: NOT_IMPLEMENTED
 
+secret_hygiene:
+  state: PASS_WITH_SCOPE_LIMITS
+  baseline: security/SECRET_HYGIENE_BASELINE_0_1.md
+  scanner: px00/secret_hygiene.py
+  tests: tests/test_secret_hygiene.py
+  file_source: git_ls_files
+  current_tracked_scan: PASS
+  findings: 0
+  errors: 0
+  values_echoed_to_logs: false
+  external_runtime_dependencies_added: false
+  accepted_ci_run_id: 31573355366
+  accepted_ci_commit: 2ce2af539f5909837a00d05da15fb410bc3337d0
+  accepted_total_tests: 24
+  run: assurance/runs/SECRET-HYGIENE-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+  acceptance: assurance/records/ACCEPTANCE-SECRET-HYGIENE-0001.yaml
+  failed_runs_preserved:
+    - 31573227207
+    - 31573246011
+  git_history_scan: NOT_IMPLEMENTED
+  github_secret_scanning: UNVERIFIED
+  github_push_protection: UNVERIFIED
+
 repository_security:
   status_file: security/REPOSITORY_SECURITY_STATUS_2026-08-12.md
   visibility: public
@@ -225,13 +255,14 @@ repository_security:
   secret_scanning: UNVERIFIED
   push_protection: UNVERIFIED
   required_ci_enforcement: UNVERIFIED
+  tracked_file_secret_hygiene: PASS_WITH_SCOPE_LIMITS
 
 current_phase:
   name: Architecture Baseline 0.1 - Repository Assurance Gate
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0018
+    - architecture_adr_0001_0019
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -264,6 +295,7 @@ current_phase:
     - local_isolated_dependency_provenance_reproduced
     - hosted_linux_dependency_artifact_hash_lock_passed
     - local_windows_dependency_artifact_hash_lock_passed
+    - tracked_file_secret_hygiene_gate_passed
   next_gate:
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
