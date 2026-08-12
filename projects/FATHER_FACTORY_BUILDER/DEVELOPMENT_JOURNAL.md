@@ -30,6 +30,7 @@ Every material Factory Builder generation records:
 - Security Knowledge: canonical professional product lives in `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`; Factory Builder binds to `KB-SECURITY` instead of copying domain truth.
 - First real cross-repository source-metadata snapshot has completed manifest → snapshot → ContextPackage → RUN trace → read-only replay.
 - `RISK-0012`: RESOLVED for bounded M1 cross-repository provenance/replay after ARGUS Audit 0002.
+- Decision materiality norm `PX00-NORM-DM-0001`: ACTIVE; Role Packages must declare materiality ranges/promotion triggers.
 - A true atomic VERIFIED Security requirement reasoning RUN remains NOT PROVEN.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
@@ -225,3 +226,17 @@ The bounded RUN uses a deterministic synthetic operation so the generation prove
 `RISK-0012` is RESOLVED for the bounded M1 cross-repository provenance/replay scope with explicit reopen conditions.
 
 Next useful evidence must come from product value rather than more snapshot plumbing: first live governed AI executor and/or a truly atomic VERIFIED domain requirement used in a professional task.
+
+## 2026-08-13 — FFBJ-0017 — Decision materiality project norm
+Promoted the repeatedly stated proportional-assurance principle into a permanent project norm `PX00-NORM-DM-0001`.
+
+Factory Builder must now declare, for every material role/responsibility, the typical D0–D3 materiality range, promotion triggers, acceptable evidence categories, independent-review requirement, approval/escalation requirement and verification/outcome-learning obligations.
+
+Core invariant:
+`higher cost of error / irreversibility / uncertainty / risk → stronger evidence + independent review + approval`.
+
+The norm is intentionally proportional: D0 local/conventional choices remain lightweight; architecture/product decisions are normally D2; regulated/safety/critical decisions are D3. A nominally local decision is promoted when it materially affects a higher-level property.
+
+Risk remains independent, but S3 imposes at least D2 and S4 imposes D3 while retaining veto semantics.
+
+This makes Security's evidence-first discipline a reusable organizational principle for future architecture, programming, analytics, operations, finance, legal and engineering roles without copying Security-specific source semantics into those domains.
