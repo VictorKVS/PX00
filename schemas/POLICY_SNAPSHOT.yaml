@@ -1,4 +1,4 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: run_policy_snapshot
 canonical_object: false
@@ -7,6 +7,7 @@ purpose: immutable exact policy profile set pinned to one governed run
 required_fields:
   snapshot_id:
     type: stable_runtime_id
+    rule: unique runtime identity for one RUN snapshot; not equal to content hash identity
   run_id:
     type: RUN-reference
   created_at:
@@ -26,12 +27,15 @@ required_fields:
     values: [sha256]
   snapshot_hash:
     type: sha256_hex
+    rule: content digest of normalized policy profile set; equal policy content may share the same hash across different RUNs
 
 invariants:
   - all_required_profile_types_are_present_exactly_once
   - exact_profile_versions_are_pinned_before_material_execution
   - inactive_profile_cannot_enter_new_snapshot
   - snapshot_content_is_immutable_for_run
+  - snapshot_runtime_identity_is_distinct_per_run
+  - equal_policy_content_may_have_equal_hash_across_runs_without_equal_snapshot_identity
   - profile_order_does_not_change_snapshot_hash
   - material_profile_change_changes_snapshot_hash
   - registry_update_does_not_silently_migrate_existing_run
