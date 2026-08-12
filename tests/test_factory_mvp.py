@@ -23,6 +23,14 @@ class FactoryMvpTests(unittest.TestCase):
             return "ASSIGN-SOCRATES"
         return "ASSIGN-PRODUCER"
 
+    def payload_for_stage(self, stage, outcome="PASS"):
+        payload = {"stage": stage, "outcome": outcome}
+        if stage in {"SECURITY_PRECHECK", "VERIFY_AND_VALIDATE"}:
+            payload["verdict"] = outcome
+        elif stage == "SOCRATES_CHALLENGE":
+            payload["verdict"] = "PASS" if outcome == "PASS" else "FAIL"
+        return payload
+
     def submit_current(self, outcome="PASS"):
         run = self.mvp.runs["MVP-RUN-1"]
         self.seq += 1
@@ -31,7 +39,7 @@ class FactoryMvpTests(unittest.TestCase):
             run.run_id,
             artifact_id,
             STAGE_ARTIFACT_TYPES[run.stage],
-            {"stage": run.stage, "outcome": outcome},
+            self.payload_for_stage(run.stage, outcome),
             self.producer_for_stage(run.stage),
         )
         return artifact_id
@@ -101,7 +109,7 @@ class FactoryMvpTests(unittest.TestCase):
                 "MVP-RUN-1",
                 "ART-X",
                 "VERIFICATION_REPORT",
-                {},
+                {"verdict": "PASS"},
                 "ASSIGN-PRODUCER",
             )
 
@@ -113,9 +121,22 @@ class FactoryMvpTests(unittest.TestCase):
                 "MVP-RUN-1",
                 "ART-X",
                 "SOCRATES_REVIEW",
-                {},
+                {"verdict": "PASS"},
                 "ASSIGN-PRODUCER",
             )
+
+    def test_gated_artifact_verdict_must_match_runtime_outcome(self):
+        self.create()
+        self.advance_until("SECURITY_PRECHECK")
+        self.mvp.submit_artifact(
+            "MVP-RUN-1",
+            "ART-X",
+            "SECURITY_PRECHECK_REPORT",
+            {"verdict": "FAIL"},
+            "ASSIGN-PRODUCER",
+        )
+        with self.assertRaisesRegex(ValueError, "ARTIFACT_OUTCOME_MISMATCH"):
+            self.mvp.advance("MVP-RUN-1", "SECURITY_PRECHECK", outcome="PASS")
 
     def test_untrusted_input_blocks_prototype_until_trust_gate(self):
         self.create(untrusted_input_present=True)
