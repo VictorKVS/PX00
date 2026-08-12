@@ -1,0 +1,49 @@
+schema_version: 0.1
+status: draft
+object_type: factory_role_blueprint
+project_ref: PROJECT-FFB-0001
+purpose: reusable governed specification for one organizational role in a factory blueprint
+
+required_fields:
+  role_id: {type: stable_id}
+  display_name: {type: text}
+  mission: {type: text}
+  department_ref: {type: stable_reference}
+  reports_to_role_ref: {type: stable_reference_or_null}
+  responsibilities: {type: list}
+  non_responsibilities: {type: list}
+  required_capabilities: {type: list}
+  authority_ceiling: {type: reference}
+  prohibited_actions: {type: list}
+  escalation_paths: {type: list}
+  protocol_refs: {type: list}
+  handoff_inputs: {type: list}
+  handoff_outputs: {type: list}
+  knowledge_binding_refs: {type: list}
+  evidence_obligations: {type: list}
+  acceptance_obligations: {type: list}
+  independence_constraints: {type: list}
+  performance_measures: {type: list}
+  anti_goodhart_controls: {type: list}
+  known_failure_modes: {type: list}
+  continuity_rules: {type: list}
+  review_cadence: {type: text}
+  version: {type: string}
+
+invariants:
+  - role_identity_is_independent_of_agent_model_device_or_vendor
+  - responsibilities_and_non_responsibilities_are_explicit
+  - authority_is_not_inferred_from_knowledge_or_capability
+  - role_must_have_measurable_outputs_or_acceptance_obligations
+  - role_must_have_escalation_path_for_out_of_scope_work
+  - role_cannot_self_declare_independence_when_conflict_exists
+  - knowledge_bindings_reference_logical_spaces_not_physical_paths
+  - replacing_executor_does_not_rewrite_role_history
+
+lifecycle:
+  - PROPOSED
+  - REVIEWED
+  - APPROVED
+  - ACTIVE
+  - DEPRECATED
+  - SUPERSEDED
