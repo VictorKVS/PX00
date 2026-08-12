@@ -1,0 +1,63 @@
+schema_version: 0.1
+status: draft
+object_type: policy_profile
+canonical_object: false
+purpose: machine-readable restrictive policy layer for governed action evaluation
+
+required_fields:
+  profile_id:
+    type: stable_governed_resource_id
+  profile_type:
+    type: enum
+    values: [ROLE, PROTOCOL, PROJECT, ORGANIZATION, JURISDICTION, TOOL, DATA, APPROVAL]
+  version:
+    type: string
+  status:
+    type: enum
+    values: [DRAFT, ACTIVE, SUSPENDED, RETIRED]
+  allowed_capabilities:
+    type: list
+    item_type: string
+  autonomy_ceiling:
+    type: enum
+    values: [A0, A1, A2, A3, A4]
+  side_effect_ceiling:
+    type: enum
+    values: [S0, S1, S2, S3, S4]
+  allowed_data_classifications:
+    type: list
+    item_type: string
+  operation_count_limit:
+    type: integer
+    minimum: 1
+
+optional_fields:
+  allowed_target_prefixes:
+    type: list
+    item_type: string
+  approval_required_capabilities:
+    type: list
+    item_type: string
+  approval_present:
+    type: boolean
+  capability_denies:
+    type: list
+    item_type: string
+  reason_metadata:
+    type: mapping
+
+invariants:
+  - missing_required_profile_fails_closed
+  - effective_capabilities_are_intersection_of_applicable_profiles
+  - effective_autonomy_is_minimum_applicable_ceiling
+  - effective_side_effect_is_minimum_applicable_ceiling
+  - effective_operation_limit_is_minimum_positive_limit
+  - explicit_deny_overrides_allow
+  - approval_requirements_accumulate
+  - profile_order_does_not_change_effective_result
+  - adding_stricter_profile_cannot_widen_effective_authority
+  - executor_or_adapter_hint_cannot_modify_policy_result
+  - suspended_or_retired_profile_cannot_authorize_new_execution
+
+runtime_validator: deterministic_reference_implementation
+library_dependency: none
