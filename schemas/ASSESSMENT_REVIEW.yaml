@@ -1,0 +1,43 @@
+schema_version: 0.1
+status: draft
+object_type: assessment_review
+purpose: immutable review decision over one formal assessment challenge
+
+required_fields:
+  review_id:
+    type: stable_id
+  challenge_ref:
+    type: challenge_reference
+  target_assessment_ref:
+    type: assessment_reference
+  reviewer_ref:
+    type: actor_or_component_reference
+  reviewer_version:
+    type: string
+  reviewed_at:
+    type: utc_timestamp
+  decision:
+    type: enum
+    values: [REJECT_CHALLENGE, ACCEPT_CHALLENGE, ACCEPT_WITH_MODIFICATION, ESCALATE]
+  reason_code:
+    type: string
+  rationale_summary:
+    type: string
+  basis_refs:
+    type: ordered_reference_list
+
+conditional_fields:
+  replacement_assessment_ref:
+    type: assessment_reference
+    required_when: decision in [ACCEPT_CHALLENGE, ACCEPT_WITH_MODIFICATION]
+
+invariants:
+  - review_is_immutable
+  - review_does_not_modify_target_assessment
+  - accepted_challenge_requires_new_replacement_assessment
+  - replacement_assessment_supersedes_exact_target
+  - rejected_challenge_preserves_target_as_current
+  - review_evidence_and_reason_are_explicit
+  - hidden_chain_of_thought_is_not_required
+
+library_dependency: none
