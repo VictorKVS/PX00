@@ -1,42 +1,46 @@
 # TF-0022 — Pull request change-control rehearsal
 
 **Date:** 2026-08-12  
-**Status:** PILOT / EXECUTION PENDING  
-**Decision:** EXPERIMENT
+**Status:** ACCEPTED WITH ACTIONS  
+**Decision:** KEEP
 
 ## Trigger
 
-`TF-0021` established tracked-file secret hygiene. Repository ruleset enforcement remains externally unverified, so the next smallest useful step is to prove the pull-request path itself before claiming enforcement.
+`TF-0021` established tracked-file secret hygiene. Repository ruleset enforcement remains externally unverified, so the next smallest useful step was to prove the pull-request path itself before claiming enforcement.
 
 ## Structural delta
 
 ```text
 security/CHANGE_CONTROL_BASELINE_0_1.md
 Tree_F/TF-0022_2026-08-12_PULL_REQUEST_CHANGE_CONTROL_REHEARSAL.md
+assurance/runs/PRGATE-0001_PULL_REQUEST_PASS_2026-08-12.md
+assurance/records/ACCEPTANCE-PRGATE-0001.yaml
 ```
 
 ## Experiment
 
-Create this material change on a dedicated branch, open a pull request to `main`, observe the existing `PX00 Contract Validation` workflow on the pull-request event, preserve the result, then merge only after successful validation.
+A material change was created on dedicated branch `gate/pr-change-control-rehearsal` and proposed through GitHub pull request `#1` to `main`.
 
-Expected path:
+Observed GitHub Actions evidence:
 
 ```text
-gate/pr-change-control-rehearsal
-→ pull request
-→ Validate contracts
-→ PASS
-→ merge
+run_id      31583857865
+workflow    PX00 Contract Validation
+event       pull_request
+head_sha    014f40ad6af36a1c678e0fb2d9b3ef24405e60e2
+base_sha    e73050bc1553d9dbc5a9713c1572e7835a677661
+status      completed
+conclusion  success
 ```
 
-## Claims allowed by a successful rehearsal
+## Accepted claims
 
-A successful run may prove:
+The rehearsal proves:
 
 - a dedicated branch can carry a governed change;
-- a PR to `main` triggers the existing workflow;
-- the exact validation job can be observed before merge;
-- the merged commit remains attributable to PR/CI evidence.
+- a PR to `main` triggers the existing validation workflow;
+- the validation result is observable before merge;
+- CI evidence can be preserved on the branch before acceptance.
 
 It does **not** prove:
 
@@ -55,13 +59,12 @@ No new runtime algorithm or dependency. This is repository change-control eviden
 
 ## Security conclusion
 
-`NOT_TESTED` until the PR-triggered workflow completes.
+`PASS_WITH_ACTIONS` for **PR workflow capability**.
 
 The experiment intentionally distinguishes voluntary process from platform enforcement. A PASS here cannot be promoted to `main branch protection PASS`.
 
 ## Next gate
 
-1. Verify the pull-request-triggered `PX00 Contract Validation` run.
-2. Preserve assurance evidence on the branch.
-3. Merge after successful validation.
-4. Recheck repository rulesets separately; only actual enforcement can close the main-branch gate.
+1. Verify the new PR run after the assurance evidence is committed.
+2. Merge PR `#1` only after that successful validation.
+3. Recheck repository rulesets separately; only actual enforcement can close the main-branch gate.
