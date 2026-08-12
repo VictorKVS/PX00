@@ -138,6 +138,7 @@ minimal_validator:
     - Tree_F/TF-0017_2026-08-12_MINIMAL_DEPENDENCY_PROVENANCE_SBOM_GATE.md
     - Tree_F/TF-0018_2026-08-12_LOCAL_DEPENDENCY_PROVENANCE_PASS.md
     - Tree_F/TF-0019_2026-08-12_DEPENDENCY_ARTIFACT_HASH_LOCK_GATE.md
+    - Tree_F/TF-0020_2026-08-12_WINDOWS_DEPENDENCY_ARTIFACT_HASH_PASS.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
@@ -198,13 +199,19 @@ dependency_provenance:
   requirement_hash_lock_agreement_required: true
   hash_algorithm: sha256
   binary_only_ci_install: true
-  hosted_linux_hash_lock: PASS
-  hosted_linux_run: assurance/runs/HASHLOCK-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
-  hosted_linux_acceptance: assurance/records/ACCEPTANCE-HASHLOCK-0001.yaml
+  artifact_hash_locking: PASS
+  supported_hash_lock_targets:
+    hosted_linux_x86_64:
+      state: PASS
+      run: assurance/runs/HASHLOCK-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+      acceptance: assurance/records/ACCEPTANCE-HASHLOCK-0001.yaml
+    local_windows_x86_64:
+      state: PASS
+      run: assurance/runs/HASHLOCK-0002_WINDOWS_LOCAL_PASS_2026-08-12.md
+      acceptance: assurance/records/ACCEPTANCE-HASHLOCK-WINDOWS-0001.yaml
   local_isolated_sbom_validation: PASS
   local_isolated_sbom_run: assurance/runs/SBOM-0002_LOCAL_ISOLATED_PASS_2026-08-12.md
   local_isolated_sbom_acceptance: assurance/records/ACCEPTANCE-SBOM-LOCAL-0001.yaml
-  windows_hash_lock_execution: PENDING
   external_schema_validation: NOT_IMPLEMENTED
   vulnerability_monitoring: NOT_IMPLEMENTED
   release_signing: NOT_IMPLEMENTED
@@ -256,8 +263,8 @@ current_phase:
     - minimal_dependency_provenance_sbom_gate_passed
     - local_isolated_dependency_provenance_reproduced
     - hosted_linux_dependency_artifact_hash_lock_passed
+    - local_windows_dependency_artifact_hash_lock_passed
   next_gate:
-    - verify_windows_hash_locked_install_locally
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
     - decide_minimal_vulnerability_monitoring_before_release
