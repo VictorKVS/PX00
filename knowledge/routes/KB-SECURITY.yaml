@@ -1,0 +1,24 @@
+knowledge_space_id: KB-SECURITY
+logical_domain: SECURITY
+route_version: 1.0.0
+endpoint_type: GITHUB_REPOSITORY
+endpoint_locator: VictorKVS/KNOWLEDGE_CORE
+endpoint_ref: main
+status: ACTIVE
+resolver_priority: 100
+content_root: security-knowledge/
+integrity_ref: KNOWLEDGE_SNAPSHOT
+
+effective_from: "2026-08-12T20:24:09Z"
+
+route_policy:
+  canonical_product_ref: SEC-PROD-0001
+  canonical_domain_registry_ref: father/domain-knowledge/domain-registry.yaml
+  canonical_roadmap_ref: father/product-roadmap/security-products.yaml
+  historical_resolution_rule: >-
+    New requests may resolve through the active route, but every RUN that consumes external
+    Security Knowledge must pin an immutable KNOWLEDGE_SNAPSHOT with the exact repository commit
+    and selected object version digests before ContextPackage delivery.
+  authority_rule: >-
+    Knowledge routing and snapshot pinning provide context provenance only and never grant
+    execution authority, tool access, compliance approval or expert-review status.
