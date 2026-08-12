@@ -132,7 +132,7 @@ Trigger
 - [ADR-0009](architecture/adr/ADR-0009-canonical-object-model-and-role-package-contract.md)
 - [TF-0003](Tree_F/TF-0003_2026-08-11_CANONICAL_OBJECT_AND_ROLE_CONTRACTS.md)
 
-**Data & processing:** The model separates orchestration objects, source/evidence/knowledge objects, governance/assurance objects and event/trace identities. Source, artifact, evidence, finding and admitted knowledge remain distinct to preserve provenance and uncertainty.
+**Data & processing:** The model separates orchestration objects, source/evidence/knowledge objects and governance/assurance objects. Source, artifact, evidence, finding and admitted knowledge remain distinct to preserve provenance and uncertainty.
 
 **Algorithms / libraries:** No runtime implementation. Contract rules use a materiality filter for object types, fail-closed authority, provenance separation and version-on-material-change. No third-party libraries introduced.
 
@@ -152,7 +152,7 @@ Trigger
 **Status:** ACCEPTED FOR BASELINE VALIDATION  
 **Decision:** KEEP / VALIDATE
 
-**Why:** Role capability must not be confused with permission, and material execution must be reconstructable from the authority decision through events, trace and output provenance. These two concerns must be coupled before any autonomous runtime or tool mediation is built.
+**Why:** Role capability must not be confused with permission, and material execution must be reconstructable from the authority decision through events, trace and output provenance.
 
 **Evidence / files:**
 
@@ -168,7 +168,7 @@ Trigger
 
 **Algorithms / libraries:** Runtime `NONE`. Defined contract algorithms are fail-closed authority intersection, `ALLOW | DENY | ESCALATE`, A0–A4 autonomy caps, event materiality T0–T5, durable trace linkage and non-destructive retry/provenance rules. Third-party libraries: `NONE`.
 
-**DevOps:** No event database, broker, OpenTelemetry stack, validator, WORM platform or PKI selected. These choices are deferred until runtime/deployment requirements justify them.
+**DevOps:** No event database, broker, OpenTelemetry stack, validator, WORM platform or PKI selected.
 
 **Security conclusion:** `PASS_WITH_ACTIONS`. Main improvements are explicit authority, approval linkage, revocation, bounded autonomy, security classification/retention metadata and traceability. Runtime must later prove non-bypassable authorization, TOCTOU protection, tamper-evident event writes, revocation propagation and sensitive-data minimization.
 
@@ -196,17 +196,17 @@ Trigger
 - [ADR-0011](architecture/adr/ADR-0011-knowledge-admission-and-decision-evaluation.md)
 - [TF-0005](Tree_F/TF-0005_2026-08-11_KNOWLEDGE_AND_DECISION_EVALUATION.md)
 
-**Data & processing:** Knowledge now follows `SRC/ART → EVD → FIND → Knowledge Gate → KN`. Contradictions, temporal validity, scope and confidence basis are preserved. Material decisions capture authority/rationale/evidence/intended outcome and receive separate ex-ante/ex-post `EVAL-*` records where required.
+**Data & processing:** Knowledge follows `SRC/ART → EVD → FIND → Knowledge Gate → KN`. Contradictions, temporal validity, scope and confidence basis are preserved. Material decisions capture authority/rationale/evidence/intended outcome and receive separate ex-ante/ex-post `EVAL-*` records where required.
 
 **Algorithms / libraries:** Runtime `NONE`. Contract rules include evidence-gated knowledge admission, contradiction/scope/temporal review, qualitative confidence by default, dimension scoring `0–5/N/A`, blocking criteria and governed A/B comparison. Third-party libraries: `NONE`.
 
-**DevOps:** No vector DB, embeddings/RAG framework, evaluation service or scoring library selected. The architecture now defines what such components must satisfy before technology selection.
+**DevOps:** No vector DB, embeddings/RAG framework, evaluation service or scoring library selected.
 
-**Security conclusion:** `PASS_WITH_ACTIONS`. Major risk reductions: hallucination-as-fact is blocked by contract; stale/superseded knowledge is explicit; security failures cannot be averaged away; evaluation cannot silently self-modify roles/KB. Runtime still needs poisoning defenses, KB isolation, freshness/invalidation, evaluator separation and access-control tests.
+**Security conclusion:** `PASS_WITH_ACTIONS`. Hallucination-as-fact is blocked by contract; stale/superseded knowledge is explicit; security failures cannot be averaged away; evaluation cannot silently self-modify roles/KB.
 
 **Tests / evaluation:** First Analyst/Socrates pilots must prove that unsupported model output remains a finding/hypothesis rather than active knowledge, contradictions remain visible, supersession preserves history, and evaluation records cannot erase failed variants.
 
-**Next gate:** Define Protocol Execution Contract and Acceptance Model/fixtures; then instantiate the first governed Role Packages as architecture validation pilots before runtime code is broadly allowed.
+**Next gate:** Define Protocol Execution Contract and Acceptance Model/fixtures; then instantiate the first governed Role Packages.
 
 ---
 
@@ -216,7 +216,7 @@ Trigger
 **Status:** ACCEPTED FOR BASELINE VALIDATION  
 **Decision:** KEEP / VALIDATE
 
-**Why:** PX00 had defined objects, roles, authority, traceability, knowledge and decision evaluation, but still needed a common contract for bounded step-by-step execution and a rule for when a material result may be called accepted.
+**Why:** PX00 still needed a common contract for bounded step-by-step execution and a rule for when a material result may be called accepted.
 
 **Evidence / files:**
 
@@ -228,17 +228,17 @@ Trigger
 - [ADR-0012](architecture/adr/ADR-0012-protocol-execution-and-acceptance-model.md)
 - [TF-0006](Tree_F/TF-0006_2026-08-11_PROTOCOL_EXECUTION_AND_ACCEPTANCE.md)
 
-**Data & processing:** Material work now follows explicit protocol selection, input/precondition validation, authority gating, bounded RUN/TRACE execution, declared branching/retries/checkpoints, durable material outputs/events, completion criteria and acceptance evidence. A technically completed run can still fail acceptance.
+**Data & processing:** Material work follows explicit protocol selection, input/precondition validation, authority gating, bounded RUN/TRACE execution, declared branching/retries/checkpoints, durable material outputs/events, completion criteria and acceptance evidence. A technically completed run can still fail acceptance.
 
 **Algorithms / libraries:** Runtime `NONE`. Contract algorithms include fail-closed authority, explicit bounded loops, distinct retry identity, idempotency/reconciliation requirements for unsafe retries, durable-save-before-checkpoint ordering, and acceptance states `NOT_TESTED | PASS | PASS_WITH_ACTIONS | FAIL | BLOCKED`. Third-party libraries: `NONE`.
 
-**DevOps:** Workflow engine, schema validator, test runner, event broker and database remain unselected. Pilot roles will provide concrete fixtures before choosing implementation tools.
+**DevOps:** Workflow engine, schema validator, test runner, event broker and database remain unselected.
 
-**Security conclusion:** `PASS_WITH_ACTIONS`. Design addresses silent gate skipping, infinite loops, unsafe retries, lost evidence, false PASS and post-hoc criteria. Runtime must later prove gate non-bypassability, cancellation, durability, evidence integrity, separation of duties where required and protected test-data handling.
+**Security conclusion:** `PASS_WITH_ACTIONS`. Design addresses silent gate skipping, infinite loops, unsafe retries, lost evidence, false PASS and post-hoc criteria.
 
 **Tests / evaluation:** Pilot fixtures must prove missing approval/authority blocks the relevant step, required steps cannot be silently skipped, loops/retries are bounded, failed attempts remain traceable, blocking acceptance failures prevent PASS, and missing evidence never becomes success.
 
-**Next gate:** Instantiate governed `Analyst` and `Socrates/Critical Reviewer` Role Package pilots with their own knowledge manifests, protocols, authority boundaries, I/O schemas, rubrics and acceptance fixtures. Use them to validate Baseline 0.1 before opening a minimal runtime implementation.
+**Next gate:** Instantiate governed `Analyst` and `Socrates/Critical Reviewer` Role Package pilots.
 
 ---
 
@@ -248,7 +248,7 @@ Trigger
 **Status:** ACCEPTED FOR PILOT VALIDATION  
 **Decision:** KEEP / VALIDATE
 
-**Why:** Abstract contracts now need proof that they can describe real professional roles without ad-hoc object types, hidden privileges or premature framework choices.
+**Why:** Abstract contracts need proof that they can describe real professional roles without ad-hoc object types, hidden privileges or premature framework choices.
 
 **Evidence / files:**
 
@@ -260,17 +260,17 @@ Trigger
 - [ADR-0013](architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md)
 - [TF-0007](Tree_F/TF-0007_2026-08-11_FIRST_GOVERNED_ROLE_PILOTS.md)
 
-**Data & processing:** `ROLE-0201` turns governed evidence into `FIND/EVAL` plus explicit proposals; `ROLE-0202` reviews the resulting findings/knowledge/decision candidates and produces `EVAL/FIND` without mutating active knowledge. Evidence-request loops are bounded to three pilot cycles. Critical review reuses canonical `EVAL/FIND/TASK` types rather than introducing a new object solely for naming convenience.
+**Data & processing:** `ROLE-0201` turns governed evidence into `FIND/EVAL` plus explicit proposals; `ROLE-0202` reviews resulting findings/knowledge/decision candidates and produces `EVAL/FIND` without mutating active knowledge. Evidence-request loops are bounded to three pilot cycles.
 
-**Algorithms / libraries:** Runtime `NONE`. Analyst algorithm: validate → classify claims → expose contradictions/gaps → findings → optional proposals → evaluation. Reviewer algorithm: validate target/independence → test evidence support → assumptions/alternatives → falsifiability/source independence/causal/scope checks → evaluation/dissent → optional bounded follow-up task. Third-party libraries: `NONE`.
+**Algorithms / libraries:** Runtime `NONE`. Analyst: validate → classify → expose contradictions/gaps → findings → optional proposals → evaluation. Reviewer: validate → evidence support → assumptions/alternatives → validity checks → evaluation/dissent → optional bounded follow-up. Third-party libraries: `NONE`.
 
-**DevOps:** No runtime validator, LLM SDK, vector DB, broker or workflow engine added. `PILOT-0001` is declarative and intentionally precedes implementation.
+**DevOps:** No runtime validator, LLM SDK, vector DB, broker or workflow engine added.
 
-**Security conclusion:** `PASS_WITH_ACTIONS`. Both pilots are capped at A1, external side effects are prohibited, knowledge self-admission/mutation is blocked, provenance and classification are explicit, cross-customer mixing is prohibited and material dissent is preserved. Runtime must still prove non-bypassable tool authorization, tenant isolation, prompt-injection/provider leakage controls, retrieval poisoning/freshness controls and tamper-evident execution evidence.
+**Security conclusion:** `PASS_WITH_ACTIONS`. Both pilots are capped at A1, external side effects are prohibited, knowledge self-admission/mutation is blocked, provenance/classification are explicit, cross-customer mixing is prohibited and material dissent is preserved.
 
-**Tests / evaluation:** `PILOT-0001` is currently `NOT_TESTED`. Blocking cases cover unsupported model output, self-admission of knowledge, reviewer mutation, dissent suppression, provenance, trace identity, missing evidence, external-action authority and display-name rebranding.
+**Tests / evaluation:** `PILOT-0001` starts `NOT_TESTED` with blocking cases for unsupported output, knowledge self-admission, reviewer mutation, dissent, provenance, trace, missing evidence, external-action authority and rebranding.
 
-**Next gate:** Execute `PILOT-0001` as a controlled dry-run using synthetic/public-safe objects; record acceptance evidence; identify contract gaps; then decide whether to permit only the smallest runtime validator/orchestrator implementation.
+**Next gate:** Execute `PILOT-0001` as a controlled dry-run.
 
 ---
 
@@ -280,7 +280,7 @@ Trigger
 **Status:** ACCEPTED  
 **Decision:** OPEN MINIMAL VALIDATION RUNTIME
 
-**Why:** Before choosing libraries or building an orchestrator, the first role chain had to prove that the contracts can represent supported evidence, unsupported model output, contradiction, authority denial and distinct provenance without hidden semantics.
+**Why:** Before choosing libraries or building an orchestrator, the first role chain had to prove that contracts can represent supported evidence, unsupported model output, contradiction, authority denial and distinct provenance without hidden semantics.
 
 **Evidence / files:**
 
@@ -290,17 +290,17 @@ Trigger
 - [ADR-0014](architecture/adr/ADR-0014-pilot-dry-run-and-minimal-runtime-opening.md)
 - [TF-0008](Tree_F/TF-0008_2026-08-11_PILOT_DRY_RUN_AND_MINIMAL_RUNTIME_GATE.md)
 
-**Data & processing:** Five synthetic/public-safe cases were executed manually against the declared Role/Protocol/Authority/Knowledge/Acceptance contracts. All blocking contract semantics passed; remaining runtime controls are explicit actions, so the acceptance state is `PASS_WITH_ACTIONS`, not production PASS.
+**Data & processing:** Five synthetic/public-safe cases were executed manually against Role/Protocol/Authority/Knowledge/Acceptance contracts. All blocking contract semantics passed; remaining runtime controls are explicit actions, so the acceptance state is `PASS_WITH_ACTIONS`, not production PASS.
 
-**Algorithms / libraries:** Still `NONE` runtime and third-party libraries. The dry-run used deterministic case walkthrough and blocking-criteria comparison. It authorizes only the next step: executable validation of existing contracts.
+**Algorithms / libraries:** Still `NONE` runtime and third-party libraries. The dry-run used deterministic case walkthrough and blocking-criteria comparison.
 
-**DevOps:** A narrow code gate is opened for a local validator/fixture runner. CI is still deferred until the local validator proves useful. Database, vector store, broker, workflow engine, web framework and LLM SDK remain unjustified.
+**DevOps:** A narrow code gate is opened for a local validator/fixture runner. CI is deferred until the local validator proves useful. Database, vector store, broker, workflow engine, web framework and LLM SDK remain unjustified.
 
-**Security conclusion:** `PASS_WITH_ACTIONS`. No external connectivity, customer data or side effects were introduced. Production remains blocked pending dependency/SBOM controls, secret scanning, non-bypassable authorization, tenant isolation, provider/prompt-injection controls, retrieval integrity, event integrity and retry/cancellation/durability tests.
+**Security conclusion:** `PASS_WITH_ACTIONS`. No external connectivity, customer data or side effects were introduced. Production remains blocked pending dependency/SBOM controls, secret scanning, non-bypassable authorization, tenant isolation, provider/prompt-injection controls, retrieval integrity and event integrity.
 
-**Tests / evaluation:** Contract dry-run result is `PASS_WITH_ACTIONS`. Next executable tests must fail closed on missing critical fields/references, verify role/protocol ID consistency, enforce A1 pilot caps and enumerate acceptance criteria deterministically.
+**Tests / evaluation:** Contract dry-run result is `PASS_WITH_ACTIONS`.
 
-**Next gate:** Select the smallest machine-readable validation approach; implement local contract validator + synthetic negative tests; record real dependency/DevOps/IB evidence in `TF-0009` before adding broader runtime.
+**Next gate:** Implement local contract validator + synthetic negative tests and record dependency/DevOps/IB evidence in `TF-0009`.
 
 ---
 
@@ -310,7 +310,7 @@ Trigger
 **Status:** IMPLEMENTED / LOCAL REPOSITORY RUN PENDING  
 **Decision:** KEEP / VERIFY LOCALLY
 
-**Why:** The previous gate explicitly allowed only a minimal local validator. YAML is already the machine-readable contract format, so the smallest useful implementation is a read-only Python validator rather than a workflow engine, API service or custom parser.
+**Why:** YAML is already the machine-readable contract format, so the smallest useful implementation is a read-only Python validator rather than a workflow engine, API service or custom parser.
 
 **Evidence / files:**
 
@@ -323,17 +323,45 @@ Trigger
 - [ADR-0015](architecture/adr/ADR-0015-minimal-local-contract-validator.md)
 - [TF-0009](Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md)
 
-**Data & processing:** The validator reads current PX00 YAML plus package/file structure and deterministically checks canonical identity, production runtime gate, role/protocol IDs, A1 side-effect prohibition, retrieval/evidence separation, referenced package files, protocol bounds/steps, acceptance evidence rule, pilot side-effect prohibition, cross references, obvious high-risk secret fields and contiguous Tree_F numbering.
+**Data & processing:** The validator reads PX00 YAML plus package/file structure and deterministically checks canonical identity, production runtime gate, role/protocol IDs, A1 side-effect prohibition, retrieval/evidence separation, package references, protocol bounds/steps, acceptance evidence rule, side-effect prohibition, cross references, obvious high-risk secret fields and contiguous Tree_F numbering.
 
-**Algorithms / libraries:** Python deterministic rule evaluation. One direct dependency: `PyYAML==6.0.3`, used via `yaml.safe_load`. Tests use standard-library `unittest`; no pytest/framework dependency is added yet.
+**Algorithms / libraries:** Python deterministic rule evaluation. One direct dependency: `PyYAML==6.0.3`, used via `yaml.safe_load`. Tests use standard-library `unittest`.
 
-**DevOps:** Local commands are defined. CI remains intentionally deferred until the real clone produces a stable PASS/FAIL signal; this prevents premature pipeline complexity. Exact direct dependency pin and security baseline are recorded now; full SBOM automation remains a release gate.
+**DevOps:** Local commands are defined. CI remains intentionally deferred until the real clone produces a stable PASS/FAIL signal. Exact direct dependency pin and security baseline are recorded; full SBOM automation remains a release gate.
 
-**Security conclusion:** `PASS_WITH_ACTIONS`. Executable checks now catch several governance/security regressions, but this validator is not a production authorization boundary. Repository-level secret scanning/branch controls, CI enforcement, dependency/SBOM automation, tenant isolation and live runtime controls remain future evidence requirements.
+**Security conclusion:** `PASS_WITH_ACTIONS`. Executable checks catch several governance/security regressions, but this validator is not a production authorization boundary.
 
-**Tests / evaluation:** Source compilation and 12 isolated unit tests passed during authoring. Full execution in `G:\1\PX00` is still pending and is the authoritative next acceptance result.
+**Tests / evaluation:** Source compilation and 12 isolated unit tests passed during authoring. Full execution in `G:\1\PX00` is still pending.
 
-**Next gate:** Pull the current repository locally; install the pinned validator dependency; execute unit tests and full `python -m px00 .` validation; preserve the result; fix any defect before adding minimal CI or widening runtime scope.
+**Next gate:** Bind the validator to a full current-repository integration test, then run it in the owner's clone.
+
+---
+
+## DJ-0011 — Real repository integration gate
+
+**Date:** 2026-08-12  
+**Status:** DEFINED / EXECUTION PENDING  
+**Decision:** KEEP
+
+**Why:** Synthetic tests prove individual rules, but the actual repository may still contain broken references, ID drift, malformed YAML or a Tree_F gap. The validator therefore needs one integration test against the current repository root before CI is justified.
+
+**Evidence / files:**
+
+- [Repository integration test](tests/test_validator.py)
+- [TF-0010](Tree_F/TF-0010_2026-08-12_REAL_REPOSITORY_INTEGRATION_GATE.md)
+- [PX00 runtime manifest](PX00.yaml)
+
+**Data & processing:** `RepositoryIntegrationTests.test_current_repository_contracts` calls `validate_repository(root)` on the real checkout and requires an empty issue list.
+
+**Algorithms / libraries:** No new dependency. Existing PyYAML + standard-library unittest/pathlib.
+
+**DevOps:** The single command `python -m unittest discover -s tests -v` now covers both isolated rules and the actual repository. CI remains deferred until this passes locally.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. This materially strengthens drift detection but still does not prove production authorization, tenant isolation or runtime tamper resistance.
+
+**Tests / evaluation:** Integration test is defined but not yet executed in `G:\1\PX00` after pulling the new commits.
+
+**Next gate:** Run the real clone. Preserve PASS/FAIL as a separate assurance record. Any failure blocks CI and wider runtime work until corrected.
 
 ---
 
