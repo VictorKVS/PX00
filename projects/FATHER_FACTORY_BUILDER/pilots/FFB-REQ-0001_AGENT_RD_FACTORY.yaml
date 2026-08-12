@@ -1,0 +1,53 @@
+requirement_id: FFB-REQ-0001
+version: 0.1
+state: QUALIFIED
+requested_by: HUMAN-OWNER
+beneficiary_refs: [HUMAN-OWNER, FUTURE_INTERNAL_PROJECTS]
+need_statement: design a governed digital research-and-development factory that can receive a bounded problem, research it, design a solution, implement a prototype, verify it, independently challenge it, and return an evidence-backed result without acquiring authority from the problem statement itself
+desired_outcomes:
+  - reusable closed-loop R&D organization blueprint
+  - clear separation of research architecture implementation review and management
+  - reproducible knowledge and execution context
+  - bounded prototype-only external effects
+  - explicit rework and acceptance loop
+non_goals:
+  - production deployment
+  - autonomous spending or procurement
+  - physical-world control
+  - self-expansion of authority
+  - unrestricted internet or credential access
+  - automatic claim of domain truth
+  - optimization for number of tasks or agents
+authority_basis_refs: [HUMAN-OWNER-REQUEST]
+jurisdiction_profile_refs: [PROFILE-SYNTHETIC-PUBLIC-SAFE]
+constraints:
+  - synthetic_or_public_safe_data_only
+  - no material external side effects in first pilot
+  - all specialist results are reviewable artifacts
+  - S4 risk blocks affected maturity path
+  - role agent model knowledge and capability identities remain distinct
+acceptance_intent:
+  - all required capabilities mapped to accountable roles
+  - no critical workflow step lacks independent verification path
+  - blueprint explicitly preserves risk and dissent
+  - no role can grant itself runtime authority
+  - prototype result can be returned to requester with provenance
+  - Socrates and ARGUS reviews completed before summit acceptance
+target_maturity: M1_PROTOTYPE
+risk_tolerance_profile_ref: RISK-PROFILE-FFB-M1
+resource_constraints:
+  - prefer existing PX00 contracts and roles where adequate
+  - avoid new infrastructure unless needed for complete loop
+known_risk_refs:
+  - RISK-0002
+  - RISK-0003
+  - RISK-0004
+  - RISK-0005
+  - RISK-0006
+  - RISK-0007
+  - RISK-0008
+assumptions:
+  - FATHER remains management plane
+  - Factory Builder produces blueprint but does not operate the factory
+  - first executor implementations may be model-backed agents
+  - later executor replacement must not change role or capability identity
