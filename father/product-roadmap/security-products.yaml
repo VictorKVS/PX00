@@ -1,0 +1,114 @@
+schema_version: "1.0"
+roadmap_id: "ROADMAP-SECURITY-0001"
+title: "Security Product Production Roadmap"
+status: "ACTIVE"
+source_of_direction: "OWNER_PRIORITY"
+owner_project: "PX00/FATHER"
+factory_project: "PROJECT-FFB-0001"
+
+north_star:
+  statement: >-
+    Build a sequence of evidence-based security products in which each later product
+    reuses a verified Security Knowledge foundation instead of inventing its own facts,
+    rules, interpretations, controls, or regulatory memory.
+  mandatory_rule: >-
+    Do not advance the product line beyond the foundational Security Knowledge Base
+    until its evidence, provenance, coverage, update, review, and benchmark gates reach
+    the declared expert-ready level for the intended scope.
+
+foundational_gate:
+  gate_id: "SEC-GATE-EXPERT-KNOWLEDGE-0001"
+  name: "Expert-Ready Evidence-Based Security Knowledge"
+  blocking: true
+  applies_before_products:
+    - "SEC-PROD-0002"
+    - "SEC-PROD-0003"
+    - "SEC-PROD-0004"
+    - "SEC-PROD-0005"
+    - "SEC-PROD-0006"
+    - "SEC-PROD-0007"
+  acceptance_criteria:
+    - "Every material claim has provenance and version identity."
+    - "Normative and factual sources are separated from inference and generated text."
+    - "Conflicting sources/interpretations remain visible and reviewable."
+    - "Knowledge freshness and regulatory effective dates are tracked."
+    - "Coverage is measured against an explicit domain/jurisdiction/control matrix."
+    - "Critical knowledge changes trigger downstream staleness/reassessment."
+    - "Representative expert benchmark questions have reproducible evidence-backed answers."
+    - "Independent Socrates/ARGUS review is passed for the declared scope."
+    - "No unresolved S4 risk affects the knowledge integrity path."
+    - "The physical repository may change without changing stable logical KB identities."
+  forbidden_shortcuts:
+    - "Treating retrieval output as evidence without source admission."
+    - "Using LLM confidence as truth confidence."
+    - "Copying regulatory summaries without effective-date/version provenance."
+    - "Promoting a demo corpus to expert knowledge because search quality looks good."
+
+products:
+  - product_id: "SEC-PROD-0001"
+    name: "Security Knowledge Base"
+    purpose: "Canonical evidence-based security knowledge foundation."
+    status: "PRIMARY_BUILD_TARGET"
+    depends_on: []
+    produces:
+      - "governed security sources"
+      - "claims and evidence graph"
+      - "regulatory/control mappings"
+      - "expert benchmark corpus"
+      - "security lessons and failure memory"
+    exit_gate: "SEC-GATE-EXPERT-KNOWLEDGE-0001"
+
+  - product_id: "SEC-PROD-0002"
+    name: "Compliance Engine"
+    purpose: "Map governed requirements and evidence to systems, controls, gaps, obligations and remediation."
+    status: "BLOCKED_BY_FOUNDATION"
+    depends_on: ["SEC-PROD-0001"]
+
+  - product_id: "SEC-PROD-0003"
+    name: "Evidence-Based Security Architect"
+    purpose: "Design security architecture from explicit requirements, threat/risk context and evidence-backed controls."
+    status: "BLOCKED_BY_FOUNDATION"
+    depends_on: ["SEC-PROD-0001", "SEC-PROD-0002"]
+
+  - product_id: "SEC-PROD-0004"
+    name: "Vulnerability & Risk Expert"
+    purpose: "Correlate vulnerabilities, exposure, business context, exploitability, control state and risk treatment."
+    status: "BLOCKED_BY_FOUNDATION"
+    depends_on: ["SEC-PROD-0001", "SEC-PROD-0003"]
+
+  - product_id: "SEC-PROD-0005"
+    name: "White-Hat / Continuous Security Assurance"
+    purpose: "Continuously and lawfully validate security assumptions, controls and exposed attack paths under explicit authorization."
+    status: "FUTURE_GATED"
+    depends_on: ["SEC-PROD-0003", "SEC-PROD-0004"]
+    mandatory_constraints:
+      - "explicit authorization and scope"
+      - "tool boundary and capability grants"
+      - "safe-stop and rate/impact limits"
+      - "full trace and evidence preservation"
+      - "no implicit privilege escalation"
+
+  - product_id: "SEC-PROD-0006"
+    name: "Regulatory Change Engine"
+    purpose: "Detect material regulatory change, assess impact and trigger governed downstream reassessment."
+    status: "FUTURE_GATED"
+    depends_on: ["SEC-PROD-0001", "SEC-PROD-0002"]
+
+  - product_id: "SEC-PROD-0007"
+    name: "Continuous Security Audit Expert"
+    purpose: "Continuously assemble audit-ready evidence, detect drift and issue independently reviewable findings."
+    status: "FUTURE_GATED"
+    depends_on: ["SEC-PROD-0002", "SEC-PROD-0003", "SEC-PROD-0004", "SEC-PROD-0006"]
+
+product_line_rule:
+  sequence_is_directional: true
+  parallel_research_allowed: true
+  parallel_research_condition: >-
+    Later products may be explored in isolated PoC form, but they may not claim MVP/production maturity
+    or become authoritative products while the foundational knowledge gate remains unsatisfied.
+  production_promotion_requires:
+    - "declared Demo/PoC/MVP/Production evidence gate"
+    - "compatible PX00 maturity gate"
+    - "risk matrix approval"
+    - "independent review where required"
+    - "green repository validation"
