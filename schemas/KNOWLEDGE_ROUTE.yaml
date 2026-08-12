@@ -1,0 +1,50 @@
+schema_version: 0.1
+status: draft
+object_type: knowledge_route
+purpose: resolve stable logical knowledge identities to mutable physical storage endpoints without changing graph lineage
+
+required_fields:
+  knowledge_space_id:
+    type: stable_id
+    examples: [KB-PROGRAMMING, KB-SECURITY, KB-ARCHITECTURE]
+  logical_domain:
+    type: string
+  route_version:
+    type: semver_or_monotonic_version
+  endpoint_type:
+    type: enum
+    values: [GITHUB_REPOSITORY, GIT_REPOSITORY, OBJECT_STORE, DATABASE, API]
+  endpoint_locator:
+    type: string
+  endpoint_ref:
+    type: string
+  status:
+    type: enum
+    values: [ACTIVE, MIGRATING, SUSPENDED, RETIRED]
+  resolver_priority:
+    type: integer
+
+optional_fields:
+  mirror_endpoints:
+    type: string_list
+  content_root:
+    type: string
+  index_ref:
+    type: string
+  integrity_ref:
+    type: string
+  migration_from_ref:
+    type: knowledge_route_reference
+  effective_from:
+    type: utc_timestamp
+
+invariants:
+  - knowledge_space_id_is_stable_across_physical_migrations
+  - physical_endpoint_locator_is_not_used_as_knowledge_identity
+  - claims_evidence_and_graph_edges_reference_stable_ids_not_repository_paths
+  - route_change_does_not_rewrite_historical_lineage
+  - active_resolution_is_deterministic
+  - suspended_or_retired_route_is_not_selected_for_new_requests
+  - migration_may_change_endpoint_without_changing_knowledge_space_id
+
+library_dependency: none
