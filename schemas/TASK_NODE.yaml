@@ -1,0 +1,31 @@
+schema_version: 0.1
+status: draft
+object_type: task_node
+purpose: represent one schedulable unit in a dependency-aware project task graph
+
+required_fields:
+  task_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  title: {type: text}
+  required_duty_code: {type: string}
+  dependency_refs: {type: list}
+  required_input_refs: {type: list}
+  expected_output_types: {type: list}
+  acceptance_criteria_refs: {type: list}
+  state: {type: enum, values: [PLANNED, READY, ASSIGNED, RUNNING, BLOCKED, REVIEW, COMPLETED, FAILED, CANCELLED]}
+  priority: {type: enum, values: [LOW, NORMAL, HIGH, CRITICAL]}
+
+conditional_fields:
+  routing_decision_ref: {type: task_routing_decision_reference}
+  run_refs: {type: list}
+  blocking_reason_refs: {type: list}
+
+invariants:
+  - dependency_graph_must_be_acyclic
+  - task_cannot_be_ready_until_dependencies_are_completed
+  - task_routes_by_required_responsibility_not_model_name
+  - task_completion_requires_declared_acceptance
+  - failed_task_history_is_not_overwritten
+  - task_does_not_grant_runtime_authority
+
+library_dependency: none
