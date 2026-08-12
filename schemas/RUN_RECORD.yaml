@@ -1,4 +1,4 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 purpose: execution-instance contract for one bounded governed RUN
 
@@ -10,6 +10,11 @@ identity:
   protocol_version: 0.1.0
   role_id: ROLE-XXXX
   role_version: 0.1.0
+
+policy:
+  policy_snapshot_ref: POLSNAP-XXXX
+  policy_snapshot_hash: null
+  hash_algorithm: sha256
 
 execution:
   started_at: null
@@ -50,12 +55,14 @@ security:
 invariants:
   - run_is_bounded
   - protocol_version_is_fixed_for_run_unless_explicit_migration_occurs
+  - policy_snapshot_is_fixed_for_run_unless_explicit_migration_occurs
+  - material_authority_decisions_must_match_run_policy_snapshot_ref_and_hash
   - material_failures_are_not_overwritten
   - retry_identity_is_distinct
   - missing_authority_cannot_be_interpreted_as_allow
   - completed_state_requires_declared_completion_criteria
 
 validation_stage:
-  current: contract_only
-  runtime_validator: not_selected
+  current: deterministic_reference_validation
+  runtime_validator: px00_profile_registry_and_kernel_tests
   library_dependency: none
