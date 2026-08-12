@@ -1,0 +1,45 @@
+schema_version: 0.1
+status: draft
+object_type: claim_status
+purpose: represent epistemic support state without declaring metaphysical truth
+
+required_fields:
+  claim_id:
+    type: stable_id
+  statement:
+    type: text
+  status:
+    type: enum
+    values: [UNKNOWN, UNSUPPORTED, SINGLE_SOURCE, CORROBORATED, CONTRADICTED, DISPUTED, SUPERSEDED, REFUTED]
+  evidence_refs:
+    type: list
+  support_score:
+    type: float_0_1
+  contradiction_score:
+    type: float_0_1
+  dimensions:
+    required: [source_reliability, evidence_quality, independence, recency, directness, corroboration]
+    range: 0.0_to_1.0
+  evaluated_at:
+    type: utc_timestamp
+  evaluator_ref:
+    type: actor_or_component_reference
+
+invariants:
+  - integrity_is_not_truth
+  - verified_record_does_not_imply_corroborated_claim
+  - unsupported_claim_cannot_have_positive_evidence_refs
+  - corroborated_requires_at_least_two_materially_independent_supporting_sources
+  - contradiction_is_preserved_not_averaged_away
+  - disputed_requires_material_support_and_material_contradiction
+  - superseded_preserves_prior_claim_lineage
+  - refuted_requires_explicit_counterevidence_refs
+  - confidence_dimensions_remain_visible_and_are_not_collapsed_into_one_truth_number
+  - source_count_alone_cannot_establish_independence
+
+non_goals:
+  - declare_absolute_truth
+  - convert_hash_integrity_into_factual_correctness
+  - let one model self-certify its own claim
+
+library_dependency: none
