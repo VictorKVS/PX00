@@ -82,6 +82,8 @@ class MvpRun:
     verification_passed: bool = False
     socrates_passed: bool = False
     delivered: bool = False
+    last_outcome: str | None = None
+    rework_count: int = 0
     artifact_refs: tuple[str, ...] = ()
     consumed_artifact_refs: tuple[str, ...] = ()
     trace: tuple[str, ...] = ()
@@ -125,6 +127,39 @@ class AgentRdFactoryMvp:
         if run.delivered:
             raise ValueError("RUN_TERMINAL")
         run = replace(run, trust_gate_passed=True, trace=run.trace + ("TRUST_GATE_PASS",))
+        self.runs[run_id] = run
+        return run
+
+    def request_rework(self, run_id: str, target_stage: str, reason_ref: str) -> MvpRun:
+        """Move a failed RUN to an earlier stage without deleting prior evidence."""
+        run = self._get(run_id)
+        if run.delivered:
+            raise ValueError("RUN_TERMINAL")
+        if run.last_outcome != "FAIL":
+            raise ValueError("REWORK_REQUIRES_FAILED_STAGE")
+        if not reason_ref:
+            raise ValueError("REWORK_REASON_REQUIRED")
+        try:
+            target_index = STAGES.index(target_stage)
+        except ValueError as exc:
+            raise ValueError("UNKNOWN_REWORK_TARGET") from exc
+        if target_index >= run.stage_index:
+            raise ValueError("REWORK_TARGET_MUST_BE_EARLIER")
+
+        updates: dict[str, object] = {
+            "stage_index": target_index,
+            "last_outcome": None,
+            "rework_count": run.rework_count + 1,
+            "trace": run.trace + (f"REWORK:{run.stage}->{target_stage}:{reason_ref}",),
+        }
+        if target_index <= STAGES.index("SECURITY_PRECHECK"):
+            updates["security_precheck_passed"] = False
+        if target_index <= STAGES.index("VERIFY_AND_VALIDATE"):
+            updates["verification_passed"] = False
+        if target_index <= STAGES.index("SOCRATES_CHALLENGE"):
+            updates["socrates_passed"] = False
+
+        run = replace(run, **updates)
         self.runs[run_id] = run
         return run
 
@@ -224,6 +259,7 @@ class AgentRdFactoryMvp:
         updates: dict[str, object] = {
             "trace": run.trace + (f"{stage}:{outcome}",),
             "consumed_artifact_refs": run.consumed_artifact_refs + (artifact_ref,),
+            "last_outcome": outcome,
         }
         if stage == "SECURITY_PRECHECK":
             updates["security_precheck_passed"] = outcome == "PASS"
