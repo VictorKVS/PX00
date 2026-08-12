@@ -1,0 +1,60 @@
+acceptance_record_id: FFB-ACCEPT-FUNC-MVP-0001
+mvp_scope_ref: FFB-MVP-0001
+blueprint_ref: FFB-BP-0001-V2@0.2
+functional_run_ref: MVP-FUNC-RUN-0001
+maturity: M1_PROTOTYPE
+accepted_component: FUNCTIONAL_REFERENCE_MVP
+verdict: PASS_WITH_RESTRICTIONS
+accepted_at: 2026-08-12T19:18:00Z
+
+evidence_refs:
+  - schemas/FACTORY_STAGE_ARTIFACT.yaml
+  - px00/factory_mvp.py
+  - px00/factory_mvp_case.py
+  - tests/test_factory_mvp.py
+  - tests/test_factory_mvp_case.py
+  - SOCRATES-FFB-FUNC-0001
+  - ARGUS-FFB-FUNC-0001
+  - CI_RUN_31631624909
+
+accepted_properties:
+  - complete_problem_to_delivery_functional_run
+  - typed_stage_artifacts
+  - append_only_artifact_identity
+  - deterministic_payload_digest
+  - strict_linear_artifact_lineage_for_MVP
+  - pinned_independent_verifier_evidence
+  - independent_socrates_evidence
+  - gated_artifact_verdict_matches_runtime_outcome
+  - security_precheck_before_prototype
+  - terminal_governed_delivery
+  - useful_deterministic_idempotency_prototype
+  - limitations_preserved_in_final_delivery
+
+scope_restrictions:
+  - synthetic_or_explicitly_bounded_inputs_only
+  - no_live_LLM_or_autonomous_agent_claim
+  - no_material_external_action
+  - no_confidential_or_regulated_data
+  - no_production_persistence
+  - no_exactly_once_claim
+  - no_production_readiness_claim
+
+open_risk_refs:
+  - RISK-0002
+  - RISK-0003
+  - RISK-0004
+  - RISK-0009
+
+next_evidence:
+  - execute_multiple_different_bounded_problem_cases
+  - measure_rework_and_failure_patterns
+  - replace_one_deterministic_stage_with_governed_executor_adapter
+  - adversarially_test_trust_gate_before_any_external_content_scope
+  - add_full_artifact_envelope_digest_before_persistent_evidence_maturity
+
+invariants:
+  - functional_MVP_pass_does_not_equal_production_ready
+  - evidence_driven_iteration_replaces_architecture_expansion_by_default
+  - critical_risk_reduction_has_priority_over_feature_velocity
+  - scope_expansion_requires_explicit_replan_or_observed_need
