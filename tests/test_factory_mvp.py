@@ -20,6 +20,10 @@ class FactoryMvpTests(unittest.TestCase):
             stage = self.mvp.runs["MVP-RUN-1"].stage
             self.mvp.advance("MVP-RUN-1", stage)
 
+    def complete(self):
+        for stage in STAGES:
+            self.mvp.advance("MVP-RUN-1", stage)
+
     def test_independent_verifier_required_at_creation(self):
         with self.assertRaisesRegex(ValueError, "INDEPENDENCE_VIOLATION"):
             self.mvp.create_run("R", "P", "A", "A")
@@ -47,13 +51,20 @@ class FactoryMvpTests(unittest.TestCase):
     def test_happy_path_reaches_governed_delivery(self):
         self.create(untrusted_input_present=True)
         self.mvp.pass_trust_gate("MVP-RUN-1")
-        for stage in STAGES:
-            self.mvp.advance("MVP-RUN-1", stage)
+        self.complete()
         run = self.mvp.runs["MVP-RUN-1"]
         self.assertTrue(run.verification_passed)
         self.assertTrue(run.socrates_passed)
         self.assertTrue(run.delivered)
         self.assertIn("GOVERNED_DELIVERY:PASS", run.trace)
+
+    def test_successful_delivery_is_terminal(self):
+        self.create()
+        self.complete()
+        with self.assertRaisesRegex(ValueError, "RUN_TERMINAL"):
+            self.mvp.advance("MVP-RUN-1", "GOVERNED_DELIVERY")
+        with self.assertRaisesRegex(ValueError, "RUN_TERMINAL"):
+            self.mvp.pass_trust_gate("MVP-RUN-1")
 
     def test_failed_socrates_cannot_be_delivered(self):
         self.create()
