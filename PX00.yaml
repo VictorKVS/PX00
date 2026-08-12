@@ -109,9 +109,12 @@ minimal_validator:
   direct_dependencies:
     PyYAML: 6.0.3
   tests: tests/test_validator.py
+  integration_test: RepositoryIntegrationTests.test_current_repository_contracts
   test_framework: python_stdlib_unittest
   devsecops_baseline: security/DEVSECOPS_BASELINE_0_1.md
-  structural_record: Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md
+  structural_records:
+    - Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md
+    - Tree_F/TF-0010_2026-08-12_REAL_REPOSITORY_INTEGRATION_GATE.md
   architecture_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
   network_required: false
   external_side_effects: false
@@ -146,6 +149,7 @@ current_phase:
     - local_contract_validator_implemented
     - synthetic_negative_tests_added
     - direct_dependency_recorded_and_pinned
+    - real_repository_integration_test_defined
   next_gate:
     - execute_validator_in_real_local_clone
     - preserve_full_repository_validation_evidence
