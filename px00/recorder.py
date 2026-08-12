@@ -53,6 +53,38 @@ class TraceKnowledgeContext:
 
 
 @dataclass(frozen=True)
+class TraceDecisionContext:
+    decision_refs: tuple[str, ...] = ()
+    decision_digests: tuple[str, ...] = ()
+    materiality_classes: tuple[str, ...] = ()
+
+    def validate(self) -> None:
+        if not self.decision_refs:
+            raise RecorderIntegrityError("DECISION_REF_REQUIRED")
+        if len(self.decision_refs) != len(self.decision_digests):
+            raise RecorderIntegrityError("DECISION_REF_DIGEST_COUNT_MISMATCH")
+        if len(self.decision_refs) != len(self.materiality_classes):
+            raise RecorderIntegrityError("DECISION_REF_MATERIALITY_COUNT_MISMATCH")
+        if len(set(self.decision_refs)) != len(self.decision_refs):
+            raise RecorderIntegrityError("DUPLICATE_DECISION_REF")
+        allowed = {
+            "D0_LOCAL_CONVENTIONAL",
+            "D1_IMPLEMENTATION",
+            "D2_ARCHITECTURE_PRODUCT",
+            "D3_REGULATED_SAFETY_CRITICAL",
+        }
+        for ref in self.decision_refs:
+            if not ref.strip():
+                raise RecorderIntegrityError("DECISION_REF_REQUIRED")
+        for digest in self.decision_digests:
+            if not _SHA256_RE.fullmatch(digest):
+                raise RecorderIntegrityError("INVALID_DECISION_DIGEST")
+        for materiality in self.materiality_classes:
+            if materiality not in allowed:
+                raise RecorderIntegrityError("INVALID_DECISION_MATERIALITY_CLASS")
+
+
+@dataclass(frozen=True)
 class TraceManifestRecord:
     trace_id: str
     run_id: str
@@ -68,6 +100,9 @@ class TraceManifestRecord:
     knowledge_snapshot_digests: tuple[str, ...] = ()
     producer_manifest_refs: tuple[str, ...] = ()
     producer_manifest_digests: tuple[str, ...] = ()
+    decision_refs: tuple[str, ...] = ()
+    decision_digests: tuple[str, ...] = ()
+    decision_materiality_classes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -127,7 +162,12 @@ class AppendOnlyEventRecorder:
             result.append(RecordedEvent(raw["event_id"], raw["previous_event_hash"], raw["event_hash"], raw["payload"]))
         return tuple(result)
 
-    def verify(self, trace_id: str, knowledge_context: TraceKnowledgeContext | None = None) -> TraceManifestRecord:
+    def verify(
+        self,
+        trace_id: str,
+        knowledge_context: TraceKnowledgeContext | None = None,
+        decision_context: TraceDecisionContext | None = None,
+    ) -> TraceManifestRecord:
         records = self.read_trace(trace_id)
         if not records:
             raise RecorderIntegrityError("TRACE_EMPTY")
@@ -165,6 +205,15 @@ class AppendOnlyEventRecorder:
             producer_manifest_refs = tuple(knowledge_context.producer_manifest_refs)
             producer_manifest_digests = tuple(value.lower() for value in knowledge_context.producer_manifest_digests)
 
+        decision_refs: tuple[str, ...] = ()
+        decision_digests: tuple[str, ...] = ()
+        decision_materiality_classes: tuple[str, ...] = ()
+        if decision_context is not None:
+            decision_context.validate()
+            decision_refs = tuple(decision_context.decision_refs)
+            decision_digests = tuple(value.lower() for value in decision_context.decision_digests)
+            decision_materiality_classes = tuple(decision_context.materiality_classes)
+
         return TraceManifestRecord(
             trace_id,
             first["run_id"],
@@ -180,14 +229,18 @@ class AppendOnlyEventRecorder:
             knowledge_snapshot_digests,
             producer_manifest_refs,
             producer_manifest_digests,
+            decision_refs,
+            decision_digests,
+            decision_materiality_classes,
         )
 
     def persist_manifest(
         self,
         trace_id: str,
         knowledge_context: TraceKnowledgeContext | None = None,
+        decision_context: TraceDecisionContext | None = None,
     ) -> PersistedTraceManifest:
-        manifest = self.verify(trace_id, knowledge_context)
+        manifest = self.verify(trace_id, knowledge_context, decision_context)
         payload = asdict(manifest)
         digest = sha256(self._canonical_json(payload)).hexdigest()
         ref = f"TRACEMAN-{trace_id.removeprefix('TRACE-')}"
@@ -207,10 +260,19 @@ class AppendOnlyEventRecorder:
             or manifest.get("producer_manifest_digests")
         )
 
+    @staticmethod
+    def _persisted_manifest_has_decision_context(manifest: dict) -> bool:
+        return bool(
+            manifest.get("decision_refs")
+            or manifest.get("decision_digests")
+            or manifest.get("decision_materiality_classes")
+        )
+
     def verify_persisted_manifest(
         self,
         trace_id: str,
         expected_knowledge_context: TraceKnowledgeContext | None = None,
+        expected_decision_context: TraceDecisionContext | None = None,
     ) -> PersistedTraceManifest:
         path = self.root / f"{trace_id}.manifest.json"
         if not path.exists():
@@ -222,9 +284,11 @@ class AppendOnlyEventRecorder:
             raise RecorderIntegrityError("TRACE_MANIFEST_HASH_MISMATCH")
         if self._persisted_manifest_has_knowledge_context(manifest) and expected_knowledge_context is None:
             raise RecorderIntegrityError("TRACE_KNOWLEDGE_CONTEXT_EXPECTATION_REQUIRED")
-        live = self.verify(trace_id, expected_knowledge_context)
+        if self._persisted_manifest_has_decision_context(manifest) and expected_decision_context is None:
+            raise RecorderIntegrityError("TRACE_DECISION_CONTEXT_EXPECTATION_REQUIRED")
+        live = self.verify(trace_id, expected_knowledge_context, expected_decision_context)
         if self._canonical_json(manifest) != self._canonical_json(asdict(live)):
-            raise RecorderIntegrityError("TRACE_MANIFEST_EVENT_OR_KNOWLEDGE_CONTEXT_MISMATCH")
+            raise RecorderIntegrityError("TRACE_MANIFEST_EVENT_KNOWLEDGE_OR_DECISION_CONTEXT_MISMATCH")
         return PersistedTraceManifest(envelope["manifest_ref"], expected, "sha256", live)
 
     def record_all(self, events: Iterable[MaterialEvent]) -> TraceManifestRecord:
