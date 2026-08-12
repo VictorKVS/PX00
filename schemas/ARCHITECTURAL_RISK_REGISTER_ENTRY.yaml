@@ -1,0 +1,42 @@
+schema_version: 0.1
+status: draft
+object_type: architectural_risk_register_entry
+purpose: preserve long-lived architecture, organization, implementation and security risks across years of PX00 evolution
+
+required_fields:
+  risk_id: {type: stable_id}
+  title: {type: text}
+  category:
+    type: enum
+    values: [ARCHITECTURE, ORGANIZATION, SOFTWARE, SECURITY, KNOWLEDGE, GOVERNANCE, OPERATIONS, PROCESS]
+  source_refs: {type: list}
+  affected_component_refs: {type: list}
+  description: {type: text}
+  causal_hypothesis: {type: text}
+  likelihood: {type: enum, values: [RARE, UNLIKELY, POSSIBLE, LIKELY, ALMOST_CERTAIN]}
+  impact: {type: enum, values: [NEGLIGIBLE, MINOR, MODERATE, MAJOR, CRITICAL]}
+  severity: {type: enum, values: [S0, S1, S2, S3, S4]}
+  status: {type: enum, values: [OPEN, ACCEPTED, MITIGATING, MONITORING, RESOLVED, SUPERSEDED, REOPENED]}
+  owner_ref: {type: actor_or_role_reference}
+  discovered_at: {type: utc_timestamp}
+  last_reviewed_at: {type: utc_timestamp}
+  mitigation_refs: {type: list}
+  verification_refs: {type: list}
+  history_refs: {type: list}
+
+conditional_fields:
+  supersedes_risk_ref: {type: architectural_risk_reference}
+  accepted_by_ref: {type: actor_reference}
+  acceptance_rationale: {type: text}
+  next_review_at: {type: utc_timestamp}
+
+invariants:
+  - risk_id_is_stable_for_lifetime_of_risk
+  - risk_history_is_append_only
+  - resolved_risk_may_be_reopened_if_evidence_changes
+  - risk_acceptance_requires_named_accountable_actor_and_rationale
+  - mitigation_does_not_equal_resolution
+  - severity_change_is_recorded_not_silently_overwritten
+  - moving_code_or_knowledge_does_not_change_risk_identity
+
+library_dependency: none
