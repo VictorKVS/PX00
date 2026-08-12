@@ -1,204 +1,32 @@
 schema_version: "1.0"
-roadmap_id: "ROADMAP-MASTER-0001"
-title: "PX00 / FATHER — Master Product Manufacturing Roadmap"
-status: "ACTIVE"
-last_updated: "2026-08-12"
+route_id: "ROADMAP-MASTER-ROUTE-0001"
+status: "ROUTE_ONLY"
+canonical_repository: "VictorKVS/KNOWLEDGE_CORE"
+canonical_path: "father/product-roadmap/master-product-roadmap.yaml"
 
-north_star:
-  statement: >-
-    Build a governed factory-of-factories platform that can turn a validated human need
-    into a project, design the required organization/factory, staff it with replaceable
-    executors, bind governed knowledge, operate it through FATHER, verify outcomes independently,
-    learn from failures, and progressively extend from digital work to research and physical production.
+purpose: >-
+  Keep PX00/FATHER aligned to one canonical product manufacturing roadmap without duplicating
+  product truth across repositories. KNOWLEDGE_CORE owns domain/product roadmaps; PX00 owns
+  runtime orchestration, execution, trace, risk, review and acceptance contracts.
 
-operating_principles:
-  - "Evidence before authority."
-  - "Reliable before fast at critical boundaries."
-  - "MVP-first inside a bounded risk envelope."
-  - "S4 risk is eliminated or isolated before the affected maturity path advances."
-  - "ROLE != AGENT != MODEL != KNOWLEDGE DOMAIN."
-  - "Factory Builder designs factories; FATHER operates them."
-  - "Logical identity is independent of physical repository/provider/device location."
-  - "IMPLEMENTED != TESTED != AUDITED != ACCEPTED."
-  - "Unknown risks are expected; observations, incidents, near-misses and reviewer disagreement feed the risk/radar memory."
-  - "Later product ideas may run as isolated PoCs, but foundational product gates cannot be bypassed by schedule pressure."
+stable_tracks:
+  primary: "TRACK-SECURITY"
+  runtime_platform: "TRACK-PLATFORM"
+  factory_builder: "TRACK-FACTORY-BUILDER"
+  knowledge_infrastructure: "TRACK-KNOWLEDGE-INFRA"
+  assurance: "TRACK-ASSURANCE"
 
-portfolio_priority:
-  primary_domain_track: "TRACK-SECURITY"
-  reason: >-
-    Security is the first domain product line and the proving ground for evidence-based knowledge,
-    compliance, architecture, risk, assurance and continuous audit capabilities.
-  non_displacement_rule: >-
-    Architect-proposed tracks may develop enabling infrastructure or isolated PoCs in parallel,
-    but must not divert the primary build from the expert-ready Security Knowledge foundation
-    unless an S4 remediation or a direct dependency of that foundation requires it.
+coordination_rules:
+  - "Security Knowledge corpus work and SUMMIT-FFB-02 live-provider work may proceed in parallel."
+  - "Live-provider readiness is not a blocker for SEC-PROD-0001 corpus population."
+  - "Downstream security products inherit canonical KNOWLEDGE_CORE gates and may not be promoted from PX00 alone."
+  - "PX00 may run bounded PoCs against VERIFIED knowledge slices while preserving the canonical product maturity claim."
+  - "S4 risk on a shared active path still outranks feature delivery."
 
-tracks:
-  - track_id: "TRACK-PLATFORM"
-    name: "FATHER + Factory Builder Core"
-    source: "ARCHITECT_PROPOSED"
-    role: "Shared production operating system"
-    current_state: "ACTIVE_FOUNDATION"
-    products:
-      - "Governed Agent Factory MVP"
-      - "Closed FATHER corporate loop"
-      - "Factory Blueprint compiler/synthesis"
-      - "Reusable role/capability/protocol catalog"
-      - "Risk/Radar/Audit memory"
-      - "Durable execution/replay platform"
-    dependency_policy: >-
-      Build only the core capabilities required by active product tracks or safety/maturity gates;
-      avoid speculative platform expansion.
+runtime_next_targets:
+  - "SUMMIT-FFB-02 — first governed live AI executor"
+  - "SUMMIT-PX00-01 — first closed FATHER corporate loop using a security-domain task"
 
-  - track_id: "TRACK-SECURITY"
-    name: "Security Products"
-    source: "OWNER_PRIORITY"
-    canonical_plan_ref: "father/product-roadmap/security-products.yaml"
-    current_state: "PRIMARY_BUILD_TARGET"
-    sequence:
-      - "Security Knowledge Base"
-      - "Compliance Engine"
-      - "Evidence-Based Security Architect"
-      - "Vulnerability & Risk Expert"
-      - "White-Hat / Continuous Security Assurance"
-      - "Regulatory Change Engine"
-      - "Continuous Security Audit Expert"
-    hard_gate: "Expert-Ready Evidence-Based Security Knowledge before authoritative promotion of downstream products"
-
-  - track_id: "TRACK-KNOWLEDGE"
-    name: "General Knowledge Infrastructure"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "ENABLING"
-    products:
-      - "Knowledge Core governance"
-      - "Source/claim/evidence provenance"
-      - "Knowledge versioning and freshness"
-      - "Domain knowledge package builder"
-      - "Factory Lessons memory"
-    relation_to_security: >-
-      Security Knowledge Base is the first high-rigor domain implementation and should harden
-      the generic Knowledge Core rather than fork a separate incompatible truth system.
-
-  - track_id: "TRACK-AGENT-FACTORY"
-    name: "Agent Factory Products"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "MVP_BUILD"
-    products:
-      - "Governed single live executor"
-      - "Multi-role Agent R&D Factory"
-      - "Reusable digital department template"
-      - "Agent team assembly from role/capability catalog"
-      - "Model/provider substitution and evaluation"
-    purpose: "Prove that governed replaceable digital workers can produce useful audited outcomes."
-
-  - track_id: "TRACK-SOFTWARE-FACTORY"
-    name: "Software / Service Factory"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "FUTURE_AFTER_AGENT_MVP"
-    products:
-      - "Requirement-to-repository factory"
-      - "Architecture/code/test/security/release pipeline"
-      - "DevSecOps evidence factory"
-      - "Service operations and maintenance loop"
-    entry_gate: "Stable Agent Factory patterns + closed FATHER work loop"
-
-  - track_id: "TRACK-RESEARCH-FACTORY"
-    name: "Research Factory"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "FUTURE"
-    products:
-      - "Evidence/literature research cell"
-      - "Hypothesis and experiment design"
-      - "Simulation/experiment orchestration"
-      - "Reproducibility and peer-review loop"
-      - "Research knowledge admission"
-    entry_gate: "Knowledge provenance + independent review + experiment/reproducibility contracts"
-
-  - track_id: "TRACK-ASSURANCE"
-    name: "Independent Assurance Products"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "PARTIALLY_ACTIVE"
-    products:
-      - "Socrates critical review service"
-      - "ARGUS milestone audit council"
-      - "Risk maturity gate service"
-      - "Architecture tension register"
-      - "Continuous evidence/quality assurance"
-    rule: "Assurance remains independent from the producer chain and cannot erase adverse findings."
-
-  - track_id: "TRACK-CYBER-PHYSICAL"
-    name: "Cyber-Physical / Robotics Factory"
-    source: "ARCHITECT_PROPOSED"
-    current_state: "LONG_HORIZON"
-    products:
-      - "Digital twin and simulation boundary"
-      - "Robot/device executor adapters"
-      - "Physical safety and emergency-stop governance"
-      - "Metrology/calibration/maintenance"
-      - "Material/resource/logistics orchestration"
-      - "Production-line quality and traceability"
-    entry_gate: >-
-      Do not enter physical execution until digital factory governance, authority, audit,
-      durable recovery, and safety-specific S4 controls are independently proven.
-
-  - track_id: "TRACK-FACTORY-OF-FACTORIES"
-    name: "Generalized Factory Builder"
-    source: "NORTH_STAR"
-    current_state: "LONG_HORIZON"
-    products:
-      - "Factory requirement compiler"
-      - "Capability-to-organization synthesis"
-      - "Factory blueprint library"
-      - "Cross-factory lessons and pattern mining"
-      - "Portfolio resource planning"
-      - "Factory lifecycle optimization"
-    entry_gate: "Multiple independently successful factory classes with reusable proven components"
-
-execution_order:
-  now:
-    - "Finish SUMMIT-FFB-02: first governed live AI executor."
-    - "Build Security Knowledge Base toward SEC-GATE-EXPERT-KNOWLEDGE-0001."
-    - "Keep FATHER/Factory Builder core work limited to direct dependencies of these goals and critical risk remediation."
-  next:
-    - "Close first end-to-end FATHER corporate loop on a security-domain product task."
-    - "Use the Security Knowledge Base to build the first bounded Compliance Engine PoC."
-    - "Convert repeated role/protocol/knowledge patterns into reusable Factory Builder catalog components."
-  after_foundation:
-    - "Promote Compliance Engine through evidence gates."
-    - "Build Evidence-Based Security Architect using the same governed knowledge/evidence layer."
-    - "Build Vulnerability & Risk Expert and continuous assurance components."
-  later:
-    - "Generalize proven patterns into Software Factory and Research Factory."
-    - "Only after digital operational maturity, begin cyber-physical/robotic factory pilots."
-
-portfolio_gates:
-  - gate_id: "PORTFOLIO-GATE-001"
-    name: "No foundation bypass"
-    rule: "A downstream product cannot become authoritative while a declared hard dependency gate is unsatisfied."
-  - gate_id: "PORTFOLIO-GATE-002"
-    name: "PoC isolation"
-    rule: "Future products may be explored as bounded PoCs, but PoC evidence cannot be presented as MVP/Production evidence."
-  - gate_id: "PORTFOLIO-GATE-003"
-    name: "Critical risk priority"
-    rule: "An S4 risk on the active path outranks feature roadmap work until eliminated or technically isolated."
-  - gate_id: "PORTFOLIO-GATE-004"
-    name: "Reusable learning"
-    rule: "Repeated findings, rework patterns and successful controls must be promoted into shared factory/knowledge patterns after review."
-  - gate_id: "PORTFOLIO-GATE-005"
-    name: "Human goal authority"
-    rule: "The portfolio roadmap does not authorize FATHER to invent societal needs or expand its own authority."
-
-roadmap_review:
-  cadence: "AT_EACH_SUMMIT_OR_MATERIAL_NEW_EVIDENCE"
-  reviewers:
-    - "Chief Factory Architect"
-    - "Security & Risk Architect"
-    - "Quality & Assurance Architect"
-    - "Socrates"
-    - "ARGUS when a major summit/product promotion is requested"
-  required_outputs:
-    - "progress delta"
-    - "new/changed risks"
-    - "dependency changes"
-    - "product promotion/hold decision"
-    - "next narrowest useful build target"
+canonical_resolution_rule: >-
+  Resolve portfolio/product state from the canonical repository/path at run planning time and pin
+  the resolved route/version in the governed context. Do not copy the roadmap content into PX00.
