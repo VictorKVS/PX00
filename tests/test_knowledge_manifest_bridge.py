@@ -33,6 +33,8 @@ MANIFEST = {
     ],
     "manifest_digest": "8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2",
 }
+EXPECTED_RUNTIME_SNAPSHOT_DIGEST = "04d5ec28431e8c13863dab9896533435dac735ceb36b6bf59e4f05eea1f7eac3"
+EXPECTED_CONTEXT_PACKAGE_HASH = "9c09e6a4075f25ce2e341d1b0bd2fa4f59dedadf364019492be337893c220a2a"
 
 
 class KnowledgeManifestBridgeTests(unittest.TestCase):
@@ -68,7 +70,7 @@ class KnowledgeManifestBridgeTests(unittest.TestCase):
         self.assertEqual(imported.producer_manifest_id, "SEC-SNAPSHOT-0001")
         self.assertEqual(imported.snapshot.repository_commit_sha, MANIFEST["repository_commit_sha"])
         self.assertEqual(imported.snapshot.knowledge_space_id, "KB-SECURITY")
-        self.assertEqual(len(imported.snapshot.snapshot_digest), 64)
+        self.assertEqual(imported.snapshot.snapshot_digest, EXPECTED_RUNTIME_SNAPSHOT_DIGEST)
         self.assertEqual(imported.objects[0].knowledge_state, "SOURCE_VERIFIED")
         self.assertNotEqual(imported.objects[0].knowledge_state, "VERIFIED")
         self.assertEqual(
@@ -113,7 +115,7 @@ class KnowledgeManifestBridgeTests(unittest.TestCase):
         self.assertEqual(package.knowledge_object_refs, ("FSB-117-2025",))
         self.assertEqual(package.knowledge_snapshot_refs, ("SEC-SNAPSHOT-0001",))
         self.assertEqual(package.route_snapshot_refs, ("KROUTE-SECURITY-v1",))
-        self.assertEqual(len(package.package_hash), 64)
+        self.assertEqual(package.package_hash, EXPECTED_CONTEXT_PACKAGE_HASH)
 
     def test_tampered_selection_state_fails_manifest_integrity(self):
         with self.assertRaisesRegex(ValueError, "PRODUCER_MANIFEST_DIGEST_MISMATCH"):
