@@ -6,9 +6,12 @@ from pathlib import Path
 
 from px00.validator import (
     validate_acceptance_fixture_document,
+    validate_action_request_document,
+    validate_capability_grant_document,
     validate_protocol_document,
     validate_repository,
     validate_role_document,
+    validate_tool_definition_document,
     validate_tree_f,
 )
 
@@ -117,6 +120,87 @@ class ProtocolValidationTests(unittest.TestCase):
         doc = self.valid_protocol()
         doc["steps"][0]["optional"] = True
         self.assertIn("PROTOCOL_OPTIONAL_CONDITION_MISSING", codes(validate_protocol_document(doc)))
+
+
+class GovernedActionSchemaValidationTests(unittest.TestCase):
+    def valid_action_request_schema(self):
+        return {
+            "canonical_prefix": "ACTREQ-",
+            "required_fields": {
+                "action_request_id": {}, "status": {}, "created_at": {}, "task_id": {},
+                "run_id": {}, "trace_id": {}, "requester_role_id": {}, "requester_role_version": {},
+                "protocol_id": {}, "protocol_version": {}, "step_id": {}, "capability": {},
+                "action_class": {}, "target_ref": {}, "purpose_code": {},
+                "requested_autonomy": {"values": ["A0", "A1", "A2", "A3", "A4"]},
+                "classification": {},
+                "side_effect_class": {"values": ["S0", "S1", "S2", "S3", "S4"]},
+            },
+            "invariants": [
+                "action_request_is_not_authority",
+                "material_execution_requires_linked_allow_authority_decision",
+                "requested_adapter_hint_does_not_grant_adapter_permission",
+                "untrusted_executor_output_cannot_directly_mutate_control_plane",
+            ],
+        }
+
+    def valid_tool_schema(self):
+        return {
+            "canonical_object": False,
+            "required_fields": {
+                "tool_id": {}, "version": {}, "name": {}, "status": {}, "capabilities": {},
+                "adapter_classes": {},
+                "supported_side_effect_classes": {"item_enum": ["S0", "S1", "S2", "S3", "S4"]},
+                "supported_data_classifications": {},
+            },
+            "invariants": [
+                "tool_definition_does_not_grant_authority",
+                "adapter_implementation_cannot_expand_declared_capability",
+                "unsupported_side_effect_class_cannot_execute",
+                "unsupported_data_classification_cannot_execute",
+            ],
+        }
+
+    def valid_grant_schema(self):
+        return {
+            "canonical_object": False,
+            "required_fields": {
+                "grant_id": {}, "action_request_id": {}, "authority_decision_ref": {},
+                "capability": {}, "target_scope": {}, "issued_at": {}, "status": {},
+                "side_effect_ceiling": {"values": ["S0", "S1", "S2", "S3", "S4"]},
+                "data_classification_ceiling": {}, "operation_count_limit": {},
+            },
+            "invariants": [
+                "grant_requires_allow_authority_decision",
+                "grant_scope_cannot_exceed_authority_decision",
+                "grant_capability_must_match_action_request",
+                "expired_revoked_or_consumed_one_time_grant_cannot_execute",
+                "replay_policy_is_enforced",
+            ],
+        }
+
+    def test_valid_action_request_schema(self):
+        self.assertEqual(validate_action_request_document(self.valid_action_request_schema()), [])
+
+    def test_action_request_cannot_lose_control_plane_injection_guard(self):
+        doc = self.valid_action_request_schema()
+        doc["invariants"].remove("untrusted_executor_output_cannot_directly_mutate_control_plane")
+        self.assertIn("ACTREQ_INVARIANT_MISSING", codes(validate_action_request_document(doc)))
+
+    def test_valid_tool_schema(self):
+        self.assertEqual(validate_tool_definition_document(self.valid_tool_schema()), [])
+
+    def test_tool_side_effect_scale_must_be_complete(self):
+        doc = self.valid_tool_schema()
+        doc["required_fields"]["supported_side_effect_classes"]["item_enum"] = ["S0", "S1"]
+        self.assertIn("TOOL_SIDE_EFFECT_VALUES_INVALID", codes(validate_tool_definition_document(doc)))
+
+    def test_valid_capability_grant_schema(self):
+        self.assertEqual(validate_capability_grant_document(self.valid_grant_schema()), [])
+
+    def test_grant_replay_guard_is_required(self):
+        doc = self.valid_grant_schema()
+        doc["invariants"].remove("replay_policy_is_enforced")
+        self.assertIn("GRANT_INVARIANT_MISSING", codes(validate_capability_grant_document(doc)))
 
 
 class AcceptanceValidationTests(unittest.TestCase):
