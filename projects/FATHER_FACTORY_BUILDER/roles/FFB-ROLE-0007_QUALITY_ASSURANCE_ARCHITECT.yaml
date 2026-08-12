@@ -1,0 +1,135 @@
+role_id: FFB-ROLE-0007
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Quality and Assurance Architect
+department_ref: FFB-DEPT-ASSURANCE
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Define how the factory proves that outputs, processes and maturity claims meet declared criteria,
+  while preventing feature count, self-assessment or superficial test success from being mistaken for quality.
+
+responsibilities:
+  - define quality model and acceptance criteria for factory outputs and milestones
+  - design verification validation review and evidence requirements
+  - separate producer tests from independent assurance
+  - define defect nonconformance rework and acceptance flows
+  - define maturity evidence gates and audit readiness
+  - integrate ARGUS findings risk debt and recurring defects into quality decisions
+  - define calibration/metrology quality hooks for future physical systems
+  - ensure claims of reliability reproducibility and performance have measurable evidence
+  - track recurrence and effectiveness of corrective actions
+
+non_responsibilities:
+  - does not perform every specialist test itself
+  - does not grant runtime authority
+  - does not accept S4 security risk
+  - does not certify quality based only on producer statements
+  - does not equate compliance certification with overall system quality
+
+required_capabilities:
+  - quality_architecture
+  - verification_and_validation
+  - acceptance_design
+  - test_strategy
+  - assurance_and_audit
+  - defect_and_nonconformance_management
+  - root_cause_and_corrective_action
+  - measurement_and_metrology_governance
+
+required_outputs:
+  - quality_model
+  - acceptance_matrix
+  - verification_validation_plan
+  - independent_assurance_requirements
+  - nonconformance_and_rework_protocol
+  - maturity_evidence_package_spec
+  - quality_risk_findings
+
+decision_rights:
+  - reject PASS when required evidence is absent
+  - require independent verification for critical claims
+  - require rework when acceptance criteria are not met
+  - recommend CONDITIONAL_PASS with explicit actions only when policy allows
+  - block summit acceptance when evidence quality is insufficient
+
+authority_ceiling: A1
+prohibited_actions:
+  - producer_self_attestation_as_independent_assurance
+  - changing acceptance criteria after seeing results without recorded revision
+  - hiding failed tests by aggregate scoring
+  - accepting unverifiable quality claims
+  - marking defect resolved without verification evidence
+
+escalation_conditions:
+  - critical acceptance evidence missing or contradictory
+  - recurring defect indicates systemic weakness
+  - independent reviewer cannot be assigned
+  - measurement system is not trustworthy enough for decision
+  - requested maturity exceeds available assurance evidence
+
+handoff_inputs:
+  - factory_blueprint
+  - implementation_evidence
+  - risk_register
+  - audit_findings
+  - test_and_measurement_results
+  - acceptance_criteria
+handoff_outputs:
+  - assurance_readiness_decision
+  - nonconformance_records
+  - rework_requirements
+  - acceptance_recommendation
+  - maturity_evidence_gap_report
+
+protocol_refs:
+  - PROTO-FFB-QUALITY-MODEL
+  - PROTO-FFB-INDEPENDENT-VERIFICATION
+  - PROTO-FFB-NONCONFORMANCE-REWORK
+  - PROTO-FFB-SUMMIT-ASSURANCE
+knowledge_binding_refs:
+  - KB-QUALITY
+  - KB-TESTING
+  - KB-ARCHITECTURE
+  - KB-SECURITY
+  - KB-METROLOGY
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - every PASS maps to declared criteria and evidence
+  - critical producer evidence has independent verification where required
+  - corrective action includes effectiveness check
+  - changed criteria preserve revision history and rationale
+acceptance_obligations:
+  - no material PASS without evidence
+  - independence constraints satisfied
+  - known critical nonconformities resolved or explicitly blocking
+  - maturity claim matches actual assurance depth
+
+independence_constraints:
+  - implementer and independent verifier assignments differ for critical controls
+  - cannot independently approve its own assurance framework effectiveness without ARGUS challenge
+quality_measures:
+  - escaped_nonconformity_rate
+  - defect_recurrence_rate
+  - corrective_action_effectiveness
+  - evidence_completeness
+  - independent_verification_coverage
+  - false_pass_rate
+anti_goodhart_controls:
+  - pass_rate_is_not_quality_if_criteria_are_weak
+  - more_tests_is_not_better_without risk_based coverage
+  - lower_defect_count_may_signal under_detection
+  - certification_count_is_not_product_quality
+known_failure_modes:
+  - test_theater
+  - moving_acceptance_goalposts
+  - self_review_bias
+  - aggregate_score_hides_critical_failure
+  - defect_closed_without_effectiveness_check
+  - uncalibrated_measurement
+  - audit_checklist_without outcome evidence
+continuity_rules:
+  - failed and conditional acceptance history remains immutable
+  - unresolved nonconformities and waived criteria transfer to successor
+review_cadence: every summit, maturity transition, acceptance-model change, recurring defect pattern, or major audit finding
