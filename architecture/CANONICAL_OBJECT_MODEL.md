@@ -38,6 +38,7 @@ Display names and customer brands are metadata. Canonical IDs do not change duri
 | `TASK-` | Task | Requested unit of work with objective, constraints and acceptance conditions. |
 | `RUN-` | Run | One bounded execution attempt of a task/protocol by a role/system. |
 | `PROTO-` | Protocol | Versioned procedure controlling how a class of work is performed. |
+| `ACTREQ-` | Action Request | One governed request for a material capability/action; the request has its own authorization/execution lifecycle and is not authority by itself. |
 
 ### Source, evidence and knowledge
 
@@ -103,7 +104,11 @@ TASK-0012
 ROLE-0201
   ↓ execution
 RUN-0031 / TRACE-0088
-  ↓ uses
+  ↓ requests
+ACTREQ-0021
+  ↓ authority decision / tool boundary
+SRC-0040 / ART-0041
+  ↓ admitted_for_claim
 EVD-0041 + EVD-0042
   ↓ produces
 FIND-0018
@@ -119,6 +124,8 @@ EVAL-0004
 REL-0002
 ```
 
+`ACTREQ-*` is intentionally distinct from `TASK-*`: a task describes governed work to achieve an objective, while an Action Request describes one requested material capability/action inside that work and must independently receive effective authority before execution.
+
 ## Lifecycle rules
 
 1. IDs are immutable and never reused for another object.
@@ -128,8 +135,10 @@ REL-0002
 5. `KN-*` requires an admitted provenance chain.
 6. Material `DEC-*` requires authority, rationale and evidence references.
 7. `RUN-*` is bounded and belongs to one `TRACE-*`; retries create new runs unless a protocol explicitly defines continuation semantics.
-8. `EVT-*` records material occurrences; debug noise is not promoted into permanent governance evidence by default.
-9. Regional/customer display terminology may change without changing canonical IDs.
+8. `ACTREQ-*` is a request, never an authority grant; execution requires a linked effective authority decision.
+9. Material `ACTREQ-*` execution must preserve request → authority → execution event/output traceability.
+10. `EVT-*` records material occurrences; debug noise is not promoted into permanent governance evidence by default.
+11. Regional/customer display terminology may change without changing canonical IDs.
 
 ## Security and privacy
 
@@ -137,6 +146,7 @@ REL-0002
 - Secrets and raw protected data are referenced through controlled storage identities rather than copied into public governance records.
 - Provenance must preserve integrity without forcing confidential content into this repository.
 - Access decisions shall be based on canonical object identity and classification, not display name.
+- Untrusted source/executor/tool output cannot create or authorize an `ACTREQ-*` execution by free-form instruction alone.
 
 ## Verification
 
@@ -146,7 +156,8 @@ The object model is acceptable for Baseline 0.1 when:
 - the development production chain can be represented without ambiguous object meanings;
 - no two object types have the same lifecycle purpose;
 - future event/provenance schemas can reference canonical IDs without renaming them;
-- a rebrand can change all display names while the canonical chain remains unchanged.
+- a rebrand can change all display names while the canonical chain remains unchanged;
+- a material tool action can be traced from `ACTREQ-*` to authority decision and execution evidence without treating the request as permission.
 
 ## Decision
 
