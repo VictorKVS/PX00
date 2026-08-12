@@ -24,14 +24,16 @@ Every material Factory Builder generation records:
 - Executor boundary: proven with replaceable local workers.
 - AI lifecycle/risk gates: integrated.
 - Live HTTPS provider secret/data-egress boundary: locally proven and CI-green.
-- Real provider-specific driver and authorized live call: pending.
+- Gemini Interactions provider-specific driver/profile: locally proven and CI-green under TF-0073.
+- Real authorized Gemini inference: pending.
 - `RISK-0011`: MITIGATING, not resolved.
 - Product portfolio: canonical master roadmap lives in `VictorKVS/KNOWLEDGE_CORE/father/product-roadmap/`.
 - Security Knowledge: canonical professional product lives in `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`; Factory Builder binds to `KB-SECURITY` instead of copying domain truth.
 - First real cross-repository source-metadata snapshot has completed manifest → snapshot → ContextPackage → RUN trace → read-only replay.
 - `RISK-0012`: RESOLVED for bounded M1 cross-repository provenance/replay after ARGUS Audit 0002.
 - Decision materiality norm `PX00-NORM-DM-0001`: ACTIVE; Role Packages must declare materiality ranges/promotion triggers.
-- Professional decision context is now bound to exact RUN/role/assignment and persisted in trace/replay under TF-0071.
+- Professional decision context is bound to exact RUN/role/assignment and persisted in trace/replay under TF-0071.
+- Security atomic proof-floor gate is active; TF-0072 baseline observed 82 atomic requirements and 0 strict VERIFIED requirements.
 - A true atomic VERIFIED Security requirement reasoning RUN remains NOT PROVEN.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
@@ -255,3 +257,45 @@ Read-only replay fails closed if persisted decision context is omitted or substi
 Important restraint: the system preserves formal rationale/evidence references, not hidden model chain-of-thought. Trace integrity proves which decision record was used; it does not prove that the professional conclusion was correct.
 
 Next useful evidence is product value, not more provenance plumbing: close `SUMMIT-FFB-02` with one real governed AI inference and, when available, run one truly atomic VERIFIED Security requirement through a professional D2/D3 decision path.
+
+## 2026-08-13 — FFBJ-0019 — Security requirement verification gate
+Attempting the first professional D3 Security decision exposed a proof-state inconsistency before runtime execution: FSTEK-31 atomic requirements were labeled VERIFIED while lacking the `source_quote` required by their canonical schema.
+
+Factory Builder did not consume the inflated state. KNOWLEDGE_CORE downgraded the affected atoms to REVIEWED without deleting their atomization and added an executable CI gate.
+
+Observed strict baseline:
+- 9 requirement files;
+- 82 atomic requirements;
+- 0 strict VERIFIED requirements.
+
+`VERIFIED` now requires source document identity, exact locator and source quote; an absent status is conservatively UNVERIFIED.
+
+Current professional D3 Security run result is correctly:
+`BLOCKED_BY_KNOWLEDGE_PROOF_FLOOR`.
+
+First promotion target: `FSTEK31-REQ-001` at locator `p. 10`.
+
+## 2026-08-13 — FFBJ-0020 — Gemini provider driver readiness
+Continued the independent live-executor stream while Security Knowledge waits for the first truly VERIFIED atom.
+
+The first concrete provider selection exposed a transport assumption: the secret-safe M1 live boundary still hardcoded Bearer authentication. `ADR-0065` makes header-based authentication strategy profile-controlled while preserving Bearer as the default.
+
+Added:
+- Google Gemini Interactions provider driver;
+- stable `v1` endpoint profile;
+- pinned `gemini-3.6-flash` model reference;
+- `x-goog-api-key` header configuration;
+- PUBLIC-only egress;
+- text-only candidate output;
+- `store=false`;
+- no tools, provider agent, grounding, files, multimodal input or background execution;
+- fail-closed handling of incomplete, function/tool and non-text provider responses.
+
+Provider interaction ID and returned model are retained as provenance when present. Credential values remain runtime-only and are absent from call records/candidate provenance.
+
+Provider-specific mapping is locally CI-proven, but no authorized real Gemini inference has yet occurred. `RISK-0011` remains MITIGATING and `SUMMIT-FFB-02` remains OPEN.
+
+Invariant:
+`DRIVER READY != LIVE CALL PROVEN != SUMMIT ACCEPTED`.
+
+Next evidence: exactly one authorized PUBLIC Gemini inference, then independent verification, governed rework if needed, Socrates and ARGUS. No second provider or broader provider abstraction before that path is exercised unless a concrete live blocker requires it.
