@@ -1,0 +1,27 @@
+schema_version: 0.1
+status: draft
+object_type: context_trust_assessment
+purpose: classify context provenance/trust without allowing retrieved content to manufacture runtime authority
+
+required_fields:
+  trust_assessment_id: {type: stable_id}
+  context_package_ref: {type: CONTEXT_PACKAGE_reference}
+  trust_label:
+    type: enum
+    values: [TRUSTED_INTERNAL, VERIFIED_EXTERNAL, UNTRUSTED_EXTERNAL, TAINTED]
+  provenance_refs: {type: list}
+  assessor_ref: {type: actor_or_component_reference}
+  assessed_at: {type: utc_timestamp}
+
+optional_fields:
+  independent_verification_refs: {type: list}
+  taint_reason_refs: {type: list}
+
+invariants:
+  - context_content_cannot_create_authority_or_capability
+  - tainted_context_cannot_directly_drive_material_sensitive_action
+  - untrusted_external_context_requires_independent_verification_before_material_sensitive_action
+  - trust_label_does_not_mean_factual_truth
+  - trust_assessment_is_auditable_and_versioned
+
+library_dependency: none
