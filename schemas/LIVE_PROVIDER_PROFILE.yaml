@@ -1,4 +1,4 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: live_provider_profile
 purpose: define a provider-neutral, secret-safe and data-classification-aware boundary for one governed live AI executor
@@ -18,6 +18,13 @@ required_fields:
   status: {type: enum, values: [ACTIVE, SUSPENDED, RETIRED]}
 
 optional_fields:
+  auth_header_name:
+    type: http_header_name
+    default: Authorization
+  auth_header_prefix:
+    type: string
+    default: "Bearer "
+    rule: prefix_only_never_contains_credential_value
   provider_region_ref: {type: string}
   data_processing_profile_ref: {type: string}
   notes: {type: string}
@@ -25,7 +32,11 @@ optional_fields:
 invariants:
   - endpoint_must_use_https
   - endpoint_host_must_be_explicitly_allowlisted
+  - authentication_header_name_is_profiled_not_hardcoded_to_bearer
+  - authentication_header_name_must_be_a_safe_HTTP_header_token
+  - authentication_prefix_must_not_contain_CR_or_LF
   - secret_value_is_never_stored_in_profile
+  - credential_value_is_never_persisted_in_call_record_or_candidate_provenance
   - live_network_access_requires_explicit_runtime_opt_in
   - request_data_classification_must_be_allowed_by_profile
   - timeout_and_response_size_are_bounded
