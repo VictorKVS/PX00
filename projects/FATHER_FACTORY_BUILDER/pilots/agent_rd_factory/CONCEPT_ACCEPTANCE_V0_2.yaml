@@ -1,0 +1,52 @@
+acceptance_record_id: FFB-ACCEPT-0001
+acceptance_matrix_ref: FFB-ACC-0001
+blueprint_ref: FFB-BP-0001-V2@0.2
+maturity: M0_CONCEPT
+verdict: PASS_WITH_ACTIONS
+accepted_scope: concept_design_only
+accepted_at: 2026-08-12T18:12:00Z
+
+evidence_refs:
+  - FFB-REQ-0001
+  - FFB-CAPMAP-0001
+  - FFB-RBSET-0001
+  - FFB-BP-0001@0.1
+  - SOCRATES_REVIEW_V0_1
+  - ARGUS-FFB-0001
+  - FFB-BP-0001-V2@0.2
+  - SOCRATES_REVIEW_V0_2
+  - ARGUS-FFB-0002
+
+criteria_results:
+  ACC-M0-001: PASS
+  ACC-M0-002: PASS
+  ACC-M0-003: PASS
+  ACC-M0-004: PASS
+  ACC-M0-005: PASS
+  ACC-M0-006: PASS
+
+blocking_scope:
+  M1_PROTOTYPE: BLOCKED
+  reason_refs:
+    - RISK-0002
+    - ACC-M1-001
+    - ACC-M1-002
+    - ACC-M1-003
+    - ACC-M1-004
+    - ACC-M1-005
+    - ACC-M1-006
+    - ACC-M1-008
+
+open_actions:
+  - define governed PROTO-RD workflow contracts
+  - implement adversarial trust gate and close or isolate RISK-0002
+  - enforce producer verifier assignment separation at runtime
+  - build reproducible bounded prototype harness
+  - define and pin executor snapshot
+  - validate role compression for low-risk profiles without weakening independence
+
+invariants:
+  - concept_acceptance_does_not_grant_execution_authority
+  - higher_maturity_is_not_implied
+  - v0_1_history_and_dissent_remain_preserved
+  - open_actions_are_not_silently_treated_as_complete
