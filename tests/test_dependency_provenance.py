@@ -10,22 +10,26 @@ from px00.dependency_provenance import validate_dependency_provenance
 
 ROOT = Path(__file__).resolve().parents[1]
 REQ = ROOT / "requirements-validator.txt"
+LOCK = ROOT / "requirements-validator-lock.txt"
 SBOM = ROOT / "security" / "sbom" / "PX00-validator.cdx.json"
 
 
 class DependencyProvenanceTests(unittest.TestCase):
     def test_current_repository_dependency_provenance(self) -> None:
-        self.assertEqual(validate_dependency_provenance(REQ, SBOM), [])
+        self.assertEqual(validate_dependency_provenance(REQ, SBOM, LOCK), [])
 
     def test_requirement_drift_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             req = root / "requirements.txt"
             sbom = root / "bom.json"
+            lock = root / "lock.txt"
             req.write_text("PyYAML==6.0.2\n", encoding="utf-8")
             sbom.write_text(SBOM.read_text(encoding="utf-8"), encoding="utf-8")
-            issues = validate_dependency_provenance(req, sbom)
+            lock.write_text(LOCK.read_text(encoding="utf-8"), encoding="utf-8")
+            issues = validate_dependency_provenance(req, sbom, lock)
             self.assertTrue(any("requirements/SBOM mismatch" in issue for issue in issues))
+            self.assertTrue(any("requirements/hash-lock mismatch" in issue for issue in issues))
 
     def test_unpinned_requirement_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -48,6 +52,33 @@ class DependencyProvenanceTests(unittest.TestCase):
             sbom.write_text(json.dumps(value), encoding="utf-8")
             issues = validate_dependency_provenance(req, sbom)
             self.assertTrue(any("root component" in issue for issue in issues))
+
+    def test_hash_lock_without_hash_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            req = root / "requirements.txt"
+            sbom = root / "bom.json"
+            lock = root / "lock.txt"
+            req.write_text(REQ.read_text(encoding="utf-8"), encoding="utf-8")
+            sbom.write_text(SBOM.read_text(encoding="utf-8"), encoding="utf-8")
+            lock.write_text("PyYAML==6.0.3\n", encoding="utf-8")
+            issues = validate_dependency_provenance(req, sbom, lock)
+            self.assertTrue(any("has no SHA256 artifact hash" in issue for issue in issues))
+
+    def test_hash_lock_version_drift_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            req = root / "requirements.txt"
+            sbom = root / "bom.json"
+            lock = root / "lock.txt"
+            req.write_text(REQ.read_text(encoding="utf-8"), encoding="utf-8")
+            sbom.write_text(SBOM.read_text(encoding="utf-8"), encoding="utf-8")
+            lock.write_text(
+                "PyYAML==6.0.2 --hash=sha256:" + "a" * 64 + "\n",
+                encoding="utf-8",
+            )
+            issues = validate_dependency_provenance(req, sbom, lock)
+            self.assertTrue(any("requirements/hash-lock mismatch" in issue for issue in issues))
 
 
 if __name__ == "__main__":
