@@ -1,0 +1,55 @@
+schema_version: 0.1
+status: draft
+object_type: knowledge_snapshot
+purpose: >-
+  Pin one immutable external knowledge repository state and the exact selected knowledge
+  object versions used to build a governed ContextPackage.
+
+required_fields:
+  snapshot_id:
+    type: stable_id
+  knowledge_space_id:
+    type: stable_id
+  canonical_repository:
+    type: repository_slug
+    format: owner/name
+  repository_commit_sha:
+    type: git_commit_sha40
+  route_snapshot_ref:
+    type: KNOWLEDGE_ROUTE_reference
+  content_root:
+    type: repository_relative_path
+  object_version_refs:
+    type: immutable_knowledge_version_reference_list
+    format: object_id@version_id#sha256_content_digest
+  snapshot_digest:
+    type: sha256_hex
+  hash_algorithm:
+    type: enum
+    values: [sha256]
+
+optional_fields:
+  product_ref:
+    type: canonical_reference
+  domain_ref:
+    type: canonical_reference
+  captured_at:
+    type: utc_timestamp
+  source_manifest_ref:
+    type: canonical_reference
+  notes:
+    type: string
+
+invariants:
+  - repository_commit_sha_is_immutable_and_not_a_branch_or_tag
+  - canonical_repository_is_location_metadata_not_knowledge_identity
+  - knowledge_space_id_remains_stable_across_repository_migrations
+  - every_selected_object_has_exact_version_and_sha256_content_digest
+  - snapshot_digest_covers_repository_commit_route_content_root_and_sorted_object_version_refs
+  - changing_repository_commit_changes_snapshot_digest
+  - changing_selected_object_or_version_or_digest_changes_snapshot_digest
+  - historical_snapshot_is_never_rewritten_to_follow_main_or_latest
+  - snapshot_does_not_grant_runtime_authority
+  - external_repository_state_is_pinned_before_context_delivery
+
+library_dependency: none
