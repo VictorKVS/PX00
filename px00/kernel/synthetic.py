@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Any
+from typing import Any, Iterable
 from uuid import uuid4
 
+from px00.policy import PolicyEngine, PolicyProfile, synthetic_policy_profiles
 from px00.tools.deterministic import BoundaryViolation, DeterministicMathTool
 
 
@@ -35,6 +36,8 @@ class AuthorityDecision:
     result: str
     effective_autonomy: str
     reason_code: str
+    policy_refs: tuple[str, ...] = ()
+    constraining_profile: str | None = None
 
 
 @dataclass(frozen=True)
@@ -76,8 +79,8 @@ class SyntheticGovernedKernel:
     """First executable PX00 governed action proof.
 
     It intentionally supports one synthetic S0 capability only: ``math.multiply``.
-    No network, filesystem mutation, subprocess, model, connector, or external
-    side effect is available from this kernel.
+    Policy is evaluated by :class:`px00.policy.PolicyEngine`; the kernel does
+    not own role/project/jurisdiction/tool authorization rules.
     """
 
     CAPABILITY = "math.multiply"
@@ -87,8 +90,10 @@ class SyntheticGovernedKernel:
     PROTOCOL_VERSION = "0.1.0"
     STEP_ID = "S02"
 
-    def __init__(self) -> None:
+    def __init__(self, profiles: Iterable[PolicyProfile] | None = None) -> None:
         self._tool = DeterministicMathTool()
+        self._policy = PolicyEngine()
+        self._profiles = tuple(profiles) if profiles is not None else synthetic_policy_profiles()
 
     def prepare_request(
         self,
@@ -119,28 +124,31 @@ class SyntheticGovernedKernel:
         )
 
     def evaluate_authority(self, request: ActionRequest, *, allow: bool) -> AuthorityDecision:
-        if request.capability != self.CAPABILITY:
+        if not allow:
             return AuthorityDecision(
                 decision_id=f"AUTH-{uuid4().hex[:12]}",
                 action_request_id=request.action_request_id,
                 result="DENY",
-                effective_autonomy="A1",
-                reason_code="CAPABILITY_NOT_ALLOWED",
+                effective_autonomy="A0",
+                reason_code="AUTHORITY_ABSENT",
             )
-        if request.side_effect_class != "S0":
-            return AuthorityDecision(
-                decision_id=f"AUTH-{uuid4().hex[:12]}",
-                action_request_id=request.action_request_id,
-                result="DENY",
-                effective_autonomy="A1",
-                reason_code="SIDE_EFFECT_CLASS_NOT_ALLOWED",
-            )
+
+        policy = self._policy.evaluate(
+            self._profiles,
+            capability=request.capability,
+            requested_autonomy=request.requested_autonomy,
+            side_effect_class=request.side_effect_class,
+            classification=request.classification,
+            target_ref=request.target_ref,
+        )
         return AuthorityDecision(
             decision_id=f"AUTH-{uuid4().hex[:12]}",
             action_request_id=request.action_request_id,
-            result="ALLOW" if allow else "DENY",
-            effective_autonomy="A1",
-            reason_code="SYNTHETIC_SCOPE_ALLOWED" if allow else "AUTHORITY_ABSENT",
+            result=policy.result,
+            effective_autonomy=policy.effective_autonomy,
+            reason_code=policy.reason_code,
+            policy_refs=policy.profile_refs,
+            constraining_profile=policy.constraining_profile,
         )
 
     def issue_grant(
@@ -158,8 +166,8 @@ class SyntheticGovernedKernel:
             authority_decision_id=authority.decision_id,
             capability=request.capability,
             target_scope=request.target_ref,
-            side_effect_ceiling="S0",
-            data_classification_ceiling="PUBLIC",
+            side_effect_ceiling=request.side_effect_class,
+            data_classification_ceiling=request.classification,
             operation_count_limit=1,
             one_time=True,
         )
@@ -175,8 +183,9 @@ class SyntheticGovernedKernel:
             self._event(request, "AUTHORITY_DECISION", authority.result, authority.reason_code)
         ]
         if authority.result != "ALLOW":
+            run_state = "ESCALATED" if authority.result == "ESCALATE" else "DENIED"
             return GovernedResult(
-                run_state="DENIED",
+                run_state=run_state,
                 action_request=request,
                 authority_decision=authority,
                 capability_grant=None,
