@@ -1,0 +1,109 @@
+schema_version: 0.1
+status: active_project_norm
+object_type: DECISION_MATERIALITY
+norm_ref: PX00-NORM-DM-0001
+purpose: >-
+  Scale evidence, review and approval obligations to the consequence, reversibility,
+  uncertainty and risk of a governed decision.
+
+required_fields:
+  - decision_ref
+  - materiality_class
+  - consequence
+  - reversibility
+  - uncertainty
+  - blast_radius
+  - risk_severity
+  - rationale
+  - evidence_categories_present
+  - independent_review_state
+  - approval_state
+
+materiality_classes:
+  D0_LOCAL_CONVENTIONAL:
+    minimum_evidence_categories: [CONVENTION_OR_PROJECT_RULE]
+    independent_review: NOT_REQUIRED_BY_MATERIALITY
+    approval: NOT_REQUIRED_BY_MATERIALITY
+  D1_IMPLEMENTATION:
+    minimum_evidence_categories: [TECHNICAL_REFERENCE, VERIFICATION]
+    independent_review: RISK_BASED
+    approval: RISK_BASED
+  D2_ARCHITECTURE_PRODUCT:
+    minimum_evidence_categories:
+      - REQUIREMENTS
+      - CONSTRAINTS
+      - ALTERNATIVES
+      - DECISION_CRITERIA
+      - COST_OR_RESOURCE_VIEW
+      - RISK_VIEW
+      - TECHNICAL_REFERENCE
+      - VERIFICATION_PLAN
+    independent_review: REQUIRED_UNLESS_GOVERNED_EXCEPTION
+    approval: POLICY_BASED
+  D3_REGULATED_SAFETY_CRITICAL:
+    minimum_evidence_categories:
+      - REQUIREMENTS
+      - CONSTRAINTS
+      - ALTERNATIVES
+      - DECISION_CRITERIA
+      - COST_OR_RESOURCE_VIEW
+      - RISK_VIEW
+      - PRIMARY_OR_NORMATIVE_SOURCE
+      - APPLICABILITY
+      - RESIDUAL_RISK
+      - VERIFICATION_PLAN
+      - QUALIFIED_INDEPENDENT_REVIEW
+    independent_review: REQUIRED
+    approval: REQUIRED_WHERE_LAW_CONTRACT_POLICY_OR_AUTHORITY_MODEL_REQUIRES
+
+classification_dimensions:
+  consequence: [LOW, MODERATE, HIGH, CRITICAL]
+  reversibility: [EASY, MANAGED, HARD, IRREVERSIBLE]
+  uncertainty: [LOW, MODERATE, HIGH, VERY_HIGH]
+  blast_radius: [LOCAL, COMPONENT, SYSTEM, ORGANIZATION, CUSTOMER_OR_PUBLIC, PHYSICAL_WORLD]
+  risk_severity: [S0, S1, S2, S3, S4]
+
+risk_floor:
+  S0: D0_LOCAL_CONVENTIONAL
+  S1: D0_LOCAL_CONVENTIONAL
+  S2: D1_IMPLEMENTATION
+  S3: D2_ARCHITECTURE_PRODUCT
+  S4: D3_REGULATED_SAFETY_CRITICAL
+
+promotion_triggers:
+  D3_REGULATED_SAFETY_CRITICAL:
+    any_of:
+      - consequence_is_CRITICAL
+      - regulated_or_legally_mandatory_decision
+      - safety_critical_decision
+      - irreversible_material_external_effect
+      - risk_severity_is_S4
+  D2_ARCHITECTURE_PRODUCT:
+    any_of:
+      - consequence_is_HIGH
+      - reversibility_is_HARD
+      - uncertainty_is_HIGH_or_VERY_HIGH
+      - blast_radius_is_ORGANIZATION_or_greater
+      - architecture_or_product_boundary_decision
+      - material_vendor_or_lock_in_decision
+      - risk_severity_is_S3
+
+allowed_gate_results:
+  - PASS
+  - INSUFFICIENT_EVIDENCE
+  - REVIEW_REQUIRED
+  - APPROVAL_REQUIRED
+  - BLOCKED_BY_RISK_FLOOR
+  - MATERIALITY_UNDERCLASSIFIED
+
+invariants:
+  - highest_material_dimension_sets_floor
+  - materiality_is_not_averaged_down_by_low_dimensions
+  - hard_constraint_cannot_be_overridden_by_preference_score
+  - s4_requires_d3_and_retains_veto_semantics
+  - favorable_expected_loss_cannot_downgrade_s4_or_d3_obligation
+  - low_level_choice_is_promoted_when_higher_level_impact_is_material
+  - evidence_depth_is_proportional_not_maximal
+  - best_practice_without_source_is_not_terminal_justification_for_d2_or_d3
+  - historical_reassessment_does_not_rewrite_historical_decision
+  - knowledge_and_evidence_never_grant_runtime_authority
