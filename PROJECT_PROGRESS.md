@@ -21,9 +21,9 @@ Completed summit: **SUMMIT-FFB-01 — BOUNDED FUNCTIONAL AGENT FACTORY REFERENCE
 Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 
 Current position inside SUMMIT-FFB-02:
-`provider-neutral executor boundary → local replaceable worker proof → live provider adapter next`.
+`provider-neutral executor boundary → AI/ML lifecycle & risk gates integrated → authorized live provider adapter next`.
 
-Latest generation: `TF-0062 — Governed Replaceable Executor Boundary`.
+Latest generation: `TF-0063 — AI Project Lifecycle Evidence Gates and Quantitative Risk`.
 
 ## WHAT IS CLOSED
 
@@ -36,7 +36,7 @@ Proven bounded outcomes:
 The factory preserves failed evidence, supports explicit governed rework, re-verifies independently and treats safe refusal as a valid control outcome rather than a delivery KPI failure.
 
 ### TF-0062 — Governed Replaceable Executor Boundary ✅ boundary capability
-A provider-neutral worker boundary is now locally proven.
+A provider-neutral worker boundary is locally proven.
 
 Proven chain:
 `worker v0.1 → candidate → VERIFY FAIL → REWORK → worker v0.2 → corrected candidate → VERIFY PASS → SOCRATES → DELIVERY`.
@@ -46,19 +46,41 @@ Pinned historical facts include exact executor/version/provider/model metadata, 
 Important invariant:
 `EXECUTOR INVOCATION SUCCESS ≠ VERIFICATION PASS ≠ ACCEPTANCE`.
 
-The executor cannot gain material external effects in this M1 experiment, impersonate another assignment, bypass the security gate, or manufacture structured capability/tool/authority/acceptance objects as runtime authority.
+### TF-0063 — AI Project Lifecycle Evidence Gates and Quantitative Risk ✅
+New OTUS/CRISP-ML(Q) learning has been translated into project/runtime controls rather than passive notes.
+
+The architecture now explicitly separates:
+`CRISP-ML(Q) PROCESS PHASE ≠ DEMO/POC/MVP/PRODUCTION DELIVERY STAGE ≠ PX00 M0..M5 SYSTEM MATURITY`.
+
+Implemented:
+- CRISP-ML(Q) phase records with requirements/constraints, tasks, risks and QA methods;
+- Demo/PoC/MVP/Production evidence gates;
+- stage-aware CI/CD contract;
+- reproducible quantitative risk assessment using Bernoulli occurrence × triangular impact;
+- expected loss, tail percentile and probability-above-tolerance outputs;
+- TechnoMart retail AI case as an educational regression/strategy seed with unknowns preserved as `TBD`.
+
+Important new invariants:
+- `technical feasibility ≠ user/business value ≠ production readiness`;
+- PoC code may be deliberately disposable only when shortcuts are declared with an expiry stage;
+- MVP requires real users/data plus business/product evidence;
+- Production requires operational reliability, security, CI/CD/release governance, monitoring, maintenance/drift and recovery evidence;
+- quantitative risk never overrides S4 or automatically accepts risk.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
 - `FFB-FP-0002 SECURITY_SCOPE_BLOCK` — safe refusal is a valid outcome.
 - `FFB-FP-0003 EXECUTOR_CANDIDATE_REJECTED` — an allowed, successfully invoked worker may still produce wrong content; its exact version remains pinned after rejection and replacement.
+- New lifecycle lesson: successful PoC evidence must not silently promote a project into MVP or Production claims.
+- New risk lesson: mean expected loss alone can hide unacceptable tail/tolerance exposure.
 
 ## VELOCITY
 Observed engineering velocities, not promises:
 - broad active build window: about **5.4 TF/hour** wall-clock;
 - earlier short burst: about **15 TF/hour**, not sustainable guidance;
 - `TF-0060 → TF-0061`: about **6.5 TF/hour burst-equivalent**;
-- `TF-0061` at 19:27:17 UTC → `TF-0062` at 19:35:11 UTC: about **7.6 TF/hour burst-equivalent**.
+- `TF-0061 → TF-0062`: about **7.6 TF/hour burst-equivalent**;
+- `TF-0062` at 19:35:11 UTC → `TF-0063` at 19:48:58 UTC: about **4.35 TF/hour burst-equivalent**, reflecting a wider source-integration/control generation rather than one narrow runtime feature.
 
 Velocity remains secondary to behavioral evidence and green validation.
 
@@ -77,12 +99,15 @@ Most relevant blockers:
 
 ### SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡
 Boundary prerequisite: **DONE**.
+Lifecycle/evidence/risk gate prerequisite: **DONE**.
 Live-provider evidence: **NOT YET DONE**.
 
 Next acceptance step: connect exactly one authorized live AI/provider adapter through the existing executor boundary.
 
 Acceptance criteria:
 - provider/model/version identity pinned as far as provider semantics allow;
+- explicit CRISP-ML(Q) phase and delivery-stage context for the experiment;
+- measurable success criteria declared before invocation;
 - input comes only through the governed bounded request/context path;
 - executor receives no implicit organizational or tool authority;
 - request/output hashes and invocation record preserved;
@@ -92,7 +117,7 @@ Acceptance criteria:
 - malformed/bad provider output can be rejected and routed through rework;
 - existing security-block regression still stops before worker invocation;
 - no material external side effect is introduced to demonstrate AI integration;
-- provider/version limitations are recorded rather than hidden.
+- provider/version limitations and quantitative/qualitative risk posture are recorded rather than hidden.
 
 ### Summit outcome
 After SUMMIT-FFB-02, PX00 will have evidence that the governed factory controls survive contact with a real non-deterministic AI worker. At that point it becomes credible to call the system an **Agent Factory MVP**, rather than only a deterministic/test-double reference factory.
