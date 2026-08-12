@@ -1,0 +1,84 @@
+mvp_scope_id: FFB-MVP-0001
+project_ref: PROJECT-FFB-0001
+blueprint_ref: FFB-BP-0001-V2@0.2
+target_maturity: M1_PROTOTYPE
+created_at: 2026-08-12T18:36:00Z
+strategy: MVP_FIRST_THEN_EVIDENCE_DRIVEN_HARDENING
+
+must_have_capabilities:
+  - deterministic_problem_to_delivery_workflow
+  - strict_stage_order
+  - explicit_untrusted_input_gate
+  - security_precheck_before_bounded_prototype
+  - independent_producer_and_verifier_assignments
+  - verification_gate
+  - socrates_gate
+  - append_only_run_trace
+  - bounded_design_or_synthetic_outputs_only
+  - no_material_external_action
+
+mvp_workflow:
+  - QUALIFY_PROBLEM
+  - RESEARCH_EVIDENCE
+  - ASSESS_CLAIMS
+  - DESIGN_ALTERNATIVES
+  - SECURITY_PRECHECK
+  - IMPLEMENT_BOUNDED_PROTOTYPE
+  - VERIFY_AND_VALIDATE
+  - SOCRATES_CHALLENGE
+  - KNOWLEDGE_ADMISSION
+  - GOVERNED_DELIVERY
+
+acceptance_criteria:
+  - happy_path_reaches_governed_delivery
+  - stage_skipping_is_rejected
+  - same_assignment_producer_and_verifier_is_rejected
+  - untrusted_input_without_gate_is_rejected_before_prototype
+  - failed_security_precheck_does_not_advance_to_prototype
+  - failed_socrates_does_not_reach_delivery
+  - run_identity_is_append_only
+  - full_repository_CI_is_green
+
+blocking_risk_refs:
+  - RISK-0002
+
+risk_treatment_for_mvp:
+  RISK-0002:
+    treatment: ISOLATE
+    rule: M1 harness accepts only synthetic or explicitly gated content and performs no material external action
+    exit_condition: adversarial trust-gate test suite passes before any wider input or tool scope is permitted
+
+excluded_until_after_mvp:
+  - live_LLM_provider_integration
+  - production_database
+  - distributed_queue
+  - web_UI
+  - multi_tenant_operation
+  - confidential_or_regulated_data
+  - autonomous_external_tools
+  - production_SLA
+  - horizontal_scaling
+  - rich_observability_dashboard
+  - automatic_role_generation
+  - physical_robotics
+  - full_protocol_catalog
+  - optimization_for_cost_or_latency
+
+backlog_rule:
+  - excluded_items_return_only_when_required_by_observed_use_case_risk_audit_or_measured_bottleneck
+  - convenience_alone_does_not_expand_MVP
+  - unresolved_critical_risk_may_expand_security_work_but_not_feature_scope
+
+mvp_exit:
+  required:
+    - executable_harness_exists
+    - negative_gate_tests_exist
+    - Socrates_and_ARGUS_review_MVP_evidence
+    - M1_acceptance_record_exists
+  result: unlock_evidence_driven_iteration
+
+invariants:
+  - MVP_PASS_does_not_mean_production_ready
+  - FATHER_remains_management_plane
+  - MVP_scope_expansion_requires_explicit_replan
+  - critical_risk_reduction_has_priority_over_feature_velocity
