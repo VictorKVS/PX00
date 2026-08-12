@@ -1,0 +1,29 @@
+acceptance_id: ACCEPTANCE-HASHLOCK-0001
+subject: validator_dependency_artifact_hash_lock
+status: PASS_WITH_ACTIONS
+date: 2026-08-12
+scope:
+  accepted_environment: github_hosted_linux_x86_64
+  python: '3.10'
+  dependency: PyYAML==6.0.3
+  lock_file: requirements-validator-lock.txt
+criteria:
+  hash_checking_mode: PASS
+  binary_only_install: PASS
+  dependency_consistency: PASS
+  tests: 19
+  full_contract_validator: PASS
+  validator_errors: 0
+  validator_warnings: 0
+evidence:
+  accepted_run: assurance/runs/HASHLOCK-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+  github_run_id: 31571447150
+  accepted_commit: ad810f2fc292864beae1e882c1c7d728dae8506f
+  failed_attempt_preserved: 31571384335
+limitations:
+  windows_hash_execution: pending_local_verification
+  vulnerability_monitoring: not_implemented
+  release_signing: not_implemented
+  main_branch_enforcement: unverified
+  secret_scanning_push_protection: unverified
+decision: KEEP
