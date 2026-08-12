@@ -1,4 +1,4 @@
-matrix_version: 0.1
+matrix_version: 0.2
 project_ref: PROJECT-FFB-0001
 status: PROPOSED
 
@@ -15,6 +15,10 @@ knowledge_spaces:
   - KB-AI-AGENTS
   - KB-RESEARCH
   - KB-SUPPLY-CHAIN
+  - KB-PROGRAMMING
+  - KB-TESTING
+  - KB-QUALITY
+  - KB-METROLOGY
   - KB-FACTORY-LESSONS
 
 bindings:
@@ -39,6 +43,18 @@ bindings:
     primary: [KB-SECURITY, KB-DEVSECOPS]
     supporting: [KB-ARCHITECTURE, KB-AI-AGENTS, KB-SUPPLY-CHAIN, KB-FACTORY-LESSONS]
     freshness: continuous_for_critical_sources
+  FFB-ROLE-0006:
+    primary: [KB-PROGRAMMING, KB-DISTRIBUTED-SYSTEMS, KB-TESTING]
+    supporting: [KB-DEVSECOPS, KB-SECURITY, KB-ARCHITECTURE, KB-FACTORY-LESSONS]
+    freshness: implementation_generation
+  FFB-ROLE-0007:
+    primary: [KB-QUALITY, KB-TESTING]
+    supporting: [KB-ARCHITECTURE, KB-SECURITY, KB-METROLOGY, KB-FACTORY-LESSONS]
+    freshness: acceptance_or_maturity_gate
+  FFB-ROLE-0008:
+    primary: [KB-SYSTEMS-ENGINEERING, KB-ARCHITECTURE, KB-PRODUCT]
+    supporting: [KB-ORGANIZATION-DESIGN, KB-FACTORY-LESSONS]
+    freshness: requirement_or_capability_change
 
 shared_rules:
   - logical_space_id_is_stable_across_physical_repo_migration
@@ -48,4 +64,5 @@ shared_rules:
   - least_context_principle_applies
   - classification_and_jurisdiction_profiles_may_reduce_visible_objects
   - role_binding_never_implies_capability_grant
+  - critical_specialist_output_must_preserve_source_and_version_lineage
   - incidents_near_misses_and_resolved_risks_feed_KB-FACTORY-LESSONS_after_governed_admission
