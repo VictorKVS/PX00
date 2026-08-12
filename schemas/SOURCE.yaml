@@ -1,0 +1,36 @@
+schema_version: 0.1
+status: draft
+object_type: SRC
+purpose: persistent source identity for evidence provenance
+
+required_fields:
+  source_id:
+    type: SRC-reference
+  source_type:
+    type: enum
+    values: [DOCUMENT, WEB, DATABASE, API, HUMAN, SENSOR, SYSTEM, OTHER]
+  locator:
+    type: string
+  captured_at:
+    type: utc_timestamp
+  independence_group:
+    type: string
+
+conditional_fields:
+  content_hash:
+    type: sha256_hex
+  publisher_or_origin:
+    type: string
+  parent_source_refs:
+    type: SRC-reference-list
+  classification:
+    type: classification_label
+
+invariants:
+  - source_identity_is_immutable
+  - locator_change_creates_new_source_identity_when_material
+  - derived_sources_preserve_parent_source_refs
+  - independence_group_is_not_inferred_from_distinct_urls_alone
+  - source_hash_proves_content_identity_not_factual_truth
+
+library_dependency: none
