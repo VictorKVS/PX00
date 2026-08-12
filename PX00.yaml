@@ -59,7 +59,7 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
+  latest_contract_decision: architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
 
 pilot_roles:
   ROLE-0201:
@@ -85,7 +85,7 @@ pilot_acceptance:
 
 runtime_gate:
   code_allowed: true
-  scope: minimal_local_contract_validation_only
+  scope: minimal_contract_validation_only
   production_runtime_allowed: false
   allowed:
     - local_contract_validator
@@ -93,6 +93,7 @@ runtime_gate:
     - synthetic_public_safe_test_data
     - deterministic_reference_checks
     - acceptance_evidence_generation
+    - minimal_ci_contract_validation
   prohibited:
     - production_agents
     - live_customer_or_protected_data
@@ -116,7 +117,13 @@ minimal_validator:
     - Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md
     - Tree_F/TF-0010_2026-08-12_REAL_REPOSITORY_INTEGRATION_GATE.md
     - Tree_F/TF-0011_2026-08-12_REAL_LOCAL_VALIDATION_PASS.md
-  architecture_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
+    - Tree_F/TF-0012_2026-08-12_ISOLATED_ENVIRONMENT_REPRODUCIBILITY_PASS.md
+    - Tree_F/TF-0013_2026-08-12_MINIMAL_CI_CONTRACT_GATE.md
+    - Tree_F/TF-0014_2026-08-12_MINIMAL_CI_VALIDATION_PASS.md
+    - Tree_F/TF-0015_2026-08-12_REPOSITORY_SECURITY_STATUS.md
+  architecture_decisions:
+    - architecture/adr/ADR-0015-minimal-local-contract-validator.md
+    - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
   network_required: false
   external_side_effects: false
   authoring_unit_tests:
@@ -130,16 +137,46 @@ minimal_validator:
     run: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
     acceptance: assurance/records/ACCEPTANCE-VALIDATOR-0001.yaml
   environment_reproducibility:
-    state: PASS_WITH_ACTIONS
-    observed_issue: shared_host_python_environment_contains_unrelated_dependency_conflict
-    required_next_control: isolated_dot_venv
+    state: PASS
+    isolated_environment: .venv
+    pip_check: PASS
+    tests: 13
+    errors: 0
+    warnings: 0
+    run: assurance/runs/VALIDATOR-0003_ISOLATED_VENV_RUN_2026-08-12.md
+    acceptance: assurance/records/ACCEPTANCE-VALIDATOR-ISOLATED-0001.yaml
+
+ci_gate:
+  workflow: .github/workflows/contract-validation.yml
+  state: PASS
+  runner: ubuntu-24.04
+  python: '3.10'
+  permissions:
+    contents: read
+  action_dependencies:
+    actions_checkout: d23441a48e516b6c34aea4fa41551a30e30af803
+    actions_setup_python: ece7cb06caefa5fff74198d8649806c4678c61a1
+  accepted_run_id: 31567474530
+  prior_successful_run_id: 31567451236
+  acceptance: assurance/records/ACCEPTANCE-CI-0001.yaml
+  production_deployment: false
+
+repository_security:
+  status_file: security/REPOSITORY_SECURITY_STATUS_2026-08-12.md
+  visibility: public
+  default_branch: main
+  rulesets_visible: none
+  branch_protection: UNVERIFIED
+  secret_scanning: UNVERIFIED
+  push_protection: UNVERIFIED
+  required_ci_enforcement: UNVERIFIED
 
 current_phase:
-  name: Architecture Baseline 0.1 - Executable Validation Gate
+  name: Architecture Baseline 0.1 - Repository Assurance Gate
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0015
+    - architecture_adr_0001_0016
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -162,11 +199,14 @@ current_phase:
     - direct_dependency_recorded_and_pinned
     - real_repository_integration_test_defined
     - real_local_repository_validation_passed
-    - validator_acceptance_recorded
+    - isolated_environment_validation_passed
+    - minimal_ci_contract_gate_implemented
+    - minimal_ci_contract_gate_passed
+    - repository_security_status_partially_verified
   next_gate:
-    - reproduce_validator_in_isolated_dot_venv
-    - preserve_isolated_environment_evidence
-    - add_minimal_ci_if_isolated_gate_is_stable
-    - verify_repository_secret_scanning_and_branch_protection
-    - add_dependency_sbom_automation_before_releasable_distribution
-  exit_gate: executable_contract_validation_passes_in_isolated_local_and_minimal_ci_environments_without_broad_runtime_or_external_side_effects
+    - verify_or_establish_main_branch_gate_enforcement
+    - verify_secret_scanning_and_push_protection
+    - decide_minimal_dependency_sbom_control
+    - preserve_ci_regression_history
+    - keep_production_runtime_blocked
+  exit_gate: repository_security_controls_and_dependency_provenance_baseline_are_evidenced_before_any_releasable_distribution
