@@ -23,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current position inside SUMMIT-FFB-02:
 `provider-neutral executor boundary → AI/ML lifecycle & risk gates → secret/data-egress live-provider boundary → provider-specific driver + real authorized call next`.
 
-Latest generation: `TF-0067 — Cross-Repository Knowledge Snapshot Pinning`.
+Latest generation: `TF-0069 — Knowledge-Bound RUN Trace and Replay`.
 
 ### Product portfolio
 Status: **CANONICAL MASTER ROADMAP ESTABLISHED IN KNOWLEDGE_CORE**.
@@ -33,7 +33,7 @@ Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
 - `father/product-roadmap/security-products.yaml`;
 - `father/domain-knowledge/domain-registry.yaml`.
 
-PX00 keeps route-only records and runtime orchestration/assurance responsibilities; it no longer carries a second copy of Security Knowledge product truth.
+PX00 keeps route-only records and runtime orchestration/assurance responsibilities; it does not carry a second copy of Security Knowledge product truth.
 
 Primary owner-priority domain track:
 `Security Knowledge Base → Compliance Engine → Evidence-Based Security Architect → Vulnerability & Risk Expert → White-Hat / Continuous Security Assurance → Regulatory Change Engine → Continuous Security Audit Expert`.
@@ -53,14 +53,20 @@ Current normative production order:
 `FSTEC → FSB P0 (GosSOPKA/NKCKI/SKZI + revisions) → Roskomnadzor → base laws/government acts/decrees + cross-links → sector regulators → GOST → ISO → NIST/CIS/OWASP → BDU/CVE/CWE/ATT&CK → pentest/vulnerability/risk → vendor hardening → broad Unified Control/evidence/expert consolidation`.
 
 ### Cross-repository knowledge boundary
-Status: **CONTRACTS IMPLEMENTED / REAL SLICE REPLAY NOT YET PROVEN**.
+Status: **FIRST REAL SOURCE-METADATA SLICE REPLAY PROVEN ✅ M1 BOUNDED**.
 
-`KB-SECURITY` now resolves through a canonical route to `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`.
+`KB-SECURITY` routes to canonical `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`.
 
-New historical context chain:
-`KNOWLEDGE_REQUEST → active route → producer selection → immutable KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE → RUN`.
+Proven chain:
+`KNOWLEDGE_REQUEST → active route → producer manifest → historical KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE → RUN KNOWLEDGE PIN → TRACE → READ-ONLY REPLAY`.
 
-The active route may follow current state. Historical RUN context may not follow `main/latest`; it pins exact repository commit plus exact selected object versions/digests.
+Important invariants:
+- `ACTIVE ROUTE != HISTORICAL SNAPSHOT`;
+- `HISTORICAL REPLAY != CURRENT REASSESSMENT`;
+- `SOURCE_VERIFIED != VERIFIED REQUIREMENT`;
+- `KNOWLEDGE CONTEXT != ACTION AUTHORITY`.
+
+The first canonical object is `FSB-117-2025` source metadata. It proves provenance/replay only; full text and atomization remain pending in KNOWLEDGE_CORE.
 
 ## WHAT IS CLOSED
 
@@ -88,13 +94,13 @@ Architecture separation:
 `CRISP-ML(Q) PROCESS PHASE ≠ DEMO/POC/MVP/PRODUCTION DELIVERY STAGE ≠ PX00 M0..M5 SYSTEM MATURITY`.
 
 ### TF-0064 — Live Provider Readiness Boundary ✅ local readiness
-Implemented a provider-neutral live HTTPS boundary beneath the governed executor layer with HTTPS allowlist, runtime credentials, egress classification, timeout/response limits and fail-closed response handling.
+Implemented provider-neutral live HTTPS boundary with HTTPS allowlist, runtime credential separation, data-egress classification, timeout/response limits and fail-closed response handling.
 
 Important separation:
 `LIVE_PROVIDER_BOUNDARY_READY ≠ LIVE_PROVIDER_PROVEN ≠ SUMMIT_ACCEPTED`.
 
 ### TF-0065 — Evidence-Gated Product Portfolio Roadmap ✅
-Established portfolio-level product manufacturing order and the rule that future ideas accumulate without bypassing dependencies.
+Established product manufacturing order and the rule that future ideas accumulate without bypassing dependencies.
 
 ### TF-0066 — Security Knowledge Canonical Repository Alignment ✅
 Corrected cross-repository ownership:
@@ -105,20 +111,48 @@ Corrected cross-repository ownership:
 Important invariant:
 `ROLE KNOWLEDGE REQUIREMENT ≠ OWNED LOCAL KNOWLEDGE COPY`.
 
-### TF-0067 — Cross-Repository Knowledge Snapshot Pinning ✅ contract/runtime proof
-Implemented:
-- `KNOWLEDGE_SNAPSHOT` contract;
-- fail-closed snapshot builder;
-- `CONTEXT_PACKAGE v0.3` with `knowledge_snapshot_refs` inside package hash;
-- canonical `KB-SECURITY` external route;
-- producer-side `snapshot-export-schema.yaml` in KNOWLEDGE_CORE;
-- negative tests for mutable revisions, bad digests, path traversal, duplicate versions and knowledge-space mismatch;
-- tests proving external snapshot change alters ContextPackage hash.
+### TF-0067 — Cross-Repository Knowledge Snapshot Pinning ✅
+Implemented immutable external knowledge snapshot contracts/runtime and canonical `KB-SECURITY` route.
 
 Important invariant:
 `ACTIVE ROUTE != HISTORICAL SNAPSHOT`.
 
-Both PX00 Contract Validation and KNOWLEDGE_CORE Knowledge Quality Gate passed for the implementation contracts.
+### TF-0068 — First Real Security Knowledge Snapshot Bridge ✅
+Moved from synthetic references to canonical `FSB-117-2025` source metadata.
+
+KNOWLEDGE_CORE now verifies the exact historical source-card bytes with `git show <pinned_commit>:<path>` even after repository `main` advances.
+
+PX00 independently verifies producer manifest integrity and preserves:
+- source state;
+- locator;
+- classification;
+- freshness;
+- exact content digest.
+
+A pre-acceptance defect was caught: classification/freshness were initially outside the manifest digest. Both were moved inside the integrity envelope before acceptance.
+
+Exact regression identities:
+- producer manifest digest: `8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2`;
+- runtime snapshot digest: `04d5ec28431e8c13863dab9896533435dac735ceb36b6bf59e4f05eea1f7eac3`;
+- fixed integration ContextPackage hash: `9c09e6a4075f25ce2e341d1b0bd2fa4f59dedadf364019492be337893c220a2a`.
+
+### TF-0069 — Knowledge-Bound RUN Trace and Replay ✅
+Added:
+- `RUN_RECORD v0.5` knowledge provenance;
+- `TRACE_MANIFEST v0.2` ContextPackage/snapshot/manifest provenance;
+- `TraceKnowledgeContext`;
+- `RunKnowledgeBinder`;
+- read-only replay verification of expected knowledge context;
+- fail-closed behavior when context is omitted or altered.
+
+A real canonical snapshot now survives:
+`manifest → snapshot → ContextPackage → bounded RUN → persisted trace → read-only replay`.
+
+`ARGUS_AUDIT_0002`: **PASS_WITH_RESTRICTIONS**.
+
+`RISK-0012`: **RESOLVED for bounded M1 cross-repository provenance/replay scope**.
+
+This does not promote the source metadata to an atomic VERIFIED requirement and does not claim expert Security reasoning.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
@@ -127,19 +161,19 @@ Both PX00 Contract Validation and KNOWLEDGE_CORE Knowledge Quality Gate passed f
 - Lifecycle lesson: successful PoC evidence must not silently promote a project into MVP or Production claims.
 - Risk lesson: mean expected loss alone can hide unacceptable tail/tolerance exposure.
 - Security implementation lesson: secret-hygiene controls constrain implementation rather than being weakened for convenience.
-- Portfolio lesson: attractive downstream product ideas remain visible but cannot substitute for proving foundational knowledge.
-- Repository-boundary lesson: FATHER/Factory Builder binds to canonical professional knowledge rather than creating a second truth store.
-- Snapshot lesson: mutable discovery/routing state and immutable historical RUN context are different architectural objects.
+- Portfolio lesson: downstream ideas cannot substitute for foundational knowledge evidence.
+- Repository-boundary lesson: FATHER binds to canonical professional knowledge rather than creating a second truth store.
+- Snapshot lesson: mutable routing and immutable RUN context are different objects.
+- Manifest lesson: classification/freshness are integrity-sensitive because they alter permissible consumer behavior.
+- Replay lesson: event/policy replay is incomplete when a knowledge-bound trace omits the knowledge context used by the original RUN.
 
 ## VELOCITY
 Observed engineering velocities, not promises:
 - broad active build window: about **5.4 TF/hour** wall-clock;
 - earlier short burst: about **15 TF/hour**, not sustainable guidance;
-- `TF-0060 → TF-0061`: about **6.5 TF/hour burst-equivalent**;
-- `TF-0061 → TF-0062`: about **7.6 TF/hour burst-equivalent**;
-- `TF-0062 → TF-0063`: about **4.35 TF/hour burst-equivalent** due to wider lifecycle/risk integration.
+- recent work continues in multi-generation bursts, but velocity remains secondary to behavioral evidence, product evidence gates and green CI.
 
-Velocity remains secondary to behavioral evidence, product evidence gates and green validation.
+Do not infer completion percentage from TF numbering.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 The current PX00 system is a bounded reference implementation, not production maturity.
@@ -150,56 +184,54 @@ Most relevant platform blockers:
 - `RISK-0004` — higher-scale/production concerns retained by maturity model;
 - `RISK-0009` — artifact digest does not yet protect the full provenance envelope;
 - `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness;
-- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised;
-- `RISK-0012` — **MITIGATING**: producer and consumer snapshot contracts exist, but a real `SEC-*` slice has not yet completed export → PX00 validation → RUN → replay after KNOWLEDGE_CORE head advancement.
+- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised.
+
+Resolved/reopenable:
+- `RISK-0012` — **RESOLVED at bounded M1** for cross-repository provenance/replay; reopen on mutable historical resolution, omitted provenance, state-upgrade, schema incompatibility or loss of historical object availability.
 
 Security product maturity blocker:
-- `SEC-PROD-0001` is **not EXPERT_READY**: a significant portion of the P0 normative corpus still requires complete atomicization, relationship/applicability mapping and independent re-verification.
+- `SEC-PROD-0001` is **not EXPERT_READY**: significant P0 corpus work still requires source ingestion, atomicization, relationships/applicability and independent re-verification.
 
 ## PARALLEL ACTIVE PRIORITIES
-Three narrow streams may proceed without blocking each other.
+Two primary value streams continue; the snapshot plumbing is no longer the active build target.
 
 ### A. Security Knowledge production — KNOWLEDGE_CORE
 Continue factual corpus production:
 1. finish FSTEC;
 2. complete FSB P0 including GosSOPKA/NKCKI/SKZI and revision history;
-3. continue the declared corpus roadmap;
+3. continue the declared regulator/standards/threat/vulnerability roadmap;
 4. keep `VERIFIED` source+locator strictness;
 5. do not reduce the product to ordinary RAG over PDFs.
+
+Next integration-worthy knowledge target: a genuinely atomic VERIFIED Security requirement slice, not merely more source metadata.
 
 ### B. SUMMIT-FFB-02 — PX00
 Executor boundary prerequisite: **DONE**.
 Lifecycle/evidence/risk prerequisite: **DONE**.
 Secret/data-egress provider boundary: **DONE**.
+Knowledge provenance/replay prerequisite: **DONE at bounded M1**.
 Provider-specific driver/configuration: **NOT YET DONE**.
 Actual live-provider evidence: **NOT YET DONE**.
 
 Next acceptance step: select one authorized AI provider, add exactly one provider-specific driver/configuration and execute one real bounded inference with no material external action.
 
-### C. Security Knowledge snapshot integration
-Producer contract: **DONE**.
-Consumer contract/runtime: **DONE**.
-Real producer export: **NOT YET DONE**.
-Cross-repository real slice: **NOT YET DONE**.
-Historical replay after KNOWLEDGE_CORE head moves: **NOT YET DONE**.
-
-Next narrow build: export one small real VERIFIED `SEC-*` slice and run it through `KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE`.
-
 ## NEXT INTEGRATION SUMMIT
 
 ### SUMMIT-PX00-01 — First closed FATHER corporate loop on a Security task
-Once a suitable VERIFIED Security Knowledge slice is available and Agent Factory controls are ready:
+Wait for a suitable atomic VERIFIED Security Knowledge slice and sufficient Agent Factory control evidence, then prove:
 
 `GOAL → PROJECT → PLAN → TASK → SECURITY ROLE → KB-SECURITY SNAPSHOT → CONTEXT → AGENT → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
 
-This will be the first proof that the runtime and a real canonical professional knowledge product work together without copying truth across repositories.
+This is deliberately stronger than TF-0069. TF-0069 proves knowledge provenance/replay; SUMMIT-PX00-01 must prove professional task value and management closure.
 
 ### Following product proof
 Use a bounded VERIFIED slice of Security Knowledge for the first Compliance Engine PoC. PoC success cannot promote the full Compliance Engine beyond the maturity supported by the underlying canonical Security Knowledge scope.
 
 ## FOLLOWING SUMMITS
-- `SUMMIT-FFB-03` — governed external knowledge/input;
-- `SUMMIT-FFB-04` — durable execution/replay;
+- `SUMMIT-FFB-02` — first governed live executor;
+- `SUMMIT-FFB-03` — governed external knowledge/input beyond the current bounded route;
+- `SUMMIT-FFB-04` — durable execution/recovery at higher maturity;
+- `SUMMIT-PX00-01` — first closed FATHER Security-domain corporate loop;
 - `FATHER V1` — end-to-end governed organizational skeleton;
 - later Software Factory and Research Factory;
 - cyber-physical/robotic pilots only after digital operational maturity and safety-specific controls.
