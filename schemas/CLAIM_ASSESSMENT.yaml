@@ -1,0 +1,52 @@
+schema_version: 0.1
+status: draft
+object_type: claim_assessment
+purpose: immutable time-bounded assessment of one claim against an exact evidence set
+
+required_fields:
+  assessment_id:
+    type: stable_id
+  claim_id:
+    type: CLM-reference
+  evaluated_at:
+    type: utc_timestamp
+  evaluator_ref:
+    type: actor_or_component_reference
+  status:
+    type: enum
+    values: [UNSUPPORTED, SINGLE_SOURCE, CORROBORATED, CONTRADICTED, DISPUTED, REFUTED]
+  evidence_refs:
+    type: ordered_EVD_reference_list
+  evidence_set_hash:
+    type: sha256_hex
+  hash_algorithm:
+    type: enum
+    values: [sha256]
+  support_score:
+    type: float_0_1
+  contradiction_score:
+    type: float_0_1
+  dimensions:
+    required: [source_reliability, evidence_quality, independence, recency, directness, corroboration]
+    range: 0.0_to_1.0
+
+conditional_fields:
+  previous_assessment_ref:
+    type: assessment_reference
+    required_when: claim has an earlier assessment
+
+invariants:
+  - assessment_is_immutable
+  - assessment_references_exact_claim_version
+  - evidence_set_hash_is_over_canonical_ordered_evidence_refs_and_material_evidence_attributes
+  - later_assessment_does_not_modify_prior_assessment
+  - status_is_reproducible_from_evidence_set_and_evaluator_version
+  - assessment_does_not_declare_absolute_truth
+  - removed_or_new_evidence_requires_new_assessment
+  - contradiction_is_preserved
+
+non_goals:
+  - overwrite historical belief state
+  - infer truth from integrity alone
+
+library_dependency: none
