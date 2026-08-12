@@ -17,6 +17,7 @@ class SyntheticGovernedKernelTests(unittest.TestCase):
         self.assertEqual(result.run_state, "COMPLETED")
         self.assertEqual(result.output, 20)
         self.assertEqual(result.authority_decision.result, "ALLOW")
+        self.assertTrue(result.authority_decision.policy_refs)
         self.assertIsNotNone(result.capability_grant)
         self.assertEqual(result.capability_grant.status, "CONSUMED")
         self.assertTrue(any(event.event_type == "TOOL_BOUNDARY" for event in result.events))
@@ -39,7 +40,7 @@ class SyntheticGovernedKernelTests(unittest.TestCase):
         request = replace(self.kernel.prepare_request(10, 2), side_effect_class="S3")
         result = self.kernel.execute_request(request, allow=True)
         self.assertEqual(result.run_state, "DENIED")
-        self.assertEqual(result.blocking_reason, "SIDE_EFFECT_CLASS_NOT_ALLOWED")
+        self.assertEqual(result.blocking_reason, "SIDE_EFFECT_CEILING_EXCEEDED")
 
     def test_privileged_adapter_hint_does_not_change_execution(self):
         request = self.kernel.prepare_request(6, 7, requested_adapter_hint="shell-root")
