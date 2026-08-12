@@ -1,0 +1,51 @@
+matrix_version: 0.1
+project_ref: PROJECT-FFB-0001
+status: PROPOSED
+
+knowledge_spaces:
+  - KB-ARCHITECTURE
+  - KB-SYSTEMS-ENGINEERING
+  - KB-DISTRIBUTED-SYSTEMS
+  - KB-ORGANIZATION-DESIGN
+  - KB-HUMAN-FACTORS
+  - KB-KNOWLEDGE-ENGINEERING
+  - KB-PRODUCT
+  - KB-SECURITY
+  - KB-DEVSECOPS
+  - KB-AI-AGENTS
+  - KB-RESEARCH
+  - KB-SUPPLY-CHAIN
+  - KB-FACTORY-LESSONS
+
+bindings:
+  FFB-ROLE-0001:
+    primary: [KB-ARCHITECTURE, KB-SYSTEMS-ENGINEERING, KB-PRODUCT, KB-FACTORY-LESSONS]
+    supporting: [KB-SECURITY, KB-AI-AGENTS, KB-ORGANIZATION-DESIGN]
+    freshness: milestone_and_material_decision
+    rule: synthesis_role_must_preserve_source_and_specialist_dissent
+  FFB-ROLE-0002:
+    primary: [KB-ARCHITECTURE, KB-SYSTEMS-ENGINEERING, KB-DISTRIBUTED-SYSTEMS]
+    supporting: [KB-DEVSECOPS, KB-SECURITY, KB-FACTORY-LESSONS]
+    freshness: architecture_change
+  FFB-ROLE-0003:
+    primary: [KB-ORGANIZATION-DESIGN, KB-HUMAN-FACTORS]
+    supporting: [KB-PRODUCT, KB-SECURITY, KB-FACTORY-LESSONS]
+    freshness: organization_change_and_pilot_observation
+  FFB-ROLE-0004:
+    primary: [KB-KNOWLEDGE-ENGINEERING, KB-RESEARCH]
+    supporting: [KB-ARCHITECTURE, KB-SECURITY, KB-FACTORY-LESSONS]
+    freshness: source_policy_domain_or_migration_change
+  FFB-ROLE-0005:
+    primary: [KB-SECURITY, KB-DEVSECOPS]
+    supporting: [KB-ARCHITECTURE, KB-AI-AGENTS, KB-SUPPLY-CHAIN, KB-FACTORY-LESSONS]
+    freshness: continuous_for_critical_sources
+
+shared_rules:
+  - logical_space_id_is_stable_across_physical_repo_migration
+  - context_for_material_decision_pins_exact_version_and_content_digest
+  - retrieval_is_not_evidence_by_itself
+  - generated_text_is_not_authoritative_without_admission
+  - least_context_principle_applies
+  - classification_and_jurisdiction_profiles_may_reduce_visible_objects
+  - role_binding_never_implies_capability_grant
+  - incidents_near_misses_and_resolved_risks_feed_KB-FACTORY-LESSONS_after_governed_admission
