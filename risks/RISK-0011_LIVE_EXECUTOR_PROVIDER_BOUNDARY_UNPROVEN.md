@@ -19,7 +19,7 @@ The local M1 executor boundary can:
 - replace the worker after verifier FAIL through governed rework;
 - keep verifier and Socrates downstream and independent.
 
-TF-0064 adds verified containment for the external provider boundary:
+TF-0064 added verified containment for the external provider boundary:
 - HTTPS is mandatory;
 - endpoint host must be explicitly allowlisted;
 - endpoint userinfo is forbidden;
@@ -32,17 +32,31 @@ TF-0064 adds verified containment for the external provider boundary:
 - provider output remains candidate content and still flows through the existing governed executor/verifier/Socrates chain;
 - secret-hygiene CI remains mandatory and was not weakened to accommodate the adapter.
 
+TF-0073 further narrows the integration uncertainty with the first concrete provider mapping:
+- header-based provider authentication is now profile-controlled rather than hardcoded to Bearer;
+- the existing Bearer default remains backward compatible;
+- Google Gemini Interactions uses a dedicated `x-goog-api-key` profile without duplicating the transport/secret boundary;
+- `GeminiInteractionsDriver` maps one pinned model and text-only request/response shape;
+- the first Gemini pilot is PUBLIC-only;
+- tools, provider agents, grounding, file upload, multimodal input and background execution are excluded from the pilot;
+- unexpected function/tool steps and non-text output fail closed;
+- provider interaction ID and returned model reference are preserved when present;
+- local integration tests prove the credential is sent through the configured header but is absent from call records and candidate provenance;
+- unit/integration, secret scan and repository contract validation are green for the provider-specific driver.
+
 ## Why this risk remains open
-A fake transport/driver can prove our boundary logic but cannot prove the external service itself. Remaining unknowns include:
-- actual authentication/token lifecycle;
+Local fake transport/response tests prove our mapping and containment logic but cannot prove the external service itself. Remaining unknowns include:
+- actual credential validity/lifecycle in the authorized runtime;
 - provider rate limits and retry semantics;
-- network timeout/error behavior;
-- real response schema and provider error payloads;
-- model alias/version behavior;
-- prompt/context retention or provider data handling;
+- real network timeout/error behavior;
+- real provider error payloads and schema edge cases;
+- model alias/version/build behavior beyond the exposed model reference;
+- provider retention/data-handling behavior for the selected account/project;
 - real non-deterministic output quality;
 - actual latency/cost behavior;
-- live bad-output rejection and rework.
+- live bad-output rejection and governed rework.
+
+No real provider inference has yet been admitted as evidence for `SUMMIT-FFB-02`.
 
 ## Closure condition
 Exercise exactly one bounded stage through an authorized live AI/provider driver while:
@@ -53,6 +67,7 @@ Exercise exactly one bounded stage through an authorized live AI/provider driver
 - keeping security-block regressions green;
 - proving malformed/bad live output can be rejected and reworked;
 - preventing provider response content from creating implicit authority;
-- recording residual provider/version/data-handling limitations explicitly.
+- recording residual provider/version/data-handling limitations explicitly;
+- completing independent verification, Socrates review and ARGUS summit audit.
 
 Until then, `SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR` remains OPEN.
