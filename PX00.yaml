@@ -142,6 +142,7 @@ minimal_validator:
     - Tree_F/TF-0019_2026-08-12_DEPENDENCY_ARTIFACT_HASH_LOCK_GATE.md
     - Tree_F/TF-0020_2026-08-12_WINDOWS_DEPENDENCY_ARTIFACT_HASH_PASS.md
     - Tree_F/TF-0021_2026-08-12_TRACKED_FILE_SECRET_HYGIENE_GATE.md
+    - Tree_F/TF-0022_2026-08-12_PULL_REQUEST_CHANGE_CONTROL_REHEARSAL.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
@@ -246,6 +247,21 @@ secret_hygiene:
   github_secret_scanning: UNVERIFIED
   github_push_protection: UNVERIFIED
 
+change_control:
+  baseline: security/CHANGE_CONTROL_BASELINE_0_1.md
+  pr_workflow_capability: PASS_WITH_ACTIONS
+  rehearsal_pull_request: 1
+  rehearsal_branch: gate/pr-change-control-rehearsal
+  accepted_pr_ci_run_id: 31583857865
+  accepted_pr_ci_head_sha: 014f40ad6af36a1c678e0fb2d9b3ef24405e60e2
+  run: assurance/runs/PRGATE-0001_PULL_REQUEST_PASS_2026-08-12.md
+  acceptance: assurance/records/ACCEPTANCE-PRGATE-0001.yaml
+  platform_enforcement: UNVERIFIED
+  direct_push_blocked: UNVERIFIED
+  required_ci_enforced: UNVERIFIED
+  force_push_blocked: UNVERIFIED
+  branch_deletion_blocked: UNVERIFIED
+
 repository_security:
   status_file: security/REPOSITORY_SECURITY_STATUS_2026-08-12.md
   visibility: public
@@ -256,6 +272,7 @@ repository_security:
   push_protection: UNVERIFIED
   required_ci_enforcement: UNVERIFIED
   tracked_file_secret_hygiene: PASS_WITH_SCOPE_LIMITS
+  pr_workflow_capability: PASS_WITH_ACTIONS
 
 current_phase:
   name: Architecture Baseline 0.1 - Repository Assurance Gate
@@ -296,7 +313,9 @@ current_phase:
     - hosted_linux_dependency_artifact_hash_lock_passed
     - local_windows_dependency_artifact_hash_lock_passed
     - tracked_file_secret_hygiene_gate_passed
+    - pull_request_change_control_capability_rehearsed
   next_gate:
+    - merge_pr_1_after_successful_validation
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
     - decide_minimal_vulnerability_monitoring_before_release
