@@ -149,7 +149,7 @@ class DecisionTraceContextTests(unittest.TestCase):
             decision_context=changed,
         )
         self.assertEqual(report.status, "TAMPER_DETECTED")
-        self.assertEqual(report.reason_code, "TRACE_MANIFEST_EVENT_KNOWLEDGE_OR_DECISION_CONTEXT_MISMATCH")
+        self.assertEqual(report.reason_code, "TRACE_MANIFEST_EVENT_OR_DECISION_CONTEXT_MISMATCH")
 
 
 if __name__ == "__main__":
