@@ -1,0 +1,41 @@
+schema_version: 0.1
+status: draft
+object_type: assessment_challenge
+purpose: immutable formal challenge against a source/evidence quality assessment
+
+required_fields:
+  challenge_id:
+    type: stable_id
+  target_assessment_ref:
+    type: assessment_reference
+  target_type:
+    type: enum
+    values: [SOURCE_ASSESSMENT, EVIDENCE_ASSESSMENT]
+  challenger_ref:
+    type: actor_or_component_reference
+  challenger_version:
+    type: string
+  created_at:
+    type: utc_timestamp
+  reason_code:
+    type: string
+  rationale_summary:
+    type: string
+  evidence_refs:
+    type: ordered_reference_list
+
+conditional_fields:
+  proposed_revision:
+    type: mapping
+    rule: contains only dimensions defined by target assessment type
+
+invariants:
+  - challenge_is_immutable
+  - challenge_does_not_mutate_target_assessment
+  - challenge_requires_explicit_target_and_reason
+  - challenge_evidence_is_preserved
+  - proposed_revision_is_not_self_executing
+  - challenger_cannot_directly_supersede_target
+  - hidden_chain_of_thought_is_not_required
+
+library_dependency: none
