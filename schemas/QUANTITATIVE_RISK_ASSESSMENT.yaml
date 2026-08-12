@@ -1,0 +1,49 @@
+schema_version: 0.1
+status: draft
+object_type: quantitative_risk_assessment
+purpose: complement qualitative severity with reproducible probabilistic loss estimates and tolerance exceedance evidence
+
+required_fields:
+  assessment_id: {type: stable_id}
+  risk_ref: {type: risk_reference}
+  horizon: {type: string}
+  probability: {type: number, minimum: 0, maximum: 1}
+  impact_distribution:
+    type: triangular
+    required: [minimum, mode, maximum]
+  impact_unit: {type: string}
+  tolerance_limit: {type: number}
+  percentile_level: {type: number, minimum: 0, maximum: 1}
+  simulation_trials: {type: integer, minimum: 100}
+  simulation_seed: {type: integer}
+  result:
+    required:
+      - expected_loss
+      - percentile_loss
+      - probability_exceeding_tolerance
+  evidence_refs: {type: list}
+  created_at: {type: utc_timestamp}
+
+optional_fields:
+  owner_ref: {type: reference}
+  assumptions: {type: list}
+  correlation_note: {type: string}
+  supersedes_assessment_ref: {type: reference}
+
+invariants:
+  - minimum_is_not_greater_than_mode
+  - mode_is_not_greater_than_maximum
+  - expected_loss_does_not_replace_tail_risk
+  - tolerance_exceedance_is_reported_separately_from_mean
+  - random_seed_and_trial_count_are_pinned_for_reproducibility
+  - simulation_result_is_evidence_not_truth
+  - qualitative_severity_and_quantitative_assessment_may_coexist
+  - material_dependency_or_correlation_assumptions_must_not_be_hidden
+  - assessment_does_not_accept_risk_or_grant_authority
+
+method_note:
+  - occurrence is modeled as Bernoulli(probability)
+  - conditional impact is modeled as triangular(minimum, mode, maximum)
+  - aggregate sample is occurrence multiplied by sampled impact
+
+library_dependency: none
