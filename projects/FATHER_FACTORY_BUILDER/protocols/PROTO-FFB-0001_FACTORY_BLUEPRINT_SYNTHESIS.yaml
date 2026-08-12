@@ -1,0 +1,151 @@
+protocol_id: PROTO-FFB-0001
+version: 0.1
+status: PROPOSED
+project_ref: PROJECT-FFB-0001
+name: Factory Blueprint Synthesis
+purpose: produce a reviewable factory blueprint from an authorized need without collapsing specialist dissent or granting runtime authority
+
+inputs:
+  - FACTORY_REQUIREMENT
+  - beneficiary_and_authority_context
+  - constraints_policy_and_maturity_target
+  - existing_role_and_capability_catalog
+  - relevant_risk_and_lesson_memory
+
+stages:
+  - stage: 1
+    name: REQUIREMENT_QUALIFICATION
+    owner: FFB-ROLE-0001
+    required_actions:
+      - confirm authorized need beneficiary scope constraints and acceptance intent
+      - identify unresolved mission ambiguities
+      - stop if broad aspiration is being treated as direct authority
+    outputs: [qualified_factory_requirement, open_assumptions]
+
+  - stage: 2
+    name: CAPABILITY_DECOMPOSITION
+    owner: FFB-ROLE-0008
+    required_actions:
+      - decompose outcomes into capabilities
+      - identify dependencies gaps bottlenecks and maturity targets
+      - avoid model vendor or tool-first definitions
+    outputs: [capability_map, capability_gap_report]
+
+  - stage: 3
+    name: PARALLEL_SPECIALIST_DESIGN
+    owners: [FFB-ROLE-0002, FFB-ROLE-0003, FFB-ROLE-0004, FFB-ROLE-0005]
+    execution: parallel_where_possible
+    required_actions:
+      - systems architect defines structural boundaries sources of truth and failure domains
+      - organization architect defines roles responsibilities handoffs separation and incentives
+      - knowledge architect defines knowledge domains provenance freshness and bindings
+      - security/risk architect defines trust boundaries threat model risk treatments and maturity blockers
+    outputs:
+      - structural_architecture_package
+      - organization_design_package
+      - governed_knowledge_architecture
+      - security_and_risk_package
+
+  - stage: 4
+    name: TENSION_REGISTRATION
+    owner: FFB-ROLE-0001
+    required_actions:
+      - compare specialist outputs
+      - register contradictions and architectural tensions explicitly
+      - never silently average incompatible positions
+      - return unresolved critical tension to affected specialists
+    outputs: [architectural_tension_register]
+
+  - stage: 5
+    name: ARCHITECTURE_SYNTHESIS
+    owner: FFB-ROLE-0001
+    required_actions:
+      - synthesize coherent candidate blueprint
+      - record tradeoffs assumptions alternatives migration consequences and residual risks
+      - preserve dissent in appendix or linked records
+    outputs: [candidate_factory_blueprint, tradeoff_record]
+
+  - stage: 6
+    name: IMPLEMENTABILITY_REVIEW
+    owner: FFB-ROLE-0006
+    required_actions:
+      - verify candidate can be implemented tested debugged migrated and recovered
+      - identify undefined failure concurrency transaction and observability semantics
+      - mark non-executable claims UNPROVEN
+    outputs: [implementability_review, executable_proof_requirements]
+
+  - stage: 7
+    name: QUALITY_AND_ACCEPTANCE_ARCHITECTURE
+    owner: FFB-ROLE-0007
+    required_actions:
+      - define acceptance matrix verification validation and independent assurance needs
+      - reject unverifiable PASS criteria
+      - define nonconformance and rework flow
+    outputs: [acceptance_matrix, assurance_plan]
+
+  - stage: 8
+    name: SECURITY_RISK_GATE
+    owner: FFB-ROLE-0005
+    required_actions:
+      - reassess risk after synthesis and implementability changes
+      - block affected path if unresolved S4 remains
+      - define adversarial evidence required for next maturity level
+    outputs: [risk_gate_decision]
+
+  - stage: 9
+    name: SOCRATES_CHALLENGE
+    owner: ROLE-0202
+    independence: assignment_must_not_equal_blueprint_producer_assignment
+    required_actions:
+      - challenge assumptions evidence alternatives falsifiability and scope
+      - identify unsupported confidence and hidden premise
+    outputs: [critical_review_findings]
+
+  - stage: 10
+    name: ARGUS_AUDIT
+    owner: ARGUS-COUNCIL
+    independence: outside_producer_chain
+    required_actions:
+      - perform multi-perspective architecture organization software security and skeptic review
+      - create or update long-lived RISK entries
+      - issue verdict and improvement requirements
+    outputs: [ARGUS_AUDIT_REPORT, audit_findings, risk_updates]
+
+  - stage: 11
+    name: REWORK_OR_ACCEPTANCE
+    owner: FFB-ROLE-0001
+    required_actions:
+      - route findings to responsible specialist roles
+      - produce explicit revision rather than mutating prior blueprint silently
+      - submit summit acceptance only when blocking findings are resolved or policy-authorized disposition exists
+    outputs: [revised_factory_blueprint_or_summit_package]
+
+  - stage: 12
+    name: FATHER_HANDOFF
+    owner: FFB-ROLE-0001
+    preconditions:
+      - blueprint_version_is_immutable
+      - acceptance_status_allows_handoff
+      - authority_and_risk_boundaries_are_explicit
+    required_actions:
+      - create governed handoff package to PX00/FATHER
+      - include capabilities departments roles protocols knowledge bindings acceptance criteria risks and maturity limits
+      - do not embed runtime capability grants
+    outputs: [FACTORY_BLUEPRINT_HANDOFF]
+
+invariants:
+  - blueprint_design_does_not_grant_execution_authority
+  - specialist_dissent_is_preserved
+  - S4_blocker_cannot_be_hidden_by_majority_vote
+  - quality_and_security_reviews_are_distinct
+  - producer_cannot_self_certify_independent_review
+  - revisions_supersede_instead_of_rewriting_history
+  - role_and_capability_identity_are_independent_of_model_vendor_device
+  - ARGUS_findings_feed_long_lived_risk_memory
+
+failure_policy:
+  - missing_required_specialist_output: FAIL_CLOSED
+  - unresolved_S4: BLOCK_AFFECTED_MATURITY_PATH
+  - unresolved_material_tension: RETURN_TO_SPECIALISTS_OR_ESCALATE
+  - missing_independent_review: NOT_SUMMIT_READY
+  - insufficient_acceptance_evidence: UNPROVEN
