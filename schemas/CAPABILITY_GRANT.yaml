@@ -1,0 +1,58 @@
+schema_version: 0.1
+status: draft
+object_type: capability_grant
+canonical_object: false
+purpose: runtime-scoped executable capability derived from an ALLOW authority decision
+
+required_fields:
+  grant_id:
+    type: stable_runtime_id
+  action_request_id:
+    type: ACTREQ-reference
+  authority_decision_ref:
+    type: canonical_or_runtime_reference
+  capability:
+    type: string
+  target_scope:
+    type: mapping
+  issued_at:
+    type: utc_timestamp
+  status:
+    type: enum
+    values: [ACTIVE, CONSUMED, EXPIRED, REVOKED]
+  side_effect_ceiling:
+    type: enum
+    values: [S0, S1, S2, S3, S4]
+  data_classification_ceiling:
+    type: string
+  operation_count_limit:
+    type: integer
+    minimum: 1
+
+optional_fields:
+  expires_at:
+    type: utc_timestamp
+  one_time:
+    type: boolean
+  allowed_adapter_ids:
+    type: list
+    item_type: stable_governed_resource_id
+  resource_limits:
+    type: mapping
+  revocation_ref:
+    type: EVT-reference
+  consumed_event_ref:
+    type: EVT-reference
+
+invariants:
+  - grant_requires_allow_authority_decision
+  - grant_scope_cannot_exceed_authority_decision
+  - grant_capability_must_match_action_request
+  - expired_revoked_or_consumed_one_time_grant_cannot_execute
+  - adapter_must_be_within_allowed_scope_when_adapter_scope_is_declared
+  - side_effect_cannot_exceed_grant_ceiling
+  - data_classification_cannot_exceed_grant_ceiling
+  - replay_policy_is_enforced
+
+runtime_validator: not_selected
+library_dependency: none
