@@ -1,0 +1,33 @@
+schema_version: 0.1
+status: draft
+object_type: source_assessment
+purpose: immutable governed assessment of source quality dimensions
+
+required_fields:
+  source_assessment_id:
+    type: stable_id
+  source_ref:
+    type: SRC-reference
+  evaluator_ref:
+    type: actor_or_component_reference
+  evaluator_version:
+    type: string
+  evaluated_at:
+    type: utc_timestamp
+  basis_refs:
+    type: canonical_reference_list
+  dimensions:
+    required: [reliability, authority, recency, conflict_of_interest]
+    range: 0.0_to_1.0
+  assessment_hash:
+    type: sha256_hex
+
+invariants:
+  - source_quality_is_assessed_not_assumed
+  - assessment_is_immutable_after_creation
+  - new_assessment_does_not_overwrite_prior_assessment
+  - dimensions_require_explicit_evaluator_and_basis
+  - conflict_of_interest_is_not_hidden_inside_one_scalar_score
+  - no_assessment_may_claim_absolute_truth
+
+library_dependency: none
