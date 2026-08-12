@@ -1,5 +1,6 @@
 from __future__ import annotations
 import hashlib
+import json
 
 from px00.factory_mvp import AgentRdFactoryMvp
 
@@ -10,7 +11,11 @@ SOCRATES = "ASSIGN-RD-SOCRATES-0001"
 
 
 def derive_idempotency_key(run_id: str, operation: str, target: str) -> str:
-    material = f"{run_id}|{operation}|{target}".encode("utf-8")
+    material = json.dumps(
+        [run_id, operation, target],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
     return hashlib.sha256(material).hexdigest()
 
 
@@ -66,10 +71,10 @@ def run_synthetic_idempotency_case() -> tuple[AgentRdFactoryMvp, str]:
         {
             "alternatives": [
                 {"id": "A", "design": "random UUID per attempt", "disposition": "REJECT"},
-                {"id": "B", "design": "SHA-256(run_id|operation|target)", "disposition": "SELECT"},
+                {"id": "B", "design": "SHA-256(canonical JSON [run_id, operation, target])", "disposition": "SELECT"},
             ],
             "selected": "B",
-            "reason": "stable under retry and deterministic for the bounded synthetic case",
+            "reason": "stable under retry, unambiguous between fields, and deterministic for the bounded synthetic case",
         },
         PRODUCER,
     )
@@ -98,7 +103,7 @@ def run_synthetic_idempotency_case() -> tuple[AgentRdFactoryMvp, str]:
         "FUNC-ART-006",
         {
             "prototype": "derive_idempotency_key",
-            "algorithm": "sha256(run_id|operation|target)",
+            "algorithm": "sha256(canonical_json([run_id, operation, target]))",
             "sample_key": same_a,
             "bounded_execution": True,
         },
@@ -113,6 +118,7 @@ def run_synthetic_idempotency_case() -> tuple[AgentRdFactoryMvp, str]:
                 "same_request_same_key": same_a == same_b,
                 "different_target_different_key": same_a != other_target,
                 "different_operation_different_key": same_a != other_operation,
+                "delimiter_ambiguity_removed": derive_idempotency_key("A|B", "C", "D") != derive_idempotency_key("A", "B|C", "D"),
                 "sha256_hex_length": len(same_a) == 64,
             },
         },
@@ -145,7 +151,7 @@ def run_synthetic_idempotency_case() -> tuple[AgentRdFactoryMvp, str]:
         "FUNC-ART-010",
         {
             "delivery": "deterministic idempotency-key prototype and verification evidence",
-            "selected_design": "SHA-256(run_id|operation|target)",
+            "selected_design": "SHA-256(canonical JSON [run_id, operation, target])",
             "sample_key": same_a,
             "limitations": [
                 "no durable deduplication store",
