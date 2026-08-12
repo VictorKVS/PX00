@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import Any
 
 PIN_RE = re.compile(r"^([A-Za-z0-9_.-]+)==([A-Za-z0-9_.+!-]+)$")
+HASHED_PIN_RE = re.compile(r"^([A-Za-z0-9_.-]+)==([A-Za-z0-9_.+!-]+)(?:\s+.+)?$")
+SHA256_RE = re.compile(r"--hash=sha256:([0-9a-fA-F]{64})(?:\s|$)")
 
 
 def normalize_name(name: str) -> str:
@@ -39,6 +41,39 @@ def parse_pinned_requirements(path: Path) -> tuple[dict[str, str], list[str]]:
     return requirements, errors
 
 
+def parse_hashed_requirements(path: Path) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    locked: dict[str, dict[str, Any]] = {}
+    errors: list[str] = []
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        return {}, [f"cannot read hashed requirements: {exc}"]
+
+    for line_number, raw in enumerate(lines, start=1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        match = HASHED_PIN_RE.fullmatch(line)
+        if not match:
+            errors.append(f"lock line {line_number} is not an exact name==version pin: {line}")
+            continue
+        name, version = match.groups()
+        normalized = normalize_name(name)
+        if normalized in locked:
+            errors.append(f"duplicate locked requirement: {normalized}")
+            continue
+        if "--hash=" in line and "--hash=sha256:" not in line:
+            errors.append(f"lock line {line_number} contains a non-SHA256 hash")
+        hashes = {value.lower() for value in SHA256_RE.findall(line)}
+        if not hashes:
+            errors.append(f"lock line {line_number} has no SHA256 artifact hash")
+        locked[normalized] = {"version": version, "hashes": hashes}
+
+    if not locked:
+        errors.append("no hash-locked runtime requirements found")
+    return locked, errors
+
+
 def load_sbom(path: Path) -> tuple[dict[str, Any] | None, list[str]]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -56,8 +91,23 @@ def load_sbom(path: Path) -> tuple[dict[str, Any] | None, list[str]]:
 def validate_dependency_provenance(
     requirements_path: Path,
     sbom_path: Path,
+    lock_path: Path | None = None,
 ) -> list[str]:
     requirements, errors = parse_pinned_requirements(requirements_path)
+
+    if lock_path is not None:
+        locked, lock_errors = parse_hashed_requirements(lock_path)
+        errors.extend(lock_errors)
+        locked_versions = {
+            name: value.get("version")
+            for name, value in locked.items()
+            if isinstance(value, dict)
+        }
+        if requirements != locked_versions:
+            errors.append(
+                f"requirements/hash-lock mismatch: requirements={requirements}, lock={locked_versions}"
+            )
+
     sbom, sbom_errors = load_sbom(sbom_path)
     errors.extend(sbom_errors)
     if sbom is None:
@@ -140,4 +190,5 @@ def validate_repository_dependency_provenance(root: Path) -> list[str]:
     return validate_dependency_provenance(
         root / "requirements-validator.txt",
         root / "security" / "sbom" / "PX00-validator.cdx.json",
+        root / "requirements-validator-lock.txt",
     )
