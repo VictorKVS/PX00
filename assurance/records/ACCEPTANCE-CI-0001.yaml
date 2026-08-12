@@ -1,0 +1,50 @@
+schema_version: 0.1
+acceptance_id: ACCEPTANCE-CI-0001
+subject: PX00 minimal GitHub Actions contract validation gate
+date: 2026-08-12
+state: PASS
+scope: ci_contract_validation_only
+
+workflow:
+  path: .github/workflows/contract-validation.yml
+  name: PX00 Contract Validation
+  accepted_run_id: 31567474530
+  head_commit: 51312d4d067482067d777ef86fad6987e59b26c5
+  trigger: push
+  conclusion: success
+  prior_successful_run_id: 31567451236
+
+criteria:
+  hosted_runner_execution: PASS
+  checkout: PASS
+  python_setup: PASS
+  pinned_dependency_install: PASS
+  pip_check: PASS
+  unit_and_integration_tests: PASS
+  repository_validator: PASS
+  workflow_conclusion: PASS
+
+supply_chain:
+  actions_checkout_sha: d23441a48e516b6c34aea4fa41551a30e30af803
+  actions_setup_python_sha: ece7cb06caefa5fff74198d8649806c4678c61a1
+  pyyaml: 6.0.3
+  repository_permission: contents_read
+  checkout_credentials_persisted: false
+
+security:
+  secrets_required: false
+  customer_data_used: false
+  repository_write_permission: false
+  deployment_performed: false
+  production_runtime_approval: false
+
+interpretation:
+  automated_contract_gate: accepted
+  production_runtime_security: not_proven
+  release_supply_chain_integrity: not_proven
+
+next_gate:
+  - verify_repository_secret_scanning_and_branch_protection
+  - decide_minimal_dependency_sbom_control
+  - preserve_ci_regression_history
+  - keep_production_runtime_blocked
