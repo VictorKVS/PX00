@@ -1,0 +1,54 @@
+schema_version: 0.1
+status: draft
+object_type: context_package
+purpose: immutable traceable knowledge context delivered to one agent assignment for one RUN
+
+required_fields:
+  context_package_id:
+    type: stable_id
+  knowledge_request_ref:
+    type: KNOWLEDGE_REQUEST_reference
+  run_ref:
+    type: RUN_reference
+  role_ref:
+    type: ROLE_reference
+  assignment_ref:
+    type: AGENT_ASSIGNMENT_reference
+  binding_refs:
+    type: KNOWLEDGE_BINDING_reference_list
+  knowledge_object_refs:
+    type: stable_knowledge_reference_list
+  route_snapshot_refs:
+    type: KNOWLEDGE_ROUTE_reference_list
+  package_hash:
+    type: sha256_hex
+  hash_algorithm:
+    type: enum
+    values: [sha256]
+
+optional_fields:
+  source_refs:
+    type: SRC_reference_list
+  evidence_refs:
+    type: EVD_reference_list
+  claim_refs:
+    type: CLM_reference_list
+  decision_refs:
+    type: canonical_reference_list
+  warning_refs:
+    type: canonical_reference_list
+  omitted_object_refs:
+    type: stable_knowledge_reference_list
+  truncation_reason:
+    type: string
+
+invariants:
+  - package_is_immutable_for_run
+  - package_contains_only_objects_allowed_by_request_and_bindings
+  - package_uses_stable_logical_knowledge_ids
+  - package_hash_covers_ordered_logical_refs_and_material_selection_metadata
+  - physical_endpoint_change_does_not_rewrite_historical_package
+  - assignment_receives_context_not_whole_repository
+  - package_does_not_grant_action_authority
+
+library_dependency: none
