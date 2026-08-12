@@ -1,0 +1,56 @@
+acceptance_record_id: FFB-ACCEPT-M1-SKELETON-0001
+mvp_scope_ref: FFB-MVP-0001
+blueprint_ref: FFB-BP-0001-V2@0.2
+maturity: M1_PROTOTYPE
+accepted_component: CONTROL_FLOW_SKELETON
+verdict: PASS_WITH_RESTRICTIONS
+accepted_at: 2026-08-12T18:45:00Z
+
+evidence_refs:
+  - schemas/FACTORY_MVP_SCOPE.yaml
+  - projects/FATHER_FACTORY_BUILDER/pilots/agent_rd_factory/MVP_SCOPE_V0_1.yaml
+  - px00/factory_mvp.py
+  - tests/test_factory_mvp.py
+  - SOCRATES_MVP_REVIEW_V0_1
+  - SOCRATES_MVP_REVIEW_V0_2
+  - ARGUS_MVP_AUDIT_V0_2
+  - CI_RUN_31628925983
+
+accepted_properties:
+  - strict_stage_order
+  - producer_verifier_assignment_separation
+  - explicit_untrusted_input_gate
+  - security_precheck_before_prototype
+  - verification_gate_before_delivery
+  - socrates_gate_before_delivery
+  - terminal_successful_delivery
+  - append_only_run_identity
+  - no_material_external_action
+
+not_accepted:
+  - useful_stage_artifact_execution
+  - live_LLM_or_agent_execution
+  - arbitrary_external_content
+  - confidential_or_regulated_data
+  - material_external_tools
+  - production_persistence
+  - concurrency_or_recovery_guarantees
+  - production_readiness
+
+residual_findings:
+  - ARG-MVP-001
+  - ARG-MVP-002
+  - ARG-MVP-003
+  - ARG-MVP-004
+
+next_required_evidence:
+  - one_complete_synthetic_problem_with_stage_artifacts
+  - artifact_type_and_lineage_validation
+  - artifact_rejection_negative_tests
+  - Socrates_and_ARGUS_review_of_functional_MVP_run
+
+invariants:
+  - skeleton_acceptance_does_not_equal_useful_factory_MVP
+  - RISK_0002_is_isolated_not_closed
+  - scope_expansion_requires_explicit_replan_or_evidence
+  - production_claims_remain_prohibited
