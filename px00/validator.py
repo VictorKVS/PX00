@@ -17,7 +17,6 @@ TF_RE = re.compile(r"^TF-(\d{4})_.*\.md$")
 AUTONOMY = {"A0", "A1", "A2", "A3", "A4"}
 ACCEPTANCE = {"NOT_TESTED", "PASS", "PASS_WITH_ACTIONS", "FAIL", "BLOCKED"}
 TERMINAL = {"COMPLETED", "FAILED", "DENIED", "ESCALATED", "CANCELLED", "BLOCKED"}
-AUTHORITY_RESULTS = {"ALLOW", "DENY", "ESCALATE"}
 SIDE_EFFECTS = {"S0", "S1", "S2", "S3", "S4"}
 SECRET_KEYS = {
     "api_key", "api_hash", "access_token", "refresh_token", "password",
@@ -200,29 +199,31 @@ def validate_action_request_document(doc: Any, path: str = "ACTION_REQUEST.yaml"
     request, issues = require_map(doc, path)
     if request is None:
         return issues
+    if request.get("canonical_prefix") != "ACTREQ-":
+        issues.append(Issue("ACTREQ_PREFIX_INVALID", path, "canonical_prefix must remain ACTREQ-."))
     required = request.get("required_fields")
     if not isinstance(required, dict):
         return issues + [Issue("ACTREQ_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
     for field in (
-        "action_request_id", "task_id", "run_id", "trace_id", "requested_by_role_id",
-        "protocol_id", "protocol_version", "step_id", "action_class", "required_capability",
-        "target_ref", "purpose", "requested_autonomy", "classification", "status",
+        "action_request_id", "status", "created_at", "task_id", "run_id", "trace_id",
+        "requester_role_id", "requester_role_version", "protocol_id", "protocol_version",
+        "step_id", "capability", "action_class", "target_ref", "purpose_code",
+        "requested_autonomy", "classification", "side_effect_class",
     ):
         if field not in required:
             issues.append(Issue("ACTREQ_FIELD_MISSING", path, f"required_fields.{field} is required."))
-    action_id = required.get("action_request_id")
-    if isinstance(action_id, dict):
-        pattern = action_id.get("pattern")
-        if pattern not in {"ACTREQ-*", "^ACTREQ-\\d{4,}$"}:
-            issues.append(Issue("ACTREQ_ID_PATTERN_INVALID", path, "action_request_id must declare ACTREQ-* canonical identity."))
     autonomy = required.get("requested_autonomy")
     if isinstance(autonomy, dict) and set(autonomy.get("values") or []) != AUTONOMY:
         issues.append(Issue("ACTREQ_AUTONOMY_VALUES_INVALID", path, "requested_autonomy must enumerate A0..A4."))
+    side_effect = required.get("side_effect_class")
+    if isinstance(side_effect, dict) and set(side_effect.get("values") or []) != SIDE_EFFECTS:
+        issues.append(Issue("ACTREQ_SIDE_EFFECT_VALUES_INVALID", path, "side_effect_class must enumerate S0..S4."))
     invariants = set(request.get("invariants") or [])
     for invariant in (
-        "request_does_not_grant_authority",
-        "executor_cannot_select_privileged_adapter_as_authority",
-        "material_execution_requires_separate_authority_decision",
+        "action_request_is_not_authority",
+        "material_execution_requires_linked_allow_authority_decision",
+        "requested_adapter_hint_does_not_grant_adapter_permission",
+        "untrusted_executor_output_cannot_directly_mutate_control_plane",
     ):
         if invariant not in invariants:
             issues.append(Issue("ACTREQ_INVARIANT_MISSING", path, invariant))
@@ -233,22 +234,26 @@ def validate_tool_definition_document(doc: Any, path: str = "TOOL_DEFINITION.yam
     tool, issues = require_map(doc, path)
     if tool is None:
         return issues
+    if tool.get("canonical_object") is not False:
+        issues.append(Issue("TOOL_CANONICAL_OBJECT_INVALID", path, "Tool definitions must remain governed resources, not canonical object families."))
     required = tool.get("required_fields")
     if not isinstance(required, dict):
         return issues + [Issue("TOOL_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
-    for field in ("tool_id", "version", "capabilities", "side_effect_classes", "supported_data_classes", "max_autonomy_by_capability", "status"):
+    for field in (
+        "tool_id", "version", "name", "status", "capabilities", "adapter_classes",
+        "supported_side_effect_classes", "supported_data_classifications",
+    ):
         if field not in required:
             issues.append(Issue("TOOL_FIELD_MISSING", path, f"required_fields.{field} is required."))
-    side_effects = required.get("side_effect_classes")
-    if isinstance(side_effects, dict):
-        values = set(side_effects.get("values") or [])
-        if values != SIDE_EFFECTS:
-            issues.append(Issue("TOOL_SIDE_EFFECT_VALUES_INVALID", path, "side_effect_classes must enumerate S0..S4."))
+    side_effects = required.get("supported_side_effect_classes")
+    if isinstance(side_effects, dict) and set(side_effects.get("item_enum") or []) != SIDE_EFFECTS:
+        issues.append(Issue("TOOL_SIDE_EFFECT_VALUES_INVALID", path, "supported_side_effect_classes must enumerate S0..S4."))
     invariants = set(tool.get("invariants") or [])
     for invariant in (
-        "tool_definition_never_grants_authority",
-        "adapter_implements_capability_not_governance",
-        "tool_output_is_not_evidence_or_knowledge_automatically",
+        "tool_definition_does_not_grant_authority",
+        "adapter_implementation_cannot_expand_declared_capability",
+        "unsupported_side_effect_class_cannot_execute",
+        "unsupported_data_classification_cannot_execute",
     ):
         if invariant not in invariants:
             issues.append(Issue("TOOL_INVARIANT_MISSING", path, invariant))
@@ -259,21 +264,28 @@ def validate_capability_grant_document(doc: Any, path: str = "CAPABILITY_GRANT.y
     grant, issues = require_map(doc, path)
     if grant is None:
         return issues
+    if grant.get("canonical_object") is not False:
+        issues.append(Issue("GRANT_CANONICAL_OBJECT_INVALID", path, "Capability grants are runtime-scoped governed resources, not canonical object families."))
     required = grant.get("required_fields")
     if not isinstance(required, dict):
         return issues + [Issue("GRANT_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
     for field in (
-        "grant_id", "action_request_id", "authority_decision_id", "capability",
-        "scope", "issued_at", "expires_at", "one_time", "status",
+        "grant_id", "action_request_id", "authority_decision_ref", "capability",
+        "target_scope", "issued_at", "status", "side_effect_ceiling",
+        "data_classification_ceiling", "operation_count_limit",
     ):
         if field not in required:
             issues.append(Issue("GRANT_FIELD_MISSING", path, f"required_fields.{field} is required."))
+    side_effect = required.get("side_effect_ceiling")
+    if isinstance(side_effect, dict) and set(side_effect.get("values") or []) != SIDE_EFFECTS:
+        issues.append(Issue("GRANT_SIDE_EFFECT_VALUES_INVALID", path, "side_effect_ceiling must enumerate S0..S4."))
     invariants = set(grant.get("invariants") or [])
     for invariant in (
         "grant_requires_allow_authority_decision",
-        "grant_scope_cannot_exceed_action_request_or_authority_scope",
-        "expired_revoked_or_consumed_grant_cannot_execute",
-        "one_time_grant_cannot_be_replayed",
+        "grant_scope_cannot_exceed_authority_decision",
+        "grant_capability_must_match_action_request",
+        "expired_revoked_or_consumed_one_time_grant_cannot_execute",
+        "replay_policy_is_enforced",
     ):
         if invariant not in invariants:
             issues.append(Issue("GRANT_INVARIANT_MISSING", path, invariant))
