@@ -66,12 +66,16 @@ class AgentRdFactoryMvp:
 
     def pass_trust_gate(self, run_id: str) -> MvpRun:
         run = self._get(run_id)
+        if run.delivered:
+            raise ValueError("RUN_TERMINAL")
         run = replace(run, trust_gate_passed=True, trace=run.trace + ("TRUST_GATE_PASS",))
         self.runs[run_id] = run
         return run
 
     def advance(self, run_id: str, stage: str, *, outcome: str = "PASS") -> MvpRun:
         run = self._get(run_id)
+        if run.delivered:
+            raise ValueError("RUN_TERMINAL")
         expected = run.stage
         if stage != expected:
             raise ValueError(f"STAGE_ORDER_VIOLATION:{expected}")
