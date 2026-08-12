@@ -23,6 +23,7 @@ _ALLOWED_KNOWLEDGE_STATES = {
     "DISPUTED",
     "SUPERSEDED",
 }
+_ALLOWED_CLASSIFICATIONS = {"PUBLIC", "INTERNAL", "CONFIDENTIAL", "SECRET"}
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,7 @@ class ImportedKnowledgeObject:
     source_locator_ref: str | None
     repository_relative_path: str
     selection_reason: str
+    freshness_state: str | None = None
 
 
 @dataclass(frozen=True)
@@ -73,10 +75,13 @@ class KnowledgeManifestBridge:
                     "knowledge_state": raw.get("knowledge_state"),
                     "selection_reason": raw.get("selection_reason"),
                     "source_locator_ref": raw.get("source_locator_ref"),
+                    "freshness_state": raw.get("freshness_state"),
+                    "classification": raw.get("classification"),
                 }
             )
         selected.sort(key=lambda row: (str(row["object_id"]), str(row["version_id"])))
         return {
+            "schema_version": manifest.get("schema_version"),
             "manifest_id": manifest.get("manifest_id"),
             "knowledge_space_id": manifest.get("knowledge_space_id"),
             "canonical_repository": manifest.get("canonical_repository"),
@@ -104,6 +109,7 @@ class KnowledgeManifestBridge:
         domain_ref: str | None = None,
     ) -> ImportedKnowledgeSlice:
         required = (
+            "schema_version",
             "manifest_id",
             "knowledge_space_id",
             "canonical_repository",
@@ -151,6 +157,8 @@ class KnowledgeManifestBridge:
             classification = str(raw.get("classification", "PUBLIC")).strip()
             path = str(raw.get("repository_relative_path", "")).strip()
             reason = str(raw.get("selection_reason", "")).strip()
+            freshness_value = raw.get("freshness_state")
+            freshness = str(freshness_value).strip() if freshness_value is not None else None
             locator_value = raw.get("source_locator_ref")
             locator = str(locator_value).strip() if locator_value is not None else None
 
@@ -160,6 +168,8 @@ class KnowledgeManifestBridge:
                 raise ValueError("INVALID_PRODUCER_KNOWLEDGE_STATE")
             if state in {"SOURCE_VERIFIED", "VERIFIED"} and not locator:
                 raise ValueError("VERIFIED_STATE_REQUIRES_SOURCE_LOCATOR")
+            if classification not in _ALLOWED_CLASSIFICATIONS:
+                raise ValueError("INVALID_PRODUCER_CLASSIFICATION")
             if not _SHA256_RE.fullmatch(digest):
                 raise ValueError("INVALID_SELECTED_OBJECT_DIGEST")
 
@@ -187,6 +197,7 @@ class KnowledgeManifestBridge:
                     source_locator_ref=locator,
                     repository_relative_path=path,
                     selection_reason=reason,
+                    freshness_state=freshness,
                 )
             )
 
