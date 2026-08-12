@@ -1,0 +1,25 @@
+schema_version: 0.1
+status: draft
+object_type: replan_trigger
+purpose: record why an active plan must be reconsidered
+
+required_fields:
+  trigger_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  plan_ref: {type: plan_reference}
+  reason_code:
+    type: enum
+    values: [NEW_EVIDENCE, TASK_FAILURE, BLOCKING_FINDING, REQUIREMENT_CHANGE, RESOURCE_CHANGE, POLICY_CHANGE, SOCRATES_CHALLENGE, HUMAN_DIRECTION]
+  raised_by: {type: actor_reference}
+  evidence_refs: {type: list}
+  description: {type: text}
+  created_at: {type: utc_timestamp}
+  state: {type: enum, values: [OPEN, ACCEPTED, REJECTED, RESOLVED]}
+
+invariants:
+  - trigger_does_not_mutate_plan
+  - accepted_trigger_requires_new_plan_or_explicit_no_change_decision
+  - evidence_refs_are_preserved
+  - trigger_does_not_grant_authority
+
+library_dependency: none
