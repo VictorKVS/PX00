@@ -1,0 +1,172 @@
+blueprint_id: FFB-BP-0001-V2
+supersedes_blueprint_ref: FFB-BP-0001@0.1
+requirement_ref: FFB-REQ-0001
+version: 0.2
+target_maturity: M0_CONCEPT
+state: CANDIDATE
+created_by_role_ref: FFB-ROLE-0001
+created_at: 2026-08-12T18:09:00Z
+review_basis:
+  - SOCRATES_REVIEW_V0_1
+  - ARGUS-FFB-0001
+
+capability_refs:
+  - CAP-RD-001
+  - CAP-RD-002
+  - CAP-RD-003
+  - CAP-RD-004
+  - CAP-RD-005
+  - CAP-RD-006
+  - CAP-RD-007
+  - CAP-RD-008
+  - CAP-RD-009
+  - CAP-RD-010
+
+departments:
+  - department_id: RD-DEPT-COORDINATION
+    name: R&D Local Coordination
+    purpose: maintain local task flow and reporting under FATHER management without creating a second strategic management loop
+    role_refs: [RD-ROLE-0001-V2]
+  - department_id: RD-DEPT-RESEARCH
+    name: Research and Evidence
+    purpose: collect assess and preserve evidence and uncertainty
+    role_refs: [RD-ROLE-0002, RD-ROLE-0008]
+  - department_id: RD-DEPT-ENGINEERING
+    name: Architecture and Prototype Engineering
+    purpose: design solution alternatives and implement bounded prototypes
+    role_refs: [RD-ROLE-0003, RD-ROLE-0004]
+  - department_id: RD-DEPT-ASSURANCE
+    name: Verification Security and Independent Challenge
+    purpose: verify challenge and risk-gate material results independently from producers
+    role_refs: [RD-ROLE-0005, RD-ROLE-0006, RD-ROLE-0007]
+
+role_blueprints:
+  - role_id: RD-ROLE-0001-V2
+    canonical_name: R&D Coordinator
+    reports_to: FATHER_MANAGEMENT_PLANE
+    responsibilities:
+      - maintain_local_work_queue_visibility
+      - prepare_handoffs_requested_by_FATHER
+      - surface_blockers_and_status
+      - coordinate_non_authoritative_meeting_and_artifact_flow
+    non_responsibilities:
+      - create_or_change_goal
+      - strategic_project_management
+      - issue_management_decisions_reserved_to_FATHER
+      - grant_runtime_authority
+      - select_executor_by_bypassing_staffing_router
+      - self_accept_project
+    capability_refs: [CAP-RD-001]
+  - role_ref: RD-ROLE-0002
+  - role_ref: RD-ROLE-0003
+  - role_ref: RD-ROLE-0004
+  - role_ref: RD-ROLE-0005
+  - role_ref: RD-ROLE-0006
+  - role_ref: RD-ROLE-0007
+  - role_ref: RD-ROLE-0008
+
+existing_protocol_refs:
+  - PROTO-FFB-0001
+required_next_protocols:
+  - PROTO-RD-RESEARCH
+  - PROTO-RD-ARCHITECTURE
+  - PROTO-RD-PROTOTYPE
+  - PROTO-RD-VERIFY
+  - PROTO-RD-SECURITY-REVIEW
+  - PROTO-RD-SOCRATES
+  - PROTO-RD-KNOWLEDGE-ADMISSION
+  - PROTO-RD-DELIVERY
+rule: required_next_protocols_are_not_treated_as_existing_executable_dependencies
+
+knowledge_binding_refs:
+  - KB-RESEARCH
+  - KB-KNOWLEDGE-ENGINEERING
+  - KB-ARCHITECTURE
+  - KB-SYSTEMS-ENGINEERING
+  - KB-PROGRAMMING
+  - KB-DEVSECOPS
+  - KB-TESTING
+  - KB-QUALITY
+  - KB-SECURITY
+  - KB-AI-AGENTS
+  - KB-FACTORY-LESSONS
+
+system_boundaries:
+  - boundary_id: RD-BOUNDARY-001
+    rule: concept work may produce documents contracts synthetic fixtures and bounded design artifacts only
+  - boundary_id: RD-BOUNDARY-002
+    rule: no material external action exists in M0 concept scope
+  - boundary_id: RD-BOUNDARY-003
+    rule: future M1 actions remain behind PX00 ActionRequest AuthorityDecision CapabilityGrant and Tool Boundary
+
+trust_boundaries:
+  - boundary_id: RD-TRUST-001
+    rule: external or generated content is untrusted until governed assessment and admission
+  - boundary_id: RD-TRUST-002
+    rule: producer output cannot become independent PASS evidence through role naming alone
+  - boundary_id: RD-TRUST-003
+    rule: context or knowledge never creates runtime authority
+
+workflow_design:
+  - QUALIFY_PROBLEM
+  - RESEARCH_EVIDENCE
+  - ASSESS_CLAIMS
+  - DESIGN_ALTERNATIVES
+  - SECURITY_PRECHECK
+  - IMPLEMENT_BOUNDED_PROTOTYPE
+  - VERIFY_AND_VALIDATE
+  - SOCRATES_CHALLENGE
+  - SECURITY_RISK_GATE
+  - REWORK_IF_REQUIRED
+  - KNOWLEDGE_ADMISSION
+  - GOVERNED_DELIVERY
+workflow_status: DESIGN_ONLY_UNTIL_REQUIRED_PROTOCOLS_EXIST
+
+acceptance_matrix_ref: FFB-ACC-0001
+risk_refs:
+  - RISK-0002
+  - RISK-0003
+  - RISK-0004
+  - RISK-0005
+  - RISK-0006
+  - RISK-0007
+  - RISK-0008
+architectural_tension_refs:
+  - FFB-TENSION-0001
+  - FFB-TENSION-0002
+
+tension_resolutions:
+  - tension_ref: FFB-TENSION-0001
+    disposition: RESOLVED_FOR_CONCEPT
+    decision: local role reduced from R&D Manager to R&D Coordinator subordinate to FATHER
+  - tension_ref: FFB-TENSION-0002
+    disposition: OPEN
+    decision: role compression may be explored later but cannot violate mandatory assignment independence
+
+residual_risks:
+  - RISK-0002 remains S4 and blocks affected M1 action path
+  - runtime reviewer independence remains unproven until assignment enforcement tests exist
+  - operational protocols remain undefined and must not be inferred from workflow labels
+  - persistence concurrency and executor snapshot maturity remain insufficient above current scope
+
+maturity_limits:
+  - accepted scope is M0 design and concept validation only
+  - no live confidential data
+  - no autonomous material external action
+  - no production or M1 readiness claim
+  - M1 remains blocked until all FFB-ACC-0001 M1 criteria pass
+
+handoff_policy:
+  - concept may be handed to FATHER only as DESIGN_REFERENCE
+  - design_reference_handoff_grants_no_execution_authority
+  - operational_factory_creation_requires_new_maturity_acceptance
+
+invariants:
+  - FATHER_remains_management_plane
+  - coordinator_is_not_second_FATHER
+  - producer_and_independent_verifier_assignments_must_differ_when_M1_is_attempted
+  - role_and_capability_identity_do_not_depend_on_model_vendor
+  - unresolved_S4_is_visible_and_blocking
+  - undefined_protocols_are_explicit_future_work
+  - blueprint_revision_does_not_rewrite_v0_1
+  - specialist_dissent_is_preserved
