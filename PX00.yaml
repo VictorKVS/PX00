@@ -115,13 +115,24 @@ minimal_validator:
   structural_records:
     - Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md
     - Tree_F/TF-0010_2026-08-12_REAL_REPOSITORY_INTEGRATION_GATE.md
+    - Tree_F/TF-0011_2026-08-12_REAL_LOCAL_VALIDATION_PASS.md
   architecture_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
   network_required: false
   external_side_effects: false
   authoring_unit_tests:
     count: 12
     state: PASS
-  real_local_repository_validation: PENDING
+  real_local_repository_validation:
+    state: PASS
+    tests: 13
+    errors: 0
+    warnings: 0
+    run: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
+    acceptance: assurance/records/ACCEPTANCE-VALIDATOR-0001.yaml
+  environment_reproducibility:
+    state: PASS_WITH_ACTIONS
+    observed_issue: shared_host_python_environment_contains_unrelated_dependency_conflict
+    required_next_control: isolated_dot_venv
 
 current_phase:
   name: Architecture Baseline 0.1 - Executable Validation Gate
@@ -150,10 +161,12 @@ current_phase:
     - synthetic_negative_tests_added
     - direct_dependency_recorded_and_pinned
     - real_repository_integration_test_defined
+    - real_local_repository_validation_passed
+    - validator_acceptance_recorded
   next_gate:
-    - execute_validator_in_real_local_clone
-    - preserve_full_repository_validation_evidence
-    - fix_any_contract_or_validator_defects
-    - add_minimal_ci_if_local_gate_is_stable
+    - reproduce_validator_in_isolated_dot_venv
+    - preserve_isolated_environment_evidence
+    - add_minimal_ci_if_isolated_gate_is_stable
+    - verify_repository_secret_scanning_and_branch_protection
     - add_dependency_sbom_automation_before_releasable_distribution
-  exit_gate: executable_contract_validation_passes_without_broad_runtime_or_external_side_effects
+  exit_gate: executable_contract_validation_passes_in_isolated_local_and_minimal_ci_environments_without_broad_runtime_or_external_side_effects
