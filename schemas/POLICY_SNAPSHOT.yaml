@@ -1,0 +1,40 @@
+schema_version: 0.1
+status: draft
+object_type: run_policy_snapshot
+canonical_object: false
+purpose: immutable exact policy profile set pinned to one governed run
+
+required_fields:
+  snapshot_id:
+    type: stable_runtime_id
+  run_id:
+    type: RUN-reference
+  created_at:
+    type: utc_timestamp
+  profile_refs:
+    type: list
+    item_type: exact_profile_reference
+    rule: each reference includes profile_id and version
+  profile_types:
+    type: list
+    item_enum: [ROLE, PROTOCOL, PROJECT, ORGANIZATION, JURISDICTION, TOOL, DATA, APPROVAL]
+  normalization:
+    type: enum
+    values: [deterministic_json_v1]
+  hash_algorithm:
+    type: enum
+    values: [sha256]
+  snapshot_hash:
+    type: sha256_hex
+
+invariants:
+  - all_required_profile_types_are_present_exactly_once
+  - exact_profile_versions_are_pinned_before_material_execution
+  - inactive_profile_cannot_enter_new_snapshot
+  - snapshot_content_is_immutable_for_run
+  - profile_order_does_not_change_snapshot_hash
+  - material_profile_change_changes_snapshot_hash
+  - registry_update_does_not_silently_migrate_existing_run
+  - executor_tool_or_source_output_cannot_select_or_mutate_snapshot
+
+library_dependency: none
