@@ -1,0 +1,27 @@
+schema_version: 0.1
+status: draft
+object_type: factory_stage_artifact
+purpose: bind every functional Factory Builder MVP stage to one immutable, typed, content-addressed artifact with explicit lineage
+
+required_fields:
+  artifact_id: {type: stable_id}
+  run_ref: {type: run_reference}
+  stage: {type: enum, values: [QUALIFY_PROBLEM, RESEARCH_EVIDENCE, ASSESS_CLAIMS, DESIGN_ALTERNATIVES, SECURITY_PRECHECK, IMPLEMENT_BOUNDED_PROTOTYPE, VERIFY_AND_VALIDATE, SOCRATES_CHALLENGE, KNOWLEDGE_ADMISSION, GOVERNED_DELIVERY]}
+  artifact_type: {type: string}
+  producer_assignment_ref: {type: assignment_reference}
+  input_artifact_refs: {type: list}
+  content_digest: {type: sha256}
+  payload: {type: object}
+
+invariants:
+  - artifact_identity_is_append_only
+  - artifact_type_must_match_current_stage
+  - content_digest_covers_canonical_payload
+  - each_non_initial_artifact_must_reference_the_immediately_preceding_artifact
+  - a_stage_cannot_pass_without_a_fresh_artifact
+  - verification_artifact_must_be_produced_by_the_pinned_verifier_assignment
+  - socrates_artifact_must_be_independent_from_producer_and_verifier_assignments
+  - artifact_lineage_grants_no_runtime_authority
+  - delivery_artifact_does_not_imply_production_readiness
+
+library_dependency: none
