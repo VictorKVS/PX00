@@ -79,7 +79,7 @@ class JsonTransport(Protocol):
 
 @dataclass
 class UrllibJsonTransport:
-    """Minimal stdlib HTTPS transport. Secrets are supplied only through headers at runtime."""
+    """Minimal stdlib HTTPS transport. Credentials are supplied only through headers at runtime."""
 
     def post_json(
         self,
@@ -166,8 +166,8 @@ class LiveHttpsExecutorAdapter:
         enabled = str(env.get(self.profile.live_enable_env_ref, "")).strip().lower()
         if enabled not in {"1", "true", "yes", "on"}:
             raise ValueError("LIVE_PROVIDER_NOT_EXPLICITLY_ENABLED")
-        secret = env.get(self.profile.auth_secret_env_ref)
-        if not secret:
+        auth_value = env.get(self.profile.auth_secret_env_ref)
+        if not auth_value:
             raise ValueError("LIVE_PROVIDER_SECRET_MISSING")
 
         data_classification = str(bounded_input.get("data_classification", ""))
@@ -192,7 +192,7 @@ class LiveHttpsExecutorAdapter:
         started = time.monotonic()
         response = self.transport.post_json(
             url=self.profile.endpoint_url,
-            headers={"Authorization": f"Bearer {secret}"},
+            headers={"Authorization": f"Bearer {auth_value}"},
             payload=request_payload,
             timeout_seconds=self.profile.timeout_seconds,
             max_response_bytes=self.profile.max_response_bytes,
