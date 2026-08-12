@@ -1,0 +1,28 @@
+schema_version: 0.1
+status: draft
+object_type: factory_mvp_scope
+purpose: freeze the smallest executable and auditable Factory Builder MVP before further architectural expansion
+
+required_fields:
+  mvp_scope_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  blueprint_ref: {type: blueprint_reference}
+  target_maturity: {type: enum, values: [M1_PROTOTYPE]}
+  must_have_capabilities: {type: list}
+  excluded_until_after_mvp: {type: list}
+  acceptance_criteria: {type: list}
+  blocking_risk_refs: {type: list}
+  created_at: {type: utc_timestamp}
+
+invariants:
+  - mvp_scope_is_frozen_for_one_generation
+  - new_features_do_not_enter_mvp_without_explicit_replan
+  - unresolved_S4_blocks_affected_M1_path
+  - mvp_does_not_grant_runtime_authority
+  - producer_and_independent_verifier_assignments_must_differ
+  - untrusted_input_must_pass_explicit_trust_gate_before_prototype_execution
+  - delivery_requires_verification_and_socrates_gate
+  - excluded_features_remain_backlog_not_implicit_requirements
+  - production_readiness_is_not_implied_by_M1_pass
+
+library_dependency: none
