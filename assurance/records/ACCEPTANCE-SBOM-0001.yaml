@@ -1,0 +1,43 @@
+acceptance_id: ACCEPTANCE-SBOM-0001
+subject: minimal_dependency_provenance_sbom_gate
+status: PASS
+accepted_at: 2026-08-12T06:37:36Z
+scope: px00_validator_dependency_provenance
+
+criteria:
+  exact_direct_dependency_pin:
+    state: PASS
+    evidence: requirements-validator.txt
+  requirement_sbom_agreement:
+    state: PASS
+    evidence: tests/test_dependency_provenance.py
+  clean_runner_dependency_consistency:
+    state: PASS
+    evidence: assurance/runs/SBOM-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+  negative_drift_tests:
+    state: PASS
+    count: 3
+    evidence: assurance/runs/SBOM-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+  existing_contract_regression:
+    state: PASS
+    total_tests: 17
+    repository_validator_errors: 0
+    repository_validator_warnings: 0
+
+ci:
+  workflow: PX00 Contract Validation
+  run_id: 31570702457
+  commit: cbcd866a99be0f2b0a74cbdfd8adaac45b912418
+  conclusion: success
+
+limitations:
+  branch_gate_enforcement: UNVERIFIED
+  secret_scanning: UNVERIFIED
+  push_protection: UNVERIFIED
+  artifact_hash_locking: NOT_IMPLEMENTED
+  external_cyclonedx_schema_validation: NOT_IMPLEMENTED
+  vulnerability_monitoring: NOT_IMPLEMENTED
+  release_signing: NOT_IMPLEMENTED
+
+production_runtime_allowed: false
+decision: KEEP
