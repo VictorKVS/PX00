@@ -9,7 +9,7 @@ Project: `PROJECT-FFB-0001`
 - FFB-0 Internal Incubation: ACTIVE.
 - `SUMMIT-FFB-01 — Bounded Functional Agent Factory Reference MVP`: ACHIEVED WITH RESTRICTIONS.
 - `SUMMIT-FFB-02 — First Governed Live Executor`: OPEN.
-- Latest completed architecture generation: `TF-0071 — Professional Decision Trace and Replay`.
+- Latest completed generation: `TF-0072 — Security Atomic Requirement Verification Gate`.
 
 ## Proven foundation
 
@@ -25,7 +25,8 @@ Project: `PROJECT-FFB-0001`
 - deterministic functional Factory MVP with verification, Socrates and governed rework;
 - replaceable executor boundary;
 - live HTTPS provider readiness boundary with secret/data-egress controls;
-- AI lifecycle evidence gates and quantitative risk support.
+- AI lifecycle evidence gates and quantitative risk support;
+- executable Security atomic-requirement proof-floor validation in canonical KNOWLEDGE_CORE.
 
 ## Current open summit — SUMMIT-FFB-02
 
@@ -60,10 +61,25 @@ Primary sequence:
 
 Security Knowledge is NOT blocked by `SUMMIT-FFB-02` and continues in parallel.
 
-## Current Security Knowledge integration state
+## Current Security Knowledge proof state
 
-Proven:
+Cross-repository provenance is proven:
 `canonical source metadata → historical Git commit → producer manifest → PX00 snapshot → ContextPackage → RUN knowledge pin → TRACE → read-only replay`.
+
+TF-0072 added a stricter product-integrity gate before professional reasoning:
+- 9 requirement files scanned;
+- 82 atomic requirements scanned;
+- **0 currently satisfy strict VERIFIED proof floor**;
+- missing verification state is conservatively `UNVERIFIED`;
+- `VERIFIED` now requires source document identity + exact locator + source quote.
+
+FSTEK-31 requirements that previously self-declared VERIFIED without source quotes were downgraded to REVIEWED without deleting their atomization.
+
+First verification target:
+`FSTEK31-REQ-001`, locator `p. 10`.
+
+Current professional Security D3 RUN state:
+`BLOCKED_BY_KNOWLEDGE_PROOF_FLOOR`.
 
 Not yet proven:
 - a truly atomic VERIFIED Security requirement used in a professional reasoning decision;
@@ -83,19 +99,21 @@ Risk floor:
 
 TF-0071 proves that a material professional decision must pass the materiality gate before it can be bound into historical RUN evidence.
 
+TF-0072 proves that the domain knowledge state used by that decision must itself earn VERIFIED status; runtime progress cannot lower the knowledge proof floor.
+
 ## Next high-value sequence
 
 ### A. Product value — live executor
 Close `SUMMIT-FFB-02` with exactly one real provider call. Do not add more provider abstractions unless the real integration requires them.
 
-### B. Professional value — real evidence-backed decision
-When KNOWLEDGE_CORE exposes a truly atomic VERIFIED Security requirement, run one bounded Security decision through:
+### B. Professional value — first true VERIFIED atomic Security requirement
+Promote `FSTEK31-REQ-001` only after exact primary-source quote + locator + semantic review are recorded and the Knowledge Quality Gate remains green.
 
-`VERIFIED REQUIREMENT → APPLICABILITY → CONSTRAINTS → OPTIONS → D2/D3 MATERIALITY → PROFESSIONAL DECISION → INDEPENDENT REVIEW → TRACE/REPLAY`.
+Then run one bounded D3 Security decision through:
+`VERIFIED REQUIREMENT → APPLICABILITY → CONSTRAINTS → OPTIONS → D3 MATERIALITY → PROFESSIONAL DECISION → INDEPENDENT REVIEW → TRACE/REPLAY`.
 
 ### C. First closed professional FATHER loop
 Combine:
-
 `GOAL → TASK → ROLE → VERIFIED KNOWLEDGE → REAL AI EXECUTOR → PROFESSIONAL DECISION/RESULT → VERIFIER → SOCRATES → REWORK/PASS → ACCEPTANCE → TRACE/REPLAY`.
 
 ## Scope discipline
