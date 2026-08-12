@@ -1,0 +1,35 @@
+schema_version: 0.1
+status: draft
+object_type: father_management_decision
+purpose: record one auditable management decision over governed project state
+
+required_fields:
+  decision_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  plan_ref: {type: plan_reference}
+  observation_refs: {type: list}
+  decision_type:
+    type: enum
+    values: [DISPATCH, WAIT, REQUEST_REVIEW, REPLAN, ESCALATE, CLOSE_PROJECT]
+  rationale: {type: text}
+  decided_by: {type: actor_reference}
+  created_at: {type: utc_timestamp}
+
+conditional_fields:
+  task_refs: {type: list}
+  routing_decision_refs: {type: list}
+  review_target_refs: {type: list}
+  replan_trigger_ref: {type: replan_trigger_reference}
+  escalation_target_ref: {type: actor_reference}
+  closure_reason: {type: text}
+
+invariants:
+  - management_decision_is_not_tool_execution
+  - dispatch_targets_only_ready_tasks
+  - replan_requires_replan_trigger_ref
+  - escalation_requires_target
+  - close_project_requires_closure_reason
+  - decision_history_is_append_only
+  - authority_is_not_inferred_from_management_decision
+
+library_dependency: none
