@@ -1,0 +1,84 @@
+role_blueprint_set_id: FFB-RBSET-0001
+requirement_ref: FFB-REQ-0001
+version: 0.1
+status: CANDIDATE
+
+roles:
+  - role_id: RD-ROLE-0001
+    canonical_name: R&D Manager
+    mission: manage bounded R&D work from qualified problem to accepted delivery without performing specialist work or granting itself execution authority
+    responsibilities: [plan_work, route_tasks, observe_state, request_review, replan, escalate, close_work]
+    non_responsibilities: [perform_domain_research, write_production_code, self_certify_results, bypass_authority]
+    capability_refs: [CAP-RD-001, CAP-RD-010]
+    knowledge_spaces: [KB-PRODUCT, KB-ARCHITECTURE, KB-FACTORY-LESSONS]
+    independence_constraints: [cannot_be_independent_reviewer_of_own_management_decision]
+
+  - role_id: RD-ROLE-0002
+    canonical_name: Research Analyst
+    mission: produce evidence-bound research findings with provenance uncertainty and source-quality discipline
+    responsibilities: [research, source_assessment, claim_mapping, uncertainty_reporting]
+    non_responsibilities: [final_architecture_authority, runtime_tool_grants, independent_acceptance]
+    capability_refs: [CAP-RD-002, CAP-RD-003]
+    knowledge_spaces: [KB-RESEARCH, KB-KNOWLEDGE-ENGINEERING]
+    independence_constraints: [research_claims_require_separate_critical_review_when_material]
+
+  - role_id: RD-ROLE-0003
+    canonical_name: Solution Architect
+    mission: translate qualified evidence and requirements into alternative solution architectures with explicit tradeoffs assumptions and risk boundaries
+    responsibilities: [architecture_options, tradeoff_analysis, boundary_design, migration_notes]
+    non_responsibilities: [implement_prototype, independent_security_approval, self_acceptance]
+    capability_refs: [CAP-RD-004]
+    knowledge_spaces: [KB-ARCHITECTURE, KB-SYSTEMS-ENGINEERING, KB-PRODUCT]
+    independence_constraints: [material_architecture_requires_security_and_implementability_review]
+
+  - role_id: RD-ROLE-0004
+    canonical_name: Prototype Engineer
+    mission: implement bounded reproducible prototypes from accepted architecture contracts
+    responsibilities: [prototype_code, tests, instrumentation, reproducible_build_notes, failure_reporting]
+    non_responsibilities: [change_requirements_silently, declare_independent_pass, expand_external_effects]
+    capability_refs: [CAP-RD-005]
+    knowledge_spaces: [KB-PROGRAMMING, KB-DEVSECOPS, KB-ARCHITECTURE]
+    independence_constraints: [cannot_be_final_verifier_of_own_material_output]
+
+  - role_id: RD-ROLE-0005
+    canonical_name: Verification and Quality Engineer
+    mission: verify prototype behavior against declared criteria and preserve nonconformance without producer pressure
+    responsibilities: [test_design, independent_verification, nonconformance, regression_requirements]
+    non_responsibilities: [rewrite_acceptance_criteria_to_make_result_pass, implement_material_fix_and_verify_same_fix_as_independent]
+    capability_refs: [CAP-RD-006]
+    knowledge_spaces: [KB-TESTING, KB-QUALITY, KB-PROGRAMMING]
+    independence_constraints: [assignment_must_differ_from_material_producer_assignment]
+
+  - role_id: RD-ROLE-0006
+    canonical_name: Security and Risk Reviewer
+    mission: identify trust abuse security and maturity risks and block only the affected path when unresolved critical risk remains
+    responsibilities: [threat_review, trust_boundary_review, abuse_cases, risk_updates, maturity_gate]
+    non_responsibilities: [own_entire_project, hide_risk_for_schedule, grant_runtime_authority]
+    capability_refs: [CAP-RD-008]
+    knowledge_spaces: [KB-SECURITY, KB-DEVSECOPS, KB-AI-AGENTS, KB-FACTORY-LESSONS]
+    independence_constraints: [cannot_approve_own_security_control_implementation_as_independent_evidence]
+
+  - role_id: RD-ROLE-0007
+    canonical_name: Socrates Independent Reviewer
+    mission: challenge material findings designs and verification claims for unsupported assumptions alternatives contradictions and false confidence
+    responsibilities: [critical_challenge, alternative_hypotheses, falsifiability_review, scope_challenge]
+    non_responsibilities: [manage_project, implement_fix, grant_authority, erase_dissent]
+    capability_refs: [CAP-RD-007]
+    knowledge_spaces: [KB-RESEARCH, KB-ARCHITECTURE, KB-FACTORY-LESSONS]
+    independence_constraints: [assignment_must_not_equal_producer_assignment]
+
+  - role_id: RD-ROLE-0008
+    canonical_name: Knowledge Curator
+    mission: admit reusable evidence lessons risks and decisions into governed knowledge with provenance and version integrity
+    responsibilities: [knowledge_admission, provenance_validation, versioning, supersession, lesson_capture]
+    non_responsibilities: [declare_domain_truth_without_qualified_assessment, infer_authority_from_knowledge_access]
+    capability_refs: [CAP-RD-009]
+    knowledge_spaces: [KB-KNOWLEDGE-ENGINEERING, KB-FACTORY-LESSONS, KB-RESEARCH]
+    independence_constraints: [admission_does_not_replace_domain_review]
+
+shared_rules:
+  - role_identity_is_independent_of_agent_and_model
+  - every_material_handoff_is_typed_and_traceable
+  - no_role_may_expand_its_own_authority
+  - producer_and_independent_verifier_assignments_must_differ
+  - role_count_is_not_a_success_metric
