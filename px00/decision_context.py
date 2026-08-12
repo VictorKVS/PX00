@@ -67,6 +67,9 @@ class DecisionContextBinder:
         *,
         decision: GovernedProfessionalDecision,
         assessment: DecisionMaterialityAssessment,
+        expected_run_id: str,
+        expected_role_ref: str,
+        expected_assignment_ref: str,
     ) -> TraceDecisionContext:
         self._require(decision.decision_id, "DECISION_ID_REQUIRED")
         self._require(decision.run_id, "RUN_ID_REQUIRED")
@@ -75,6 +78,12 @@ class DecisionContextBinder:
         self._require(decision.decision_question, "DECISION_QUESTION_REQUIRED")
         self._require(decision.rationale_summary, "RATIONALE_REQUIRED")
 
+        if decision.run_id != expected_run_id:
+            raise DecisionContextError("DECISION_RUN_MISMATCH")
+        if decision.role_ref != expected_role_ref:
+            raise DecisionContextError("DECISION_ROLE_MISMATCH")
+        if decision.assignment_ref != expected_assignment_ref:
+            raise DecisionContextError("DECISION_ASSIGNMENT_MISMATCH")
         if decision.chosen_disposition not in self._DISPOSITIONS:
             raise DecisionContextError("UNKNOWN_DECISION_DISPOSITION")
         if assessment.decision_ref != decision.decision_id:
