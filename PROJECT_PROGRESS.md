@@ -23,21 +23,38 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current position inside SUMMIT-FFB-02:
 `provider-neutral executor boundary → AI/ML lifecycle & risk gates → secret/data-egress live-provider boundary → provider-specific driver + real authorized call next`.
 
-Latest generation: `TF-0065 — Evidence-Gated Product Portfolio Roadmap`.
+Latest generation: `TF-0066 — Security Knowledge Canonical Repository Alignment`.
 
 ### Product portfolio
-Status: **MASTER ROADMAP ESTABLISHED**.
+Status: **CANONICAL MASTER ROADMAP ESTABLISHED IN KNOWLEDGE_CORE**.
 
-Canonical plans:
+Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
 - `father/product-roadmap/master-product-roadmap.yaml`;
-- `father/product-roadmap/security-products.yaml`.
+- `father/product-roadmap/security-products.yaml`;
+- `father/domain-knowledge/domain-registry.yaml`.
+
+PX00 keeps route-only records and runtime orchestration/assurance responsibilities; it no longer carries a second copy of Security Knowledge product truth.
 
 Primary owner-priority domain track:
 `Security Knowledge Base → Compliance Engine → Evidence-Based Security Architect → Vulnerability & Risk Expert → White-Hat / Continuous Security Assurance → Regulatory Change Engine → Continuous Security Audit Expert`.
 
-Hard product gate: downstream Security products may be explored as isolated PoCs, but may not become authoritative MVP/Production products until `SEC-GATE-EXPERT-KNOWLEDGE-0001` is passed for the declared Security Knowledge scope.
+### SEC-PROD-0001 — Security Knowledge Base
+Canonical repository: **`VictorKVS/KNOWLEDGE_CORE`**.
+Canonical tree: **`security-knowledge/`**.
+Current state: **foundation/schemas built; Russian normative corpus actively being populated; NOT EXPERT_READY**.
 
-Architect-proposed future/supporting tracks are now visible but non-displacing: platform core, generic Knowledge Core, Agent Factory, Software/Service Factory, Research Factory, Assurance, Cyber-Physical/Robotics and Factory-of-Factories.
+Already established in the canonical product include evidence-driven KB architecture, atomic requirement/checklist structures, Organization Profile/applicability, legal-force classification, Unified Control model, expert metrics and completeness/expert-readiness structures.
+
+Canonical pipeline:
+`SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
+
+Critical invariant:
+`VERIFIED` requires an admitted primary source and exact locator. Retrieval/RAG/model output alone is not verified knowledge.
+
+Current normative production order:
+`FSTEC → FSB P0 (GosSOPKA/NKCKI/SKZI + revisions) → Roskomnadzor → base laws/government acts/decrees + cross-links → sector regulators → GOST → ISO → NIST/CIS/OWASP → BDU/CVE/CWE/ATT&CK → pentest/vulnerability/risk → vendor hardening → broad Unified Control/evidence/expert consolidation`.
+
+Hard product rule: downstream Security products may run bounded PoCs on sufficiently VERIFIED slices, but may not claim broad authoritative maturity while dependent Security Knowledge coverage remains incomplete.
 
 ## WHAT IS CLOSED
 
@@ -61,18 +78,10 @@ Important invariant:
 `EXECUTOR INVOCATION SUCCESS ≠ VERIFICATION PASS ≠ ACCEPTANCE`.
 
 ### TF-0063 — AI Project Lifecycle Evidence Gates and Quantitative Risk ✅
-New OTUS/CRISP-ML(Q) learning has been translated into project/runtime controls rather than passive notes.
+CRISP-ML(Q), Demo→PoC→MVP→Production evidence gates and quantitative risk were translated into project/runtime controls.
 
 Architecture separation:
 `CRISP-ML(Q) PROCESS PHASE ≠ DEMO/POC/MVP/PRODUCTION DELIVERY STAGE ≠ PX00 M0..M5 SYSTEM MATURITY`.
-
-Implemented:
-- CRISP-ML(Q) phase records;
-- Demo/PoC/MVP/Production evidence gates;
-- stage-aware CI/CD contract;
-- reproducible Bernoulli × triangular quantitative risk assessment;
-- expected loss, tail percentile and probability-above-tolerance outputs;
-- TechnoMart case as educational regression/strategy seed with unknowns preserved as `TBD`.
 
 Important invariants:
 - `technical feasibility ≠ user/business value ≠ production readiness`;
@@ -87,46 +96,43 @@ Implemented a provider-neutral live HTTPS boundary beneath the governed executor
 Proven locally:
 - HTTPS mandatory;
 - exact host allowlisting;
-- endpoint userinfo forbidden;
 - explicit runtime live-enable flag;
-- credential values loaded only at runtime and absent from durable profiles/call records;
-- data-classification egress gate before transport;
+- credential values loaded only at runtime;
+- data-classification egress gate;
 - bounded timeout and response size;
 - HTTP/JSON/response-shape failures fail closed;
 - canonical request/response hashes;
-- provider request ID and returned model identity preserved when available;
-- live adapter can feed the existing `GovernedExecutorBoundary` while output remains only a candidate artifact.
-
-CI itself found an implementation secret-hygiene pattern during the first pass. The scanner was not weakened; implementation was corrected and the subsequent run passed.
+- provider request/model identity captured when available;
+- output remains candidate evidence under `GovernedExecutorBoundary`.
 
 Important separation:
 `LIVE_PROVIDER_BOUNDARY_READY ≠ LIVE_PROVIDER_PROVEN ≠ SUMMIT_ACCEPTED`.
 
 ### TF-0065 — Evidence-Gated Product Portfolio Roadmap ✅
-Established one portfolio-level manufacturing plan so future product ideas accumulate without bypassing dependencies or diluting the active build.
+Established portfolio-level product manufacturing order and the rule that future ideas accumulate without bypassing dependencies.
 
-Key controls:
-- owner-priority Security line is explicit;
-- `Security Knowledge Base` has a hard expert-ready evidence gate;
-- later products may run isolated PoCs without maturity promotion;
-- architect-proposed tracks cannot displace the active owner-priority foundation except for direct dependencies, critical-risk remediation or explicit governance reprioritization;
-- product delivery stage remains independent of CRISP-ML(Q) phase and PX00 maturity;
-- S4 remediation outranks feature work on the affected path.
+### TF-0066 — Security Knowledge Canonical Repository Alignment ✅
+Corrected cross-repository ownership after detecting that PX00 had briefly started duplicating Security Knowledge product/gate/coverage artifacts.
 
-Immediate product order:
-1. finish first governed live executor;
-2. raise Security Knowledge Base toward expert-ready evidence quality;
-3. close first complete FATHER corporate loop on a Security-domain task;
-4. begin bounded Compliance Engine PoC from governed Security Knowledge.
+Now:
+- `KNOWLEDGE_CORE = canonical professional/domain/product knowledge truth`;
+- `PX00 = governed organizational runtime and Factory Builder`;
+- local Security Knowledge roadmap/product files in PX00 are route-only;
+- duplicate PX00 coverage/readiness/source-backlog/runtime-gate artifacts were removed;
+- canonical master product roadmap is maintained in KNOWLEDGE_CORE.
+
+Important invariant:
+`ROLE KNOWLEDGE REQUIREMENT ≠ OWNED LOCAL KNOWLEDGE COPY`.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
 - `FFB-FP-0002 SECURITY_SCOPE_BLOCK` — safe refusal is a valid outcome.
-- `FFB-FP-0003 EXECUTOR_CANDIDATE_REJECTED` — an allowed, successfully invoked worker may still produce wrong content; exact worker version remains pinned after rejection and replacement.
+- `FFB-FP-0003 EXECUTOR_CANDIDATE_REJECTED` — an allowed worker may still produce wrong content; exact worker version remains pinned after rejection and replacement.
 - Lifecycle lesson: successful PoC evidence must not silently promote a project into MVP or Production claims.
 - Risk lesson: mean expected loss alone can hide unacceptable tail/tolerance exposure.
-- Security implementation lesson: secret-hygiene controls constrain implementation; they are not relaxed simply because a live-provider adapter needs credentials.
-- Portfolio lesson: attractive downstream product ideas remain visible but cannot substitute for proving the foundational knowledge they depend on.
+- Security implementation lesson: secret-hygiene controls constrain implementation rather than being weakened for convenience.
+- Portfolio lesson: attractive downstream product ideas remain visible but cannot substitute for proving foundational knowledge.
+- Repository-boundary lesson: FATHER/Factory Builder must bind to canonical professional knowledge, not create a second local truth when a domain product already exists.
 
 ## VELOCITY
 Observed engineering velocities, not promises:
@@ -139,74 +145,58 @@ Observed engineering velocities, not promises:
 Velocity remains secondary to behavioral evidence, product evidence gates and green validation.
 
 ## CURRENT BLOCKERS / OPEN RISKS
-The current system is a bounded reference implementation, not production maturity.
+The current PX00 system is a bounded reference implementation, not production maturity.
 
-Most relevant blockers:
+Most relevant platform blockers:
 - `RISK-0002` — untrusted/external input safety beyond bounded synthetic scope;
 - `RISK-0003` — reference stores are not durable system-of-record implementations;
 - `RISK-0004` — higher-scale/production concerns retained by maturity model;
 - `RISK-0009` — artifact digest does not yet protect the full provenance envelope;
 - `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness;
-- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised;
-- `SEC-GATE-EXPERT-KNOWLEDGE-0001` — Security Knowledge foundation is not yet expert-ready and therefore blocks authoritative downstream Security products.
+- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised.
 
-## NEXT SUMMIT
+Security product maturity blocker:
+- `SEC-PROD-0001` is **not EXPERT_READY**: a significant portion of the P0 normative corpus still requires complete atomicization, relationship/applicability mapping and independent re-verification.
 
-### SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡
+## PARALLEL ACTIVE PRIORITIES
+These two streams proceed independently and reinforce each other later; neither currently blocks the other.
+
+### A. Security Knowledge production — KNOWLEDGE_CORE
+Continue factual corpus production in the canonical repository:
+1. finish FSTEC;
+2. complete FSB P0 including GosSOPKA/NKCKI/SKZI and revision history;
+3. continue the declared corpus roadmap;
+4. keep `VERIFIED` source+locator strictness;
+5. do not turn the product into ordinary RAG over PDFs;
+6. after sufficient corpus density, consolidate overlapping requirements into Unified Controls, checks, evidence and expert review.
+
+### B. SUMMIT-FFB-02 — PX00
 Executor boundary prerequisite: **DONE**.
 Lifecycle/evidence/risk prerequisite: **DONE**.
 Secret/data-egress provider boundary: **DONE**.
 Provider-specific driver/configuration: **NOT YET DONE**.
 Actual live-provider evidence: **NOT YET DONE**.
 
-Next acceptance step: select one authorized AI provider, add exactly one provider-specific driver/configuration and execute one real bounded inference.
+Next acceptance step: select one authorized AI provider, add exactly one provider-specific driver/configuration and execute one real bounded inference with no material external action.
 
-First live experiment classification:
-- CRISP-ML(Q): `DEPLOYMENT` integration sub-experiment;
-- delivery stage: `POC`;
-- PX00 maturity: `M1_PROTOTYPE`.
+## NEXT INTEGRATION SUMMIT
 
-Acceptance criteria:
-- provider/model/version identity pinned as far as provider semantics allow;
-- measurable success criteria declared before invocation;
-- PUBLIC/INTERNAL bounded input only for the first call;
-- input comes only through the governed bounded request/context path;
-- executor receives no implicit organizational or tool authority;
-- HTTPS allowlist, runtime credential and data-egress gates remain active;
-- request/output hashes and provider call evidence preserved;
-- output becomes candidate artifact, not truth;
-- independent verifier remains separate;
-- Socrates remains separate;
-- malformed/bad live output can be rejected and routed through rework;
-- existing security-block regression still stops before worker invocation;
-- no material external side effect is introduced to demonstrate AI integration;
-- provider/version/data-handling limitations are recorded rather than hidden.
+### SUMMIT-PX00-01 — First closed FATHER corporate loop on a Security task
+Once a suitable VERIFIED Security Knowledge slice is available and Agent Factory controls are ready:
 
-### Summit outcome
-After SUMMIT-FFB-02, PX00 will have evidence that the governed factory controls survive contact with a real non-deterministic AI worker. Only then is it credible to call the system an **Agent Factory MVP**, rather than a deterministic/test-double reference factory with live-provider readiness.
+`GOAL → PROJECT → PLAN → TASK → SECURITY ROLE → KB-SECURITY CONTEXT → AGENT → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
 
-## PRODUCT ROADMAP — NEXT NARROW BUILD
-Parallel but bounded priorities:
-1. **Runtime proof:** complete the first governed live executor.
-2. **Domain foundation:** begin measurable construction of the evidence-based `Security Knowledge Base` and its expert-ready gate.
+This will be the first proof that the runtime and a real canonical professional knowledge product work together without copying truth across repositories.
 
-Do not expand broad future factory tracks until one of these priorities demonstrates a direct dependency or a critical-risk need.
+### Following product proof
+Use a bounded VERIFIED slice of Security Knowledge for the first Compliance Engine PoC. PoC success cannot promote the full Compliance Engine beyond the maturity supported by the underlying canonical Security Knowledge scope.
 
 ## FOLLOWING SUMMITS
-
-### SUMMIT-FFB-03 — Governed external knowledge/input
-Adversarial trust-gate evidence, bounded retrieval/context, provenance and safe failure behavior.
-
-### SUMMIT-FFB-04 — Durable execution and replay
-Persistent artifact envelopes, transactions, recovery, durable rework and restart/replay semantics.
-
-### SUMMIT-PX00-01 — First closed FATHER corporate loop
-`GOAL → PROJECT → PLAN → TASK → ROLE → AGENT → KNOWLEDGE → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
-
-Preferred first domain proof: a bounded Security Knowledge/product task so platform progress and product progress reinforce each other.
-
-### FATHER V1 summit
-A working organizational skeleton where FATHER manages a project end to end and specialist agents remain replaceable, governed workers rather than hidden autonomous authorities.
+- `SUMMIT-FFB-03` — governed external knowledge/input;
+- `SUMMIT-FFB-04` — durable execution/replay;
+- `FATHER V1` — end-to-end governed organizational skeleton;
+- later Software Factory and Research Factory;
+- cyber-physical/robotic pilots only after digital operational maturity and safety-specific controls.
 
 ## JOURNAL RULE
 After every meaningful batch, update this file with:
