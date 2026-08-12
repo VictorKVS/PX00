@@ -3,7 +3,7 @@
 **Date:** 2026-08-12  
 **Status:** ACCEPTED FOR CONTRACT DESIGN  
 **Lifecycle decision:** KEEP / IMPLEMENT AFTER CONTRACT FIXTURES  
-**Primary ADR:** `architecture/adr/ADR-0016-minimal-governed-execution-kernel.md`
+**Primary ADR:** `architecture/adr/ADR-0020-minimal-governed-execution-kernel.md`
 
 ## Trigger
 
