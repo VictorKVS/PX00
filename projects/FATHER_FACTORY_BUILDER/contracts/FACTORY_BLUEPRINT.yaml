@@ -1,0 +1,56 @@
+schema_version: 0.1
+status: draft
+object_type: factory_blueprint
+project_ref: PROJECT-FFB-0001
+purpose: immutable reviewable specification of one designed factory before PX00/FATHER operation
+
+required_fields:
+  blueprint_id: {type: stable_id}
+  requirement_ref: {type: factory_requirement_reference}
+  version: {type: string}
+  target_maturity: {type: maturity_reference}
+  capability_refs: {type: list}
+  department_refs: {type: list}
+  role_blueprint_refs: {type: list}
+  protocol_refs: {type: list}
+  knowledge_binding_refs: {type: list}
+  resource_model_refs: {type: list}
+  system_boundary_refs: {type: list}
+  trust_boundary_refs: {type: list}
+  acceptance_matrix_ref: {type: stable_reference}
+  risk_refs: {type: list}
+  architectural_tension_refs: {type: list}
+  assumptions: {type: list}
+  residual_risks: {type: list}
+  maturity_limits: {type: list}
+  created_by_role_ref: {type: role_reference}
+  created_at: {type: utc_timestamp}
+  state: {type: enum, values: [CANDIDATE, IN_REVIEW, REWORK_REQUIRED, ACCEPTED_FOR_HANDOFF, REJECTED, SUPERSEDED]}
+
+optional_fields:
+  supersedes_blueprint_ref: {type: factory_blueprint_reference}
+  implementation_architecture_refs: {type: list}
+  socrates_review_ref: {type: stable_reference}
+  argus_audit_ref: {type: stable_reference}
+  handoff_ref: {type: stable_reference}
+  cost_model_ref: {type: stable_reference}
+  recovery_model_ref: {type: stable_reference}
+
+invariants:
+  - blueprint_is_immutable_after_creation
+  - revision_creates_new_blueprint_version
+  - factory_blueprint_does_not_grant_runtime_authority
+  - accepted_for_handoff_requires_no_unresolved_S4_on_target_maturity_path
+  - independent_review_cannot_be_self_attested_by_blueprint_producer
+  - role_capability_and_knowledge_logical_ids_survive_physical_repo_migration
+  - specialist_dissent_and_architectural_tensions_are_preserved
+  - executor_model_vendor_and_device_choices_do_not_define_role_or_capability_identity
+  - acceptance_and_risk_limits_are_explicit_before_handoff
+
+lifecycle:
+  - CANDIDATE
+  - IN_REVIEW
+  - REWORK_REQUIRED
+  - ACCEPTED_FOR_HANDOFF
+  - REJECTED
+  - SUPERSEDED
