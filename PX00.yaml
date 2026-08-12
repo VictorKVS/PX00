@@ -59,7 +59,7 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0014-pilot-dry-run-and-minimal-runtime-opening.md
+  latest_contract_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
 
 pilot_roles:
   ROLE-0201:
@@ -101,12 +101,31 @@ runtime_gate:
     - broad_orchestration_framework
     - live_knowledge_admission_from_model_output
 
+minimal_validator:
+  package: px00
+  entry_point: python -m px00 .
+  validator: px00/validator.py
+  dependency_file: requirements-validator.txt
+  direct_dependencies:
+    PyYAML: 6.0.3
+  tests: tests/test_validator.py
+  test_framework: python_stdlib_unittest
+  devsecops_baseline: security/DEVSECOPS_BASELINE_0_1.md
+  structural_record: Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md
+  architecture_decision: architecture/adr/ADR-0015-minimal-local-contract-validator.md
+  network_required: false
+  external_side_effects: false
+  authoring_unit_tests:
+    count: 12
+    state: PASS
+  real_local_repository_validation: PENDING
+
 current_phase:
   name: Architecture Baseline 0.1 - Executable Validation Gate
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0014
+    - architecture_adr_0001_0015
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -123,10 +142,14 @@ current_phase:
     - pilot_0001_contract_dry_run
     - pilot_0001_acceptance_record
     - minimal_runtime_opening
+    - minimal_machine_validation_representation_selected
+    - local_contract_validator_implemented
+    - synthetic_negative_tests_added
+    - direct_dependency_recorded_and_pinned
   next_gate:
-    - select_minimal_machine_validation_representation
-    - implement_local_contract_validator
-    - add_synthetic_negative_tests
-    - record_dependency_sbom_security_evidence_if_dependency_added
-    - add_minimal_ci_only_after_local_value_is_proven
+    - execute_validator_in_real_local_clone
+    - preserve_full_repository_validation_evidence
+    - fix_any_contract_or_validator_defects
+    - add_minimal_ci_if_local_gate_is_stable
+    - add_dependency_sbom_automation_before_releasable_distribution
   exit_gate: executable_contract_validation_passes_without_broad_runtime_or_external_side_effects
