@@ -31,6 +31,7 @@ Every material Factory Builder generation records:
 - First real cross-repository source-metadata snapshot has completed manifest → snapshot → ContextPackage → RUN trace → read-only replay.
 - `RISK-0012`: RESOLVED for bounded M1 cross-repository provenance/replay after ARGUS Audit 0002.
 - Decision materiality norm `PX00-NORM-DM-0001`: ACTIVE; Role Packages must declare materiality ranges/promotion triggers.
+- Professional decision context is now bound to exact RUN/role/assignment and persisted in trace/replay under TF-0071.
 - A true atomic VERIFIED Security requirement reasoning RUN remains NOT PROVEN.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
@@ -240,3 +241,17 @@ The norm is intentionally proportional: D0 local/conventional choices remain lig
 Risk remains independent, but S3 imposes at least D2 and S4 imposes D3 while retaining veto semantics.
 
 This makes Security's evidence-first discipline a reusable organizational principle for future architecture, programming, analytics, operations, finance, legal and engineering roles without copying Security-specific source semantics into those domains.
+
+## 2026-08-13 — FFBJ-0018 — Professional decision trace and replay
+Operationalized `PX00-NORM-DM-0001` inside the historical RUN evidence path.
+
+A governed professional decision can now be bound only after the materiality gate passes and its RUN/role/assignment identity matches the execution context. D2/D3 decisions require structured requirements, constraints, options, evidence and independent review; D3 additionally requires accountable approval.
+
+TRACE persists the minimum immutable professional-decision provenance envelope:
+`decision_ref + decision_digest + materiality_class`.
+
+Read-only replay fails closed if persisted decision context is omitted or substituted. Existing knowledge-only replay behavior remains backward compatible.
+
+Important restraint: the system preserves formal rationale/evidence references, not hidden model chain-of-thought. Trace integrity proves which decision record was used; it does not prove that the professional conclusion was correct.
+
+Next useful evidence is product value, not more provenance plumbing: close `SUMMIT-FFB-02` with one real governed AI inference and, when available, run one truly atomic VERIFIED Security requirement through a professional D2/D3 decision path.
