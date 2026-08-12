@@ -8,6 +8,10 @@ from px00.context_packages import (
 )
 
 
+D1 = "1" * 64
+D2 = "2" * 64
+
+
 class ContextPackageBuilderTests(unittest.TestCase):
     def setUp(self):
         self.builder = ContextPackageBuilder()
@@ -35,16 +39,36 @@ class ContextPackageBuilderTests(unittest.TestCase):
             purpose="security analysis",
         )
 
+    def obj(self, oid, otype, digest=D1, version="v1", route="KROUTE-SNAP-1", classification="PUBLIC"):
+        return KnowledgeObjectRef(oid, version, digest, otype, "KB-SECURITY", "controls", classification, route)
+
     def test_builds_bounded_immutable_context(self):
         candidates = (
-            KnowledgeObjectRef("SRC-2", "SRC", "KB-SECURITY", "controls", "PUBLIC", "KROUTE-SNAP-1"),
-            KnowledgeObjectRef("EVD-1", "EVD", "KB-SECURITY", "controls", "INTERNAL", "KROUTE-SNAP-1"),
-            KnowledgeObjectRef("CLM-1", "CLM", "KB-SECURITY", "controls", "PUBLIC", "KROUTE-SNAP-1"),
+            self.obj("SRC-2", "SRC"),
+            self.obj("EVD-1", "EVD", classification="INTERNAL"),
+            self.obj("CLM-1", "CLM"),
         )
         package = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=candidates, context_package_id="CTX-1")
         self.assertEqual(package.knowledge_object_refs, ("EVD-1", "SRC-2"))
+        self.assertEqual(package.knowledge_object_version_refs, (f"EVD-1@v1#{D1}", f"SRC-2@v1#{D1}"))
         self.assertEqual(package.route_snapshot_refs, ("KROUTE-SNAP-1",))
         self.assertEqual(len(package.package_hash), 64)
+
+    def test_content_change_under_same_object_id_changes_package_hash(self):
+        first = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC",D1),), context_package_id="CTX-1")
+        second = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC",D2),), context_package_id="CTX-2")
+        self.assertEqual(first.knowledge_object_refs, second.knowledge_object_refs)
+        self.assertNotEqual(first.knowledge_object_version_refs, second.knowledge_object_version_refs)
+        self.assertNotEqual(first.package_hash, second.package_hash)
+
+    def test_version_change_under_same_object_id_changes_package_hash(self):
+        first = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC",D1,"v1"),), context_package_id="CTX-1")
+        second = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC",D1,"v2"),), context_package_id="CTX-2")
+        self.assertNotEqual(first.package_hash, second.package_hash)
+
+    def test_invalid_digest_fails_closed(self):
+        with self.assertRaisesRegex(ValueError, "INVALID_KNOWLEDGE_CONTENT_DIGEST"):
+            self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC","bad"),), context_package_id="CTX-1")
 
     def test_role_mismatch_fails_closed(self):
         bad = KnowledgeBindingRef(**{**self.binding.__dict__, "role_ref": "ROLE-OTHER"})
@@ -62,16 +86,17 @@ class ContextPackageBuilderTests(unittest.TestCase):
             self.builder.build(req, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(), context_package_id="CTX-1")
 
     def test_physical_location_cannot_be_knowledge_id(self):
-        candidate = KnowledgeObjectRef("https://github.com/VictorKVS/SECURITY_KB/file", "SRC", "KB-SECURITY", "controls", "PUBLIC", "KROUTE-SNAP-1")
+        candidate = self.obj("https://github.com/VictorKVS/SECURITY_KB/file", "SRC")
         with self.assertRaisesRegex(ValueError, "PHYSICAL_LOCATION_USED_AS_KNOWLEDGE_ID"):
             self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(candidate,), context_package_id="CTX-1")
 
-    def test_physical_route_migration_does_not_change_logical_selection(self):
-        candidate_a = KnowledgeObjectRef("SRC-1", "SRC", "KB-SECURITY", "controls", "PUBLIC", "KROUTE-SNAP-OLD")
-        candidate_b = KnowledgeObjectRef("SRC-1", "SRC", "KB-SECURITY", "controls", "PUBLIC", "KROUTE-SNAP-NEW")
+    def test_physical_route_migration_preserves_logical_and_content_identity(self):
+        candidate_a = self.obj("SRC-1", "SRC", D1, "v1", "KROUTE-SNAP-OLD")
+        candidate_b = self.obj("SRC-1", "SRC", D1, "v1", "KROUTE-SNAP-NEW")
         first = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(candidate_a,), context_package_id="CTX-1")
         second = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(candidate_b,), context_package_id="CTX-2")
         self.assertEqual(first.knowledge_object_refs, second.knowledge_object_refs)
+        self.assertEqual(first.knowledge_object_version_refs, second.knowledge_object_version_refs)
         self.assertNotEqual(first.package_hash, second.package_hash)
 
 
