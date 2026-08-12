@@ -1,0 +1,32 @@
+registry_version: 0.1
+project_ref: PROJECT-FFB-0001
+scope: bounded Agent R&D Factory M1 reference MVP
+status: active
+
+patterns:
+  - pattern_id: FFB-FP-0001
+    pattern_type: VERIFICATION_REWORK_REQUIRED
+    first_observed_run_ref: MVP-FUNC-RUN-0002
+    first_observed_stage: VERIFY_AND_VALIDATE
+    evidence_refs: [RW-ART-007]
+    summary: independent verification found duplicate and ordering defects after the first implementation attempt
+    control_or_mitigation: explicit request_rework transition returns the failed RUN to IMPLEMENT_BOUNDED_PROTOTYPE while preserving failed evidence and lineage
+    status: CONTROLLED
+    related_risk_refs: [RISK-0010]
+    recurrence_count: 1
+
+  - pattern_id: FFB-FP-0002
+    pattern_type: SECURITY_SCOPE_BLOCK
+    first_observed_run_ref: MVP-FUNC-RUN-0003
+    first_observed_stage: SECURITY_PRECHECK
+    evidence_refs: [BLK-ART-005]
+    summary: a requested arbitrary shell execution exceeded the bounded M1 authority envelope and was stopped before prototype creation
+    control_or_mitigation: keep material external action outside this MVP until governed ActionRequest, AuthorityDecision, CapabilityGrant and Tool Boundary integration exists
+    status: CONTROLLED
+    related_risk_refs: [RISK-0002]
+    recurrence_count: 1
+
+notes:
+  - blocked-by-security is an expected safe outcome and must not be optimized away merely to increase delivery rate
+  - a later successful rework does not remove or rewrite the failed verification artifact
+  - future recurrences should increment or supersede observations without reusing pattern identity
