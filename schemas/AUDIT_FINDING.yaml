@@ -1,0 +1,35 @@
+schema_version: 0.1
+status: draft
+object_type: audit_finding
+purpose: record one independent reviewer finding and its lifecycle without losing history
+
+required_fields:
+  finding_id: {type: stable_id}
+  audit_ref: {type: audit_reference}
+  reviewer_role: {type: string}
+  target_refs: {type: list}
+  finding_type:
+    type: enum
+    values: [DEFECT, RISK, DESIGN_DEBT, CONTROL_GAP, UNPROVEN_ASSUMPTION, PROCESS_GAP, ORGANIZATIONAL_TENSION, SECURITY_WEAKNESS]
+  verdict: {type: enum, values: [STRONG_PASS, PASS, CONDITIONAL_PASS, FAIL, CRITICAL_FAIL, UNPROVEN]}
+  severity: {type: enum, values: [S0, S1, S2, S3, S4]}
+  statement: {type: text}
+  evidence_refs: {type: list}
+  recommendation: {type: text}
+  created_at: {type: utc_timestamp}
+  status: {type: enum, values: [OPEN, ACCEPTED, DISPUTED, FIX_REQUIRED, RISK_ACCEPTED, RESOLVED, SUPERSEDED]}
+
+conditional_fields:
+  risk_register_ref: {type: architectural_risk_reference}
+  owner_ref: {type: actor_or_role_reference}
+  resolution_refs: {type: list}
+  next_review_at: {type: utc_timestamp}
+
+invariants:
+  - reviewer_finding_is_not_self_approval
+  - critical_fail_requires_blocking_disposition_or_explicit_risk_acceptance
+  - open_finding_cannot_be_deleted
+  - disputed_finding_preserves_original_evidence
+  - resolved_finding_requires_verification_refs_in_linked_risk_or_resolution
+
+library_dependency: none
