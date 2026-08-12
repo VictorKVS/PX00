@@ -1,0 +1,189 @@
+blueprint_id: FFB-BP-0001
+requirement_ref: FFB-REQ-0001
+version: 0.1
+target_maturity: M1_PROTOTYPE
+state: IN_REVIEW
+created_by_role_ref: FFB-ROLE-0001
+created_at: 2026-08-12T18:05:00Z
+
+capability_refs:
+  - CAP-RD-001
+  - CAP-RD-002
+  - CAP-RD-003
+  - CAP-RD-004
+  - CAP-RD-005
+  - CAP-RD-006
+  - CAP-RD-007
+  - CAP-RD-008
+  - CAP-RD-009
+  - CAP-RD-010
+
+departments:
+  - department_id: RD-DEPT-MANAGEMENT
+    name: R&D Management
+    purpose: plan route observe replan escalate and close work
+    role_refs: [RD-ROLE-0001]
+  - department_id: RD-DEPT-RESEARCH
+    name: Research and Evidence
+    purpose: collect assess and preserve evidence and uncertainty
+    role_refs: [RD-ROLE-0002, RD-ROLE-0008]
+  - department_id: RD-DEPT-ENGINEERING
+    name: Architecture and Prototype Engineering
+    purpose: design solution alternatives and implement bounded prototypes
+    role_refs: [RD-ROLE-0003, RD-ROLE-0004]
+  - department_id: RD-DEPT-ASSURANCE
+    name: Verification Security and Independent Challenge
+    purpose: verify challenge and risk-gate material results independently from producers
+    role_refs: [RD-ROLE-0005, RD-ROLE-0006, RD-ROLE-0007]
+
+role_blueprint_refs:
+  - RD-ROLE-0001
+  - RD-ROLE-0002
+  - RD-ROLE-0003
+  - RD-ROLE-0004
+  - RD-ROLE-0005
+  - RD-ROLE-0006
+  - RD-ROLE-0007
+  - RD-ROLE-0008
+
+protocol_refs:
+  - PROTO-FFB-0001
+  - PROTO-RD-RESEARCH
+  - PROTO-RD-ARCHITECTURE
+  - PROTO-RD-PROTOTYPE
+  - PROTO-RD-VERIFY
+  - PROTO-RD-SECURITY-REVIEW
+  - PROTO-RD-SOCRATES
+  - PROTO-RD-KNOWLEDGE-ADMISSION
+  - PROTO-RD-DELIVERY
+
+knowledge_binding_refs:
+  - KB-RESEARCH
+  - KB-KNOWLEDGE-ENGINEERING
+  - KB-ARCHITECTURE
+  - KB-SYSTEMS-ENGINEERING
+  - KB-PROGRAMMING
+  - KB-DEVSECOPS
+  - KB-TESTING
+  - KB-QUALITY
+  - KB-SECURITY
+  - KB-AI-AGENTS
+  - KB-FACTORY-LESSONS
+
+resource_model_refs:
+  - RESOURCE-MODEL-RD-M1
+
+system_boundaries:
+  - boundary_id: RD-BOUNDARY-001
+    rule: prototype execution is limited to synthetic or public-safe environments
+  - boundary_id: RD-BOUNDARY-002
+    rule: external effects require separate PX00 ActionRequest AuthorityDecision CapabilityGrant and Tool Boundary
+  - boundary_id: RD-BOUNDARY-003
+    rule: Factory Builder blueprint never embeds credentials grants or live production secrets
+
+trust_boundaries:
+  - boundary_id: RD-TRUST-001
+    from: external_research_content
+    to: governed_knowledge
+    rule: provenance and admission required; retrieved or generated text is not authoritative by itself
+  - boundary_id: RD-TRUST-002
+    from: specialist_output
+    to: acceptance
+    rule: material producer claim requires independent verification or explicit unproven status
+  - boundary_id: RD-TRUST-003
+    from: context
+    to: material_action
+    rule: tainted or untrusted context cannot directly authorize sensitive action
+
+workflow:
+  - QUALIFY_PROBLEM
+  - RESEARCH_EVIDENCE
+  - ASSESS_CLAIMS
+  - DESIGN_ALTERNATIVES
+  - SECURITY_PRECHECK
+  - IMPLEMENT_BOUNDED_PROTOTYPE
+  - VERIFY_AND_VALIDATE
+  - SOCRATES_CHALLENGE
+  - SECURITY_RISK_GATE
+  - REWORK_IF_REQUIRED
+  - KNOWLEDGE_ADMISSION
+  - GOVERNED_DELIVERY
+
+handoffs:
+  - from: RD-ROLE-0001
+    to: RD-ROLE-0002
+    object: QUALIFIED_RESEARCH_BRIEF
+  - from: RD-ROLE-0002
+    to: RD-ROLE-0003
+    object: EVIDENCE_AND_CLAIM_PACKAGE
+  - from: RD-ROLE-0003
+    to: RD-ROLE-0006
+    object: CANDIDATE_ARCHITECTURE_FOR_SECURITY_PRECHECK
+  - from: RD-ROLE-0003
+    to: RD-ROLE-0004
+    object: APPROVED_PROTOTYPE_ARCHITECTURE
+  - from: RD-ROLE-0004
+    to: RD-ROLE-0005
+    object: PROTOTYPE_AND_REPRODUCTION_PACKAGE
+  - from: RD-ROLE-0005
+    to: RD-ROLE-0007
+    object: VERIFICATION_PACKAGE
+  - from: RD-ROLE-0007
+    to: RD-ROLE-0001
+    object: CRITICAL_REVIEW_FINDINGS
+  - from: RD-ROLE-0006
+    to: RD-ROLE-0001
+    object: SECURITY_AND_RISK_GATE_DECISION
+  - from: RD-ROLE-0001
+    to: RD-ROLE-0008
+    object: ACCEPTED_LESSON_AND_EVIDENCE_CANDIDATES
+  - from: RD-ROLE-0001
+    to: HUMAN-OWNER
+    object: GOVERNED_RD_DELIVERY_PACKAGE
+
+acceptance_matrix_ref: FFB-ACC-0001
+risk_refs:
+  - RISK-0002
+  - RISK-0003
+  - RISK-0004
+  - RISK-0005
+  - RISK-0006
+  - RISK-0007
+  - RISK-0008
+
+architectural_tension_refs:
+  - FFB-TENSION-0001
+  - FFB-TENSION-0002
+
+assumptions:
+  - M1 execution may use replaceable model-backed agents
+  - no production persistence is implied by reference stores
+  - first pilot uses no autonomous procurement or physical control
+
+residual_risks:
+  - RISK-0002 remains critical until adversarial trust gate is proven end-to-end
+  - reference persistence and concurrency controls remain below pilot-grade maturity
+  - exact executor snapshot remains incomplete for future replay-grade comparisons
+
+maturity_limits:
+  - M1 prototype only
+  - no live confidential customer data
+  - no autonomous material external effect
+  - no claim of production readiness
+  - no transition to M3 while unresolved S3 risks remain above maturity threshold
+  - any unresolved S4 blocks the affected maturity path
+
+review_requirements:
+  - independent Socrates review
+  - ARGUS audit
+  - Principal Software Engineer implementability review
+  - Quality and Assurance acceptance review
+  - Security and Risk maturity gate
+
+invariants:
+  - management_role_does_not_do_specialist_work
+  - producer_and_independent_verifier_assignments_must_differ
+  - role_and_capability_identity_do_not_depend_on_model_vendor
+  - blueprint_does_not_grant_runtime_authority
+  - specialist_dissent_is_preserved
+  - revisions_create_new_blueprint_version
