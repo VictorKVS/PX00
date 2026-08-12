@@ -5,6 +5,7 @@ from typing import Any, Iterable
 from uuid import uuid4
 
 from px00.policy import PolicyEngine, PolicyProfile, synthetic_policy_profiles
+from px00.profile_registry import PolicyProfileRegistry, PolicySnapshot
 from px00.tools.deterministic import BoundaryViolation, DeterministicMathTool
 
 
@@ -33,9 +34,13 @@ class ActionRequest:
 class AuthorityDecision:
     decision_id: str
     action_request_id: str
+    run_id: str
     result: str
     effective_autonomy: str
     reason_code: str
+    policy_snapshot_ref: str
+    policy_snapshot_hash: str
+    policy_hash_algorithm: str = "sha256"
     policy_refs: tuple[str, ...] = ()
     constraining_profile: str | None = None
 
@@ -68,6 +73,7 @@ class MaterialEvent:
 class GovernedResult:
     run_state: str
     action_request: ActionRequest
+    policy_snapshot: PolicySnapshot
     authority_decision: AuthorityDecision
     capability_grant: CapabilityGrant | None
     output: Any | None
@@ -76,12 +82,7 @@ class GovernedResult:
 
 
 class SyntheticGovernedKernel:
-    """First executable PX00 governed action proof.
-
-    It intentionally supports one synthetic S0 capability only: ``math.multiply``.
-    Policy is evaluated by :class:`px00.policy.PolicyEngine`; the kernel does
-    not own role/project/jurisdiction/tool authorization rules.
-    """
+    """First executable PX00 governed action proof with pinned policy lineage."""
 
     CAPABILITY = "math.multiply"
     TARGET = "synthetic://math.multiply"
@@ -94,6 +95,10 @@ class SyntheticGovernedKernel:
         self._tool = DeterministicMathTool()
         self._policy = PolicyEngine()
         self._profiles = tuple(profiles) if profiles is not None else synthetic_policy_profiles()
+        self._registry = PolicyProfileRegistry(self._profiles)
+        self._requested_profiles = {
+            profile.profile_type: (profile.profile_id, profile.version) for profile in self._profiles
+        }
 
     def prepare_request(
         self,
@@ -123,18 +128,35 @@ class SyntheticGovernedKernel:
             requested_adapter_hint=requested_adapter_hint,
         )
 
-    def evaluate_authority(self, request: ActionRequest, *, allow: bool) -> AuthorityDecision:
+    def create_policy_snapshot(self, request: ActionRequest) -> PolicySnapshot:
+        return self._registry.snapshot(run_id=request.run_id, requested=self._requested_profiles)
+
+    def evaluate_authority(
+        self,
+        request: ActionRequest,
+        *,
+        allow: bool,
+        policy_snapshot: PolicySnapshot | None = None,
+    ) -> AuthorityDecision:
+        snapshot = policy_snapshot or self.create_policy_snapshot(request)
+        if snapshot.run_id != request.run_id:
+            return self._lineage_denial(request, snapshot, "POLICY_SNAPSHOT_RUN_MISMATCH")
+
         if not allow:
             return AuthorityDecision(
                 decision_id=f"AUTH-{uuid4().hex[:12]}",
                 action_request_id=request.action_request_id,
+                run_id=request.run_id,
                 result="DENY",
                 effective_autonomy="A0",
                 reason_code="AUTHORITY_ABSENT",
+                policy_snapshot_ref=snapshot.snapshot_id,
+                policy_snapshot_hash=snapshot.snapshot_hash,
+                policy_refs=snapshot.profile_refs,
             )
 
         policy = self._policy.evaluate(
-            self._profiles,
+            snapshot.profiles,
             capability=request.capability,
             requested_autonomy=request.requested_autonomy,
             side_effect_class=request.side_effect_class,
@@ -144,9 +166,12 @@ class SyntheticGovernedKernel:
         return AuthorityDecision(
             decision_id=f"AUTH-{uuid4().hex[:12]}",
             action_request_id=request.action_request_id,
+            run_id=request.run_id,
             result=policy.result,
             effective_autonomy=policy.effective_autonomy,
             reason_code=policy.reason_code,
+            policy_snapshot_ref=snapshot.snapshot_id,
+            policy_snapshot_hash=snapshot.snapshot_hash,
             policy_refs=policy.profile_refs,
             constraining_profile=policy.constraining_profile,
         )
@@ -155,10 +180,16 @@ class SyntheticGovernedKernel:
         self,
         request: ActionRequest,
         authority: AuthorityDecision,
+        policy_snapshot: PolicySnapshot | None = None,
     ) -> CapabilityGrant | None:
+        snapshot = policy_snapshot or self.create_policy_snapshot(request)
         if authority.result != "ALLOW":
             return None
-        if authority.action_request_id != request.action_request_id:
+        if authority.action_request_id != request.action_request_id or authority.run_id != request.run_id:
+            return None
+        if authority.policy_snapshot_ref != snapshot.snapshot_id:
+            return None
+        if authority.policy_snapshot_hash != snapshot.snapshot_hash:
             return None
         return CapabilityGrant(
             grant_id=f"GRANT-{uuid4().hex[:12]}",
@@ -177,8 +208,10 @@ class SyntheticGovernedKernel:
         request: ActionRequest,
         *,
         allow: bool,
+        policy_snapshot: PolicySnapshot | None = None,
     ) -> GovernedResult:
-        authority = self.evaluate_authority(request, allow=allow)
+        snapshot = policy_snapshot or self.create_policy_snapshot(request)
+        authority = self.evaluate_authority(request, allow=allow, policy_snapshot=snapshot)
         events: list[MaterialEvent] = [
             self._event(request, "AUTHORITY_DECISION", authority.result, authority.reason_code)
         ]
@@ -187,6 +220,7 @@ class SyntheticGovernedKernel:
             return GovernedResult(
                 run_state=run_state,
                 action_request=request,
+                policy_snapshot=snapshot,
                 authority_decision=authority,
                 capability_grant=None,
                 output=None,
@@ -194,17 +228,18 @@ class SyntheticGovernedKernel:
                 blocking_reason=authority.reason_code,
             )
 
-        grant = self.issue_grant(request, authority)
+        grant = self.issue_grant(request, authority, snapshot)
         if grant is None:
-            events.append(self._event(request, "GRANT", "BLOCKED", "GRANT_NOT_ISSUED"))
+            events.append(self._event(request, "GRANT", "BLOCKED", "POLICY_LINEAGE_MISMATCH"))
             return GovernedResult(
                 run_state="BLOCKED",
                 action_request=request,
+                policy_snapshot=snapshot,
                 authority_decision=authority,
                 capability_grant=None,
                 output=None,
                 events=tuple(events),
-                blocking_reason="GRANT_NOT_ISSUED",
+                blocking_reason="POLICY_LINEAGE_MISMATCH",
             )
 
         try:
@@ -214,6 +249,7 @@ class SyntheticGovernedKernel:
             return GovernedResult(
                 run_state="BLOCKED",
                 action_request=request,
+                policy_snapshot=snapshot,
                 authority_decision=authority,
                 capability_grant=grant,
                 output=None,
@@ -226,10 +262,29 @@ class SyntheticGovernedKernel:
         return GovernedResult(
             run_state="COMPLETED",
             action_request=request,
+            policy_snapshot=snapshot,
             authority_decision=authority,
             capability_grant=consumed_grant,
             output=output,
             events=tuple(events),
+        )
+
+    def _lineage_denial(
+        self,
+        request: ActionRequest,
+        snapshot: PolicySnapshot,
+        reason: str,
+    ) -> AuthorityDecision:
+        return AuthorityDecision(
+            decision_id=f"AUTH-{uuid4().hex[:12]}",
+            action_request_id=request.action_request_id,
+            run_id=request.run_id,
+            result="DENY",
+            effective_autonomy="A0",
+            reason_code=reason,
+            policy_snapshot_ref=snapshot.snapshot_id,
+            policy_snapshot_hash=snapshot.snapshot_hash,
+            policy_refs=snapshot.profile_refs,
         )
 
     @staticmethod
