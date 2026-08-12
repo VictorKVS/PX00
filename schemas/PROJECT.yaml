@@ -1,0 +1,26 @@
+schema_version: 0.1
+status: draft
+object_type: project
+purpose: bind one or more goals to a bounded managed work container
+
+required_fields:
+  project_id: {type: stable_id}
+  goal_refs: {type: list}
+  owner_ref: {type: actor_reference}
+  scope_in: {type: list}
+  scope_out: {type: list}
+  state: {type: enum, values: [PLANNED, ACTIVE, PAUSED, COMPLETED, CANCELLED]}
+  created_at: {type: utc_timestamp}
+
+conditional_fields:
+  parent_project_ref: {type: project_reference}
+  deadline: {type: utc_timestamp}
+  budget_ref: {type: reference}
+
+invariants:
+  - project_has_at_least_one_goal
+  - scope_out_is_explicit
+  - project_does_not_grant_runtime_authority
+  - completion_requires_goal_acceptance_or_explicit_closure_reason
+
+library_dependency: none
