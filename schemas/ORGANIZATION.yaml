@@ -1,0 +1,22 @@
+schema_version: 0.1
+status: draft
+object_type: organization
+purpose: define governed corporate structure for PX00/FATHER
+
+required_fields:
+  organization_id:
+    type: stable_id
+  name:
+    type: string
+  departments:
+    type: department_reference_list
+  governance_profile_ref:
+    type: policy_profile_reference
+
+invariants:
+  - departments_have_declared_mandates
+  - roles_belong_to_declared_organizational_units
+  - organizational_structure_does_not_grant_runtime_authority_by_itself
+  - knowledge_is_bound_by_reference_not_copied_into_role_contracts
+
+library_dependency: none
