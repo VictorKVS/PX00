@@ -1,7 +1,7 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: claim_assessment
-purpose: immutable time-bounded assessment of one claim against an exact evidence set
+purpose: immutable time-bounded assessment of one claim against an exact evidence and quality-assessment set
 
 required_fields:
   assessment_id:
@@ -12,11 +12,17 @@ required_fields:
     type: utc_timestamp
   evaluator_ref:
     type: actor_or_component_reference
+  evaluator_version:
+    type: string
   status:
     type: enum
     values: [UNSUPPORTED, SINGLE_SOURCE, CORROBORATED, CONTRADICTED, DISPUTED, REFUTED]
   evidence_refs:
     type: ordered_EVD_reference_list
+  source_assessment_refs:
+    type: ordered_source_assessment_reference_list
+  evidence_assessment_refs:
+    type: ordered_evidence_assessment_reference_list
   evidence_set_hash:
     type: sha256_hex
   hash_algorithm:
@@ -38,11 +44,13 @@ conditional_fields:
 invariants:
   - assessment_is_immutable
   - assessment_references_exact_claim_version
-  - evidence_set_hash_is_over_canonical_ordered_evidence_refs_and_material_evidence_attributes
+  - evidence_set_hash_covers_evidence_and_quality_assessment_identity
+  - source_and_evidence_quality_must_be_governed_assessments_not_defaults
+  - missing_quality_assessment_fails_closed
   - later_assessment_does_not_modify_prior_assessment
-  - status_is_reproducible_from_evidence_set_and_evaluator_version
+  - status_is_reproducible_from_evidence_set_quality_set_and_evaluator_version
   - assessment_does_not_declare_absolute_truth
-  - removed_or_new_evidence_requires_new_assessment
+  - removed_new_or_reassessed_evidence_requires_new_assessment
   - contradiction_is_preserved
 
 non_goals:
