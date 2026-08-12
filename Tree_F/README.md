@@ -26,6 +26,22 @@ This accumulated corpus is intended to support architecture comparison, producti
 
 The only destructive exception is a formally authorized security/legal sanitation case (for example an accidentally committed secret or protected data). Such sanitation must preserve a public-safe tombstone or incident reference without reproducing the sensitive content.
 
+## Canonical structure evidence
+
+For repository/product structure, the canonical source is the Git-tracked file set, not the raw workstation filesystem.
+
+Use:
+
+```powershell
+git ls-files
+git status --short
+git diff --name-status <base>..<head>
+```
+
+`tree /F` may be preserved as supplementary diagnostic evidence, but it SHALL NOT define the canonical PX00 architecture because it can contain `.venv`, caches, package-manager internals and other generated or ignored local state.
+
+This distinction keeps structural history deterministic and comparable across developer machines and CI environments. See `TF-0016_2026-08-12_GIT_TRACKED_STRUCTURE_EVIDENCE.md`.
+
 ## Record rule
 
 For every material structural change create one record:
