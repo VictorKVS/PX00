@@ -30,9 +30,28 @@ STAGE_ARTIFACT_TYPES = {
     "GOVERNED_DELIVERY": "DELIVERY_PACKAGE",
 }
 
+GATED_VERDICT_STAGES = {
+    "SECURITY_PRECHECK",
+    "VERIFY_AND_VALIDATE",
+    "SOCRATES_CHALLENGE",
+}
+
 
 def _canonical_payload(payload: dict[str, object]) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _declared_verdict_matches(stage: str, payload: dict[str, object], outcome: str) -> bool:
+    if stage not in GATED_VERDICT_STAGES:
+        return True
+    verdict = payload.get("verdict")
+    if not isinstance(verdict, str):
+        raise ValueError("ARTIFACT_VERDICT_REQUIRED")
+    if stage == "SOCRATES_CHALLENGE":
+        pass_verdicts = {"PASS", "PASS_WITH_FINDING", "PASS_WITH_ACTIONS"}
+        fail_verdicts = {"FAIL", "REWORK", "BLOCK"}
+        return verdict in (pass_verdicts if outcome == "PASS" else fail_verdicts)
+    return verdict == outcome
 
 
 @dataclass(frozen=True)
@@ -183,6 +202,9 @@ class AgentRdFactoryMvp:
             raise ValueError("FRESH_STAGE_ARTIFACT_REQUIRED")
         if not artifact.verify_digest():
             raise ValueError("ARTIFACT_DIGEST_MISMATCH")
+        payload = json.loads(artifact.payload_json)
+        if not _declared_verdict_matches(stage, payload, outcome):
+            raise ValueError("ARTIFACT_OUTCOME_MISMATCH")
 
         if stage == "IMPLEMENT_BOUNDED_PROTOTYPE":
             if run.untrusted_input_present and not run.trust_gate_passed:
