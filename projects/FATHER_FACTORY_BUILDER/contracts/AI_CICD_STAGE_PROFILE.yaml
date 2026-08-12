@@ -1,0 +1,79 @@
+schema_version: 0.1
+status: draft
+object_type: ai_cicd_stage_profile
+purpose: scale CI/CD controls with delivery evidence stage without prematurely building production infrastructure
+
+required_fields:
+  ci_profile_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  delivery_stage:
+    type: enum
+    values: [DEMO, POC, MVP, PRODUCTION]
+  required_checks: {type: list}
+  required_artifacts: {type: list}
+  deployment_policy: {type: string}
+  failure_policy: {type: string}
+
+stage_defaults:
+  DEMO:
+    required_checks:
+      - basic_repository_validation
+    required_artifacts:
+      - demo_or_scenario_artifact
+    deployment_policy: no_production_deployment_required
+  POC:
+    required_checks:
+      - lint_or_static_validation
+      - unit_or_experiment_tests
+      - reproducibility_check
+      - dependency_consistency
+    required_artifacts:
+      - experiment_result
+      - technical_metrics
+      - known_risks_and_data_gaps
+    deployment_policy: deployment_automation_optional_and_disposable
+  MVP:
+    required_checks:
+      - unit_tests
+      - integration_tests
+      - data_contract_or_data_quality_tests
+      - security_checks
+      - build_reproducibility
+    required_artifacts:
+      - versioned_build_or_model_artifact
+      - test_results
+      - staging_or_uat_evidence
+    deployment_policy: minimal_automated_staging_or_controlled_release_with_rollback
+  PRODUCTION:
+    required_checks:
+      - full_regression
+      - security_and_dependency_gates
+      - release_policy_gate
+      - model_or_executor_quality_gate
+      - operational_readiness_gate
+    required_artifacts:
+      - immutable_release_artifact
+      - provenance_or_attestation
+      - release_evidence
+      - rollback_material
+    deployment_policy: governed_promotion_to_production_with_sla_observability_and_rollback
+
+recommended_workflow_controls:
+  - explicit_event_triggers
+  - jobs_with_declared_dependencies
+  - upstream_failure_blocks_dependent_promotion
+  - timeouts_for_bounded_execution
+  - concurrency_control_where_duplicate_runs_are_harmful
+  - build_and_test_outputs_preserved_as_workflow_artifacts_when_evidence_is_needed
+  - matrix_testing_only_when_multiple_supported_environments_or_versions_are_material
+
+invariants:
+  - ci_cd_complexity_must_follow_stage_need_not_hype
+  - poc_may_be_disposable_but_results_must_be_reproducible_enough_for_go_no_go
+  - failed_required_job_cannot_promote_release
+  - build_artifact_and_deployment_action_are_separate_concerns
+  - production_release_requires_governed_artifact_promotion_not_rebuild_by_hand
+  - workflow_success_is_not_business_acceptance
+  - ci_profile_does_not_grant_runtime_authority
+
+library_dependency: none
