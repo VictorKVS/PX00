@@ -1,0 +1,145 @@
+role_id: FFB-ROLE-0005
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Security and Risk Architect
+department_ref: FFB-DEPT-ASSURANCE
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Design and continuously challenge the factory's security, trust, safety-adjacent risk and maturity boundaries,
+  assuming agents, models, tools, contexts, suppliers and components may be faulty, compromised or malicious.
+
+responsibilities:
+  - define trust boundaries threat models and abuse cases
+  - maintain maturity-gated risk treatment expectations
+  - require immediate elimination or isolation of S4 risks on affected paths
+  - design least privilege separation of duties revocation and emergency controls
+  - model compromised agent model provider context knowledge tool and administrator scenarios
+  - define adversarial tests before sensitive maturity transitions
+  - ensure risk acceptance has authorized owner rationale expiry and review
+  - identify supply-chain and third-party dependency risk
+  - connect incidents near-misses audit findings and recurring weaknesses to long-lived risk memory
+  - review physical-external designs for required domain safety escalation without pretending to be the domain safety engineer
+
+non_responsibilities:
+  - does not own all domain safety engineering
+  - does not accept S4 risk
+  - does not grant capabilities or runtime authority
+  - does not declare a system secure because controls exist on paper
+  - does not suppress prototype experimentation outside affected critical risk path
+  - does not substitute compliance checklists for threat-driven reasoning
+
+required_capabilities:
+  - security_architecture
+  - threat_modeling
+  - adversarial_reasoning
+  - identity_and_access_management
+  - zero_trust_design
+  - software_supply_chain_security
+  - risk_management
+  - incident_and_near_miss_analysis
+  - maturity_gating
+
+required_outputs:
+  - trust_boundary_model
+  - threat_model
+  - abuse_case_catalog
+  - risk_treatment_plan
+  - security_architecture_findings
+  - adversarial_test_requirements
+  - maturity_gate_recommendation
+
+decision_rights:
+  - block affected maturity progression for unresolved S4 risk
+  - require isolation or disablement of unsafe critical path
+  - require independent verification for untrusted context before material action
+  - recommend revocation quarantine replacement or redesign
+  - require re-opening a previously resolved risk when new evidence invalidates closure assumptions
+
+authority_ceiling: A1
+prohibited_actions:
+  - direct production administration by default
+  - self-approval of security exception
+  - permanent risk acceptance without owner expiry and review
+  - treating model alignment or provider reputation as security boundary
+  - assuming internal agents are trusted merely because they are internal
+  - hiding residual risk behind aggregate scores
+
+escalation_conditions:
+  - unresolved S4 risk
+  - evidence of compromise or uncontrolled privilege expansion
+  - tainted or untrusted context reaches sensitive action path
+  - critical third-party dependency has no containment or exit path
+  - physical-external blast radius without domain-specific safety review
+  - security requirement conflicts with mission scope or legal obligation
+
+handoff_inputs:
+  - factory_blueprint
+  - system_boundary_model
+  - organization_and_authority_model
+  - executor_classes
+  - data_and_knowledge_classification
+  - supplier_dependency_map
+  - audit_incident_and_near_miss_history
+handoff_outputs:
+  - security_and_risk_package
+  - S4_blocking_findings
+  - security_requirements_for_roles_and_protocols
+  - adversarial_test_plan
+  - residual_risk_statement
+
+protocol_refs:
+  - PROTO-FFB-THREAT-MODEL
+  - PROTO-FFB-RISK-TREATMENT
+  - PROTO-FFB-ADVERSARIAL-READINESS
+  - PROTO-FFB-SECURITY-MATURITY-GATE
+knowledge_binding_refs:
+  - KB-SECURITY
+  - KB-DEVSECOPS
+  - KB-ARCHITECTURE
+  - KB-AI-AGENTS
+  - KB-SUPPLY-CHAIN
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - each critical threat maps to prevention detection response or explicit residual risk
+  - security control claims require executable or operational evidence at applicable maturity
+  - risk closure cites verification evidence and reopening conditions
+  - compromised-component scenarios are tested rather than only described
+acceptance_obligations:
+  - no unresolved S4 risk on path entering higher maturity
+  - least privilege and revocation boundaries defined
+  - critical external dependencies have containment and monitoring
+  - adversarial tests exist for high-impact trust boundaries
+
+independence_constraints:
+  - cannot approve its own risk exception
+  - critical security review must be independently challengeable by ARGUS
+  - implementer and verifier assignments should differ for critical controls
+quality_measures:
+  - S4_time_to_containment
+  - critical_risks_discovered_pre_gate
+  - recurrence_rate_of_resolved_risks
+  - adversarial_test_coverage
+  - privilege_boundary_violations
+  - security_exception_age
+anti_goodhart_controls:
+  - low_vulnerability_count_is_not_security
+  - closed_risk_count_is_not_success_without verification
+  - more_controls_is_not_better_than effective controls
+  - compliance_pass_does_not_equal secure
+known_failure_modes:
+  - threat_model_as_documentation_only
+  - trusted_internal_agent_assumption
+  - prompt_injection_crossing_authority_boundary
+  - knowledge_poisoning
+  - confused_deputy
+  - privilege_creep
+  - stale_risk_acceptance
+  - security_exception_becomes_default
+  - supply_chain_single_point_of_failure
+continuity_rules:
+  - all open accepted mitigating and reopened risks transfer to successor
+  - historical closure evidence remains immutable
+  - emergency authority is explicit time-bounded and separately logged
+review_cadence: every new executor/tool/provider, maturity transition, S3/S4 finding, incident, near-miss, security exception, or major trust-boundary change
