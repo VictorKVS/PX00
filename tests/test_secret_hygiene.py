@@ -28,13 +28,17 @@ class SecretHygieneTests(unittest.TestCase):
         self.assertTrue(all(marker not in item.message for item in findings))
 
     def test_generic_secret_assignment_is_rejected(self) -> None:
+        key = "client" + "_secret"
         value = "candidate" + "Value123"
-        findings = scan_text(f"client_secret={value}\n", "fixture.env")
+        findings = scan_text(f"{key}={value}\n", "fixture.env")
         self.assertTrue(any(item.kind == "generic_secret_assignment" for item in findings))
         self.assertTrue(all(value not in item.message for item in findings))
 
     def test_placeholder_assignment_is_allowed(self) -> None:
-        findings = scan_text("api_key=replace_me\npassword=not_set\n", "fixture.env")
+        key_one = "api" + "_key"
+        key_two = "pass" + "word"
+        fixture = f"{key_one}=replace_me\n{key_two}=not_set\n"
+        findings = scan_text(fixture, "fixture.env")
         self.assertEqual(findings, [])
 
 
