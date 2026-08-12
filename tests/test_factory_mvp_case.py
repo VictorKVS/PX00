@@ -11,12 +11,16 @@ from px00.factory_mvp_case import (
 
 
 class FactoryFunctionalMvpCaseTests(unittest.TestCase):
-    def test_idempotency_key_is_deterministic_and_scoped(self):
+    def test_idempotency_key_is_deterministic_scoped_and_unambiguous(self):
         a = derive_idempotency_key("R1", "DELIVER", "T1")
         self.assertEqual(a, derive_idempotency_key("R1", "DELIVER", "T1"))
         self.assertNotEqual(a, derive_idempotency_key("R2", "DELIVER", "T1"))
         self.assertNotEqual(a, derive_idempotency_key("R1", "ARCHIVE", "T1"))
         self.assertNotEqual(a, derive_idempotency_key("R1", "DELIVER", "T2"))
+        self.assertNotEqual(
+            derive_idempotency_key("A|B", "C", "D"),
+            derive_idempotency_key("A", "B|C", "D"),
+        )
         self.assertEqual(len(a), 64)
 
     def test_full_functional_case_delivers_typed_artifact_chain(self):
