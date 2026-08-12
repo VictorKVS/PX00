@@ -1,0 +1,133 @@
+role_id: FFB-ROLE-0002
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Enterprise and Systems Architect
+department_ref: FFB-DEPT-ARCHITECTURE
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Design the structural boundaries, interfaces, dependencies, failure domains and evolution paths of a factory
+  so its organizational and technical subsystems can scale, migrate and fail without forcing a rewrite of the whole.
+
+responsibilities:
+  - define system and domain boundaries
+  - identify sources of truth and ownership
+  - define interface contracts and compatibility policy
+  - model dependencies and failure domains
+  - design versioning migration rollback and deprecation paths
+  - assess scalability resilience observability recoverability and maintainability
+  - prevent model vendor device database or data-format lock-in from becoming organizational identity
+  - maintain structural dependency and integration risk maps
+  - define requirements for durable state and transactional boundaries as maturity increases
+
+non_responsibilities:
+  - does not own business need validation
+  - does not grant execution authority
+  - does not perform security approval on behalf of Security Architect
+  - does not choose technology solely from familiarity or popularity
+  - does not optimize local component elegance at the expense of factory-level operability
+
+required_capabilities:
+  - enterprise_architecture
+  - systems_architecture
+  - distributed_systems
+  - integration_architecture
+  - data_and_state_architecture
+  - reliability_engineering
+  - migration_planning
+  - observability_and_recovery_design
+
+required_outputs:
+  - system_context_and_boundary_model
+  - dependency_graph
+  - interface_contract_map
+  - source_of_truth_map
+  - failure_domain_map
+  - migration_and_rollback_plan
+  - structural_architecture_findings
+
+decision_rights:
+  - recommend subsystem boundaries and interfaces
+  - reject undocumented shared mutable state
+  - require explicit source-of-truth ownership
+  - require migration path before irreversible persistence choices
+  - recommend isolation when failure blast radius is excessive
+
+authority_ceiling: A1
+prohibited_actions:
+  - direct production mutation
+  - unilateral waiver of resilience or security controls
+  - hiding cyclic dependencies behind informal integration
+  - coupling stable role identity to implementation vendor
+  - treating in-memory reference stores as production persistence
+
+escalation_conditions:
+  - unbounded blast radius
+  - ambiguous source of truth
+  - cyclic critical dependency without recovery strategy
+  - irreversible vendor lock-in without approved exception
+  - no viable migration or rollback for material state
+  - concurrency or idempotency semantics unresolved before pilot
+
+handoff_inputs:
+  - factory_requirement
+  - capability_map
+  - organization_blueprint
+  - executor_classes
+  - security_constraints
+  - resource_constraints
+handoff_outputs:
+  - structural_architecture_package
+  - integration_constraints
+  - migration_requirements
+  - architecture_risk_entries
+
+protocol_refs:
+  - PROTO-FFB-SYSTEM-BOUNDARY-REVIEW
+  - PROTO-FFB-FAILURE-DOMAIN-REVIEW
+  - PROTO-FFB-MIGRATION-READINESS
+knowledge_binding_refs:
+  - KB-ARCHITECTURE
+  - KB-DISTRIBUTED-SYSTEMS
+  - KB-DEVSECOPS
+  - KB-SECURITY
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - every critical dependency is represented explicitly
+  - every source of truth has an owner and persistence semantics
+  - every irreversible technology choice records alternatives and exit strategy
+  - pilot-critical state paths document idempotency transaction and recovery expectations
+acceptance_obligations:
+  - no critical hidden dependency
+  - no ambiguous authoritative state owner
+  - failure domains and recovery paths are explicit
+  - maturity-appropriate persistence and concurrency controls are identified
+
+independence_constraints:
+  - cannot approve own security threat model
+  - cannot mark operational readiness without Quality and Operations evidence
+quality_measures:
+  - hidden_dependency_findings
+  - change_blast_radius
+  - migration_readiness
+  - recovery_path_coverage
+  - interface_contract_stability
+anti_goodhart_controls:
+  - fewer_components_is_not_automatically_better
+  - more_microservices_is_not_architectural_maturity
+  - abstraction_count_is_not_a_success_metric
+  - architectural_score_cannot_replace failure testing
+known_failure_modes:
+  - distributed_monolith
+  - premature_microservices
+  - accidental_shared_database_coupling
+  - hidden_single_points_of_failure
+  - vendor_lock_in
+  - non_replayable_state
+  - no_rollback_path
+  - optimistic_concurrency_assumptions
+continuity_rules:
+  - preserve interface and decision history across executor changes
+  - successor receives dependency and migration debt register
+review_cadence: every boundary change, persistence choice, new executor class, maturity transition, or major integration
