@@ -1,0 +1,46 @@
+schema_version: 0.1
+status: draft
+object_type: architecture_radar_entry
+purpose: preserve proactive architectural foresight about decisions that may constrain future capability horizons
+
+required_fields:
+  radar_entry_id: {type: stable_id}
+  subject_ref: {type: canonical_reference}
+  horizon:
+    type: enum
+    values: [H1_AGENT_FACTORY, H2_SOFTWARE_SERVICE_FACTORY, H3_RESEARCH_FACTORY, H4_CYBER_PHYSICAL_FACTORY, H5_GENERALIZED_PRODUCTION]
+  assumption: {type: text}
+  failure_mode: {type: text}
+  reversibility:
+    type: enum
+    values: [EASY, MODERATE, EXPENSIVE, PRACTICALLY_IRREVERSIBLE]
+  lock_in_risk:
+    type: enum
+    values: [LOW, MEDIUM, HIGH, CRITICAL]
+  blast_radius:
+    type: enum
+    values: [LOCAL, DOMAIN, MULTI_DOMAIN, ORGANIZATION, PHYSICAL_EXTERNAL]
+  maturity_trigger:
+    type: enum
+    values: [NOW, BEFORE_M2, BEFORE_M3, BEFORE_M4, BEFORE_M5]
+  recommendation:
+    type: enum
+    values: [KEEP, EXPERIMENT, ABSTRACT_NOW, DEFER_WITH_GUARD, REPLACE, STOP]
+  rationale: {type: text}
+  owner_ref: {type: actor_reference}
+  created_at: {type: utc_timestamp}
+
+optional_fields:
+  risk_refs: {type: list}
+  evidence_refs: {type: list}
+  mitigation_refs: {type: list}
+  next_review_at: {type: utc_timestamp}
+  supersedes_ref: {type: architecture_radar_reference}
+
+invariants:
+  - radar_entry_does_not_grant_authority
+  - practically_irreversible_decisions_require_explicit_review_before_material_commitment
+  - critical_lock_in_cannot_be_silently_deferred
+  - physical_external_blast_radius_requires_safety_review_before_real_world_execution
+  - old_radar_entries_are_preserved_when_assumptions_change
+  - broad_future_vision_does_not_expand_current_authority
