@@ -26,8 +26,9 @@ Every material Factory Builder generation records:
 - Live HTTPS provider secret/data-egress boundary: locally proven and CI-green.
 - Real provider-specific driver and authorized live call: pending.
 - `RISK-0011`: MITIGATING, not resolved.
-- Product portfolio: canonical master roadmap now lives in `VictorKVS/KNOWLEDGE_CORE/father/product-roadmap/`.
+- Product portfolio: canonical master roadmap lives in `VictorKVS/KNOWLEDGE_CORE/father/product-roadmap/`.
 - Security Knowledge: canonical professional product lives in `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`; Factory Builder binds to `KB-SECURITY` instead of copying domain truth.
+- Cross-repository snapshot consumer and producer contracts: implemented; first real exported/replayed `SEC-*` slice remains open under `RISK-0012`.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
 
@@ -162,22 +163,34 @@ PX00 duplicate Security Knowledge coverage/readiness/source-backlog/runtime-gate
 Factory Builder rule:
 `ROLE KNOWLEDGE REQUIREMENT ≠ OWNED LOCAL KNOWLEDGE COPY`.
 
-A role requiring Security knowledge binds to stable `KB-SECURITY`; FATHER resolves the canonical route and pins the resulting knowledge/version context for reproducibility.
-
 Security Knowledge remains evidence-first and is not ordinary RAG over PDFs. Canonical pipeline:
 `SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
 
 `VERIFIED` requires an admitted primary source and exact locator.
 
-Parallel decision: `SUMMIT-FFB-02` may proceed independently; live-provider readiness is not a blocker for normative corpus production. Live-model output later used for extraction/interpretation remains candidate knowledge until admitted through canonical review.
+Parallel decision: `SUMMIT-FFB-02` may proceed independently; live-provider readiness is not a blocker for normative corpus production.
 
-Current gate:
-- `LIVE_PROVIDER_BOUNDARY_READY = YES`;
-- `LIVE_PROVIDER_PROVEN = NO`;
-- `SUMMIT-FFB-02 = OPEN`;
-- `SEC-PROD-0001 = ACTIVE CORPUS BUILD, NOT EXPERT_READY`.
+## 2026-08-12 — FFBJ-0014 — Cross-repository knowledge snapshot pinning
+Introduced the reusable boundary that separates current knowledge routing from immutable historical RUN context.
 
-Next actions:
-1. continue canonical Security Knowledge corpus roadmap in KNOWLEDGE_CORE;
-2. complete exactly one authorized live-provider pilot in PX00;
-3. later combine them in the first closed FATHER Security-domain loop using a VERIFIED knowledge slice.
+Pattern:
+`ROLE KNOWLEDGE BINDING → ACTIVE ROUTE → PRODUCER SELECTION → IMMUTABLE KNOWLEDGE SNAPSHOT → CONTEXT PACKAGE → RUN`.
+
+Implemented in PX00:
+- `KNOWLEDGE_SNAPSHOT`;
+- fail-closed snapshot builder;
+- ContextPackage snapshot hashing;
+- canonical `KB-SECURITY` external route;
+- negative/reproducibility tests.
+
+Implemented in KNOWLEDGE_CORE:
+- producer-side Security Knowledge snapshot export schema.
+
+Key invariant:
+`ACTIVE ROUTE != HISTORICAL SNAPSHOT`.
+
+Snapshot integrity records which knowledge was supplied; it does not create truth, applicability, acceptance or authority.
+
+`RISK-0012` is MITIGATING: contracts exist on both sides, but one real exported `SEC-*` slice and historical replay after KNOWLEDGE_CORE head advancement remain to be proven.
+
+Next Factory Builder evidence: use a real VERIFIED Security Knowledge slice through the snapshot boundary in the first Security-domain FATHER loop.
