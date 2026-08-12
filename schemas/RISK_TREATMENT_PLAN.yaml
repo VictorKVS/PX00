@@ -1,0 +1,39 @@
+schema_version: 0.1
+status: draft
+object_type: risk_treatment_plan
+purpose: bind one architectural risk to immediate containment, final remediation, maturity gates and verification evidence
+
+required_fields:
+  treatment_id: {type: stable_id}
+  risk_ref: {type: architectural_risk_reference}
+  severity: {type: enum, values: [S0, S1, S2, S3, S4]}
+  affected_scope_refs: {type: list}
+  immediate_treatment_type:
+    type: enum
+    values: [ELIMINATE, REDUCE, ISOLATE, DISABLE, TRANSFER, ACCEPT, MONITOR]
+  immediate_actions: {type: list}
+  final_remediation_actions: {type: list}
+  owner_ref: {type: actor_or_role_reference}
+  latest_unresolved_maturity:
+    type: enum
+    values: [M0_CONCEPT, M1_PROTOTYPE, M2_INTEGRATED_PROTOTYPE, M3_CONTROLLED_PILOT, M4_PRE_PRODUCTION, M5_PRODUCTION]
+  verification_criteria: {type: list}
+  status:
+    type: enum
+    values: [PLANNED, CONTAINING, CONTAINED, REMEDIATING, VERIFYING, CLOSED, BLOCKED]
+
+optional_fields:
+  containment_evidence_refs: {type: list}
+  remediation_evidence_refs: {type: list}
+  next_review_at: {type: utc_timestamp}
+  residual_risk_ref: {type: architectural_risk_reference}
+
+invariants:
+  - s4_cannot_use_accept_or_monitor_as_primary_treatment
+  - s4_requires_immediate_eliminate_isolate_disable_or_verified_reduce
+  - containment_is_not_final_remediation
+  - maturity_promotion_requires_verified_containment_for_remaining_risks
+  - closure_requires_verification_evidence
+  - treatment_history_is_append_only
+
+library_dependency: none
