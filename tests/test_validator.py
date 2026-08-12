@@ -7,6 +7,7 @@ from pathlib import Path
 from px00.validator import (
     validate_acceptance_fixture_document,
     validate_protocol_document,
+    validate_repository,
     validate_role_document,
     validate_tree_f,
 )
@@ -156,6 +157,14 @@ class TreeFValidationTests(unittest.TestCase):
             (tree / "TF-0001_A.md").write_text("# 1", encoding="utf-8")
             (tree / "TF-0003_C.md").write_text("# 3", encoding="utf-8")
             self.assertIn("TREE_F_SEQUENCE_GAP", codes(validate_tree_f(root)))
+
+
+class RepositoryIntegrationTests(unittest.TestCase):
+    def test_current_repository_contracts(self):
+        root = Path(__file__).resolve().parents[1]
+        issues = validate_repository(root)
+        details = "\n".join(f"{item.code} {item.path}: {item.message}" for item in issues)
+        self.assertEqual(issues, [], details)
 
 
 if __name__ == "__main__":
