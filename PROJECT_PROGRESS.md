@@ -35,7 +35,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current path:
 `executor boundary → lifecycle/risk gates → secret/data-egress boundary → concrete Gemini driver/profile ✅ → one authorized real inference ⏭ → verifier → Socrates → ARGUS`.
 
-Latest generation: **`TF-0073 — Gemini Provider Driver Readiness`**.
+Latest generation: **`TF-0074 — Security Source-Pack CI Gate`**.
 
 ### Product portfolio
 Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
@@ -56,16 +56,26 @@ Status: **active corpus construction; NOT EXPERT_READY**.
 Canonical pipeline:
 `SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
 
-TF-0072 strengthened the proof floor:
+TF-0072 strengthened the requirement proof floor:
 - corpus scan: **9 requirement files / 82 atomic requirements / 0 strict VERIFIED requirements** at the observed baseline;
 - missing verification state is conservatively `UNVERIFIED`;
 - `VERIFIED` requires source document identity + exact locator + source quote;
 - FSTEK-31 atoms that lacked source quotes were corrected from VERIFIED to REVIEWED without deleting atomization.
 
-First promotion target: `FSTEK31-REQ-001`, locator `p. 10`.
+TF-0074 closes a separate source-pack CI gap:
+- canonical `security-knowledge/corpus/**/*source-pack*.yaml|yml` changes now trigger a dedicated validator;
+- VERIFIED source metadata requires official publication identity/date/HTTPS official URL;
+- VERIFIED atomic facts require resolvable source IDs, locator and conservative statement;
+- the first implementation failure was preserved and corrected without weakening VERIFIED semantics;
+- `Security Source Pack Gate` run 3 on KNOWLEDGE_CORE commit `4333a0d9ddb51a53044d9564a8a7afb2b85a84e1` passed.
+
+First requirement promotion target remains: `FSTEK31-REQ-001`, locator `p. 10`.
 
 Current professional Security D3 run state:
 **`BLOCKED_BY_KNOWLEDGE_PROOF_FLOOR`** until a truly VERIFIED applicable atomic requirement exists.
+
+Important distinction:
+`SOURCE PACK GATE PASS != VERIFIED APPLICABLE REQUIREMENT != EXPERT_READY`.
 
 ## CROSS-REPOSITORY KNOWLEDGE BOUNDARY
 Status: **PROVEN ✅ M1 BOUNDED**.
@@ -152,6 +162,12 @@ First concrete provider mapping:
 Invariant:
 `DRIVER READY != LIVE CALL PROVEN != SUMMIT ACCEPTED`.
 
+### TF-0074 — Security Source-Pack CI Gate ✅ BOUNDED
+A dedicated KNOWLEDGE_CORE gate now validates declared Security Knowledge source packs instead of relying on generic CI/indexing. The first gate run failed on validator scope/type defects; corrections preserved the failure evidence and the third run passed.
+
+Invariant:
+`SOURCE PACK GATE PASS != REQUIREMENT PROOF != APPLICABILITY != EXPERT READINESS`.
+
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — verifier can force explicit implementation rework.
 - `FFB-FP-0002 SECURITY_SCOPE_BLOCK` — safe refusal is a valid outcome.
@@ -162,7 +178,8 @@ Invariant:
 - mutable knowledge routing and immutable historical context are separate;
 - trace integrity proves history, not professional truth;
 - a field named VERIFIED is not evidence — promotion conditions must be executable;
-- provider-neutrality must be tested against a real provider contract, not inferred from naming.
+- provider-neutrality must be tested against a real provider contract, not inferred from naming;
+- a specialized proof gate must select only the artifact class whose semantics it actually validates; broad globs can create false failures and false confidence.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 PX00 remains a bounded reference implementation, not production maturity.
@@ -176,7 +193,8 @@ Most relevant:
 - `RISK-0011` — **MITIGATING**: Gemini-specific mapping/auth/data-egress behavior is locally tested, but no authorized real provider inference has yet been admitted as evidence.
 
 Security product blocker:
-- 0 strict VERIFIED atomic requirements at TF-0072 baseline, so expert D3 Security reasoning cannot yet be claimed.
+- 0 strict VERIFIED atomic requirements at TF-0072 baseline, so expert D3 Security reasoning cannot yet be claimed;
+- TF-0074 strengthens source-pack admission but does not remove the requirement-level blocker.
 
 ## PARALLEL ACTIVE PRIORITIES
 
@@ -184,7 +202,7 @@ Security product blocker:
 Continue factual corpus production without lowering proof floors.
 
 Immediate integration target:
-`FSTEK31-REQ-001 REVIEWED → exact primary-source quote + locator + semantic review → VERIFIED`.
+`FSTEK31-REQ-001 REVIEWED → exact primary-source quote + locator + semantic review + applicability → VERIFIED`.
 
 Then run one bounded D3 professional Security decision.
 
