@@ -1,16 +1,16 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: knowledge_binding
-purpose: bind PX00 roles/protocols to governed knowledge domains stored outside PX00
+purpose: bind PX00 roles/protocols to stable governed knowledge spaces resolved outside PX00
 
 required_fields:
   binding_id:
     type: stable_id
   role_ref:
     type: ROLE_reference
-  knowledge_repository:
-    type: string
-  domain_path:
+  knowledge_space_id:
+    type: stable_id
+  logical_domain:
     type: string
   access_mode:
     type: enum
@@ -25,8 +25,8 @@ optional_fields:
     type: string_list
   classification_ceiling:
     type: classification_label
-  version_or_ref:
-    type: string
+  route_constraint_ref:
+    type: knowledge_route_reference
   freshness_policy_ref:
     type: policy_reference
 
@@ -35,10 +35,18 @@ invariants:
   - binding_does_not_grant_tool_authority_by_itself
   - role_uses_knowledge_only_for_declared_purpose
   - protocol_context_constrains_binding_use
-  - knowledge_repository_identity_is_explicit
+  - knowledge_space_identity_is_stable_and_independent_of_physical_repository
+  - physical_repository_or_path_is_resolved_via_knowledge_route
   - write_or_admission_requires_separate_governed_action
 
-reference_repository:
-  repository: VictorKVS/KNOWLEDGE_CORE
+reference_knowledge_spaces:
+  - KB-PROGRAMMING
+  - KB-SECURITY
+  - KB-ARCHITECTURE
+  - KB-DEVSECOPS
+  - KB-PRODUCT
+  - KB-RESEARCH
+  - KB-OSINT
+  - KB-AI-AGENTS
 
 library_dependency: none
