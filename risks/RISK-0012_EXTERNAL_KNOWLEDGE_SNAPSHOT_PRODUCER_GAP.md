@@ -1,88 +1,100 @@
 # RISK-0012 — External Knowledge Snapshot Producer Gap
 
-Status: MITIGATING
+Status: RESOLVED
 Severity: S3
+Resolution scope: M1 bounded cross-repository provenance/replay
 Category: KNOWLEDGE / CROSS-REPOSITORY / REPRODUCIBILITY / INTEGRITY
-Source: TF-0067 design pass; narrowed by TF-0068
+Source: TF-0067 design pass; narrowed by TF-0068; resolved by TF-0069
 Owner: FFB-ROLE-0004 Knowledge Architect + FFB-ROLE-0006 Principal Software Engineer
+Independent review: ARGUS_AUDIT_0002 — PASS_WITH_RESTRICTIONS
 
-## Risk
-A real Security Knowledge source-metadata slice now crosses the producer/consumer boundary with historical Git verification, manifest integrity, PX00 snapshot pinning and ContextPackage construction. The remaining gap is narrower: the pinned context has not yet been carried through an actual FATHER RUN and replay verifier after further canonical knowledge evolution.
+## Original risk
+PX00/FATHER needed to consume actively changing canonical knowledge from `VictorKVS/KNOWLEDGE_CORE` while preserving the exact historical knowledge state used by a RUN. Without a producer manifest, immutable repository/object pinning and replay binding, historical runs could silently follow a newer `main` or lose the provenance needed to reproduce a decision.
 
-Without RUN/replay evidence, we still cannot claim end-to-end historical decision reproducibility even though the external knowledge transport boundary itself is now materially proven.
+## Resolution evidence
+### Producer-side canonical evidence
+`VictorKVS/KNOWLEDGE_CORE` now provides:
+- `security-knowledge/corpus/snapshot-export-schema.yaml`;
+- real producer manifest `SEC-SNAPSHOT-0001`;
+- historical Git validation using full checkout history and `git show <pinned_commit>:<path>`;
+- CI verification of exact object SHA-256 and manifest digest.
 
-## Proven in TF-0067
-PX00:
-- `KNOWLEDGE_SNAPSHOT` contract;
-- immutable 40-hex Git commit pinning instead of `main/latest` for historical state;
-- exact `object_id@version_id#sha256_content_digest` selection references;
-- snapshot digest over repository, commit, route, content root and sorted selected object versions;
-- `KB-SECURITY` route to `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`;
-- ContextPackage hashing of `knowledge_snapshot_refs`;
-- fail-closed negative tests.
+The first real object is `FSB-117-2025` at pinned commit:
+`8f7e1cb7a5abec39e0432ce7a811591a5dcadc8d`.
 
-KNOWLEDGE_CORE:
-- `security-knowledge/corpus/snapshot-export-schema.yaml` producer contract;
-- selection remains distinct from verification;
-- retrieval/model output cannot promote knowledge state.
+Pinned source-card digest:
+`5bdfd92728c6be35cdbffba5c57bb843bf1f3e48813c47fab2a755a5a3351710`.
 
-## Additional evidence proven in TF-0068
-### First real canonical object
-Producer manifest `SEC-SNAPSHOT-0001` pins:
-- object: `FSB-117-2025`;
-- exact historical repository commit: `8f7e1cb7a5abec39e0432ce7a811591a5dcadc8d`;
-- exact source-card content digest: `5bdfd92728c6be35cdbffba5c57bb843bf1f3e48813c47fab2a755a5a3351710`;
-- state: `SOURCE_VERIFIED`;
-- official publication locator: `publication.pravo.gov.ru:0001202503260008`.
+Producer manifest digest:
+`8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2`.
 
-The source record itself explicitly says full text and atomization remain pending. TF-0068 therefore preserves `SOURCE_VERIFIED` and does not promote the object to VERIFIED requirement knowledge.
+The repository head advanced after the pinned commit, while historical validation continued to pass.
 
-### Historical producer validation
-`Knowledge Quality Gate` now checks snapshots with full Git history using:
-`git show <pinned_commit>:<path>`.
+### Consumer-side evidence
+PX00 now provides:
+- `KNOWLEDGE_SNAPSHOT`;
+- `KnowledgeManifestBridge` with independent producer-digest recomputation;
+- state/classification/freshness preservation;
+- `RunKnowledgeBinder` matching RUN/role/assignment to ContextPackage and snapshot set;
+- knowledge-bound persisted trace manifests;
+- read-only replay that fails closed if a recorded knowledge context is omitted or changed.
 
-The repository head advanced beyond the pinned commit, yet CI successfully re-read the historical source card and verified its SHA-256. This proves the manifest does not silently follow current `main`.
+Pinned runtime snapshot digest:
+`04d5ec28431e8c13863dab9896533435dac735ceb36b6bf59e4f05eea1f7eac3`.
 
-### Manifest-envelope hardening
-A pre-acceptance review found that classification and freshness were not initially inside the manifest digest. The envelope was strengthened before acceptance so the digest now covers:
-- schema version;
-- repository/commit/root/request;
-- object/version/type/path/content digest;
-- knowledge state;
-- source locator;
-- freshness state;
-- classification;
-- selection reason.
+The first fixed integration ContextPackage proof uses hash:
+`9c09e6a4075f25ce2e341d1b0bd2fa4f59dedadf364019492be337893c220a2a`.
 
-Tampering with state, locator, classification or freshness is rejected by PX00 consumer tests.
+TF-0069 additionally creates a bounded governed RUN whose trace manifest stores:
+- ContextPackage ref/hash;
+- knowledge snapshot ref/digest;
+- producer manifest ref/digest.
 
-### PX00 real-manifest bridge
-`px00/knowledge_manifest_bridge.py` independently recomputes the producer manifest digest and creates the runtime `KNOWLEDGE_SNAPSHOT` without changing knowledge state.
+Read-only replay verifies event/policy lineage and the expected knowledge context. Negative tests prove replay fails when:
+- knowledge context is omitted;
+- context package hash changes;
+- snapshot digest changes;
+- producer state/locator/classification/freshness is tampered;
+- context belongs to another RUN.
 
-Regression evidence pins exact values:
-- producer manifest digest: `8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2`;
-- PX00 runtime snapshot digest: `04d5ec28431e8c13863dab9896533435dac735ceb36b6bf59e4f05eea1f7eac3`;
-- ContextPackage hash: `9c09e6a4075f25ce2e341d1b0bd2fa4f59dedadf364019492be337893c220a2a`.
+### Epistemic restraint preserved
+The first real slice is intentionally only `SOURCE_VERIFIED` because the canonical FSB record states full text and atomization are still pending.
 
-PX00 stores only an integration receipt/reference, not a duplicate Security Knowledge truth object.
+Resolution of this risk therefore proves **historical knowledge provenance/replay**, not expert Security reasoning.
 
-## Remaining evidence before closure
-- carry the real snapshot-bound ContextPackage through an actual PX00/FATHER RUN;
-- preserve the snapshot/package references in RUN/trace evidence;
-- advance canonical Security Knowledge again;
-- replay the historical RUN and prove it still verifies against the pinned snapshot/context rather than the new head;
-- repeat later with a true atomic VERIFIED requirement slice, because TF-0068 proves source-metadata transport, not expert requirement reasoning.
+`SOURCE_VERIFIED ≠ VERIFIED REQUIREMENT` remains mandatory.
 
-## Immediate containment
-- mutable branch resolution is never historical snapshot identity;
-- no closed FATHER Security loop may claim reproducible knowledge context without immutable snapshot refs;
-- canonical Security Knowledge remains in KNOWLEDGE_CORE and is not copied into PX00;
-- knowledge state, classification and freshness are producer-signed-by-digest material and may not be silently altered by the consumer;
-- `SOURCE_VERIFIED` is not `VERIFIED REQUIREMENT`.
+## Independent review
+`ARGUS_AUDIT_0002_KNOWLEDGE_BOUND_REPLAY.md` returns `PASS_WITH_RESTRICTIONS` and permits resolution only for the bounded M1 provenance/replay claim.
 
-## Closure condition
-Prove:
+The audit explicitly rejects broader claims of:
+- full-text regulatory verification;
+- applicability;
+- compliance;
+- expert Security reasoning;
+- production durability;
+- live AI correctness;
+- complete FATHER corporate loop.
 
-`KNOWLEDGE_REQUEST → canonical selection → historical manifest → PX00 KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE → RUN → TRACE/REPLAY`
+## Reopen conditions
+Reopen RISK-0012 if any of the following occurs:
+- historical replay resolves mutable `main/latest` instead of pinned state;
+- a material RUN omits ContextPackage/snapshot/manifest provenance;
+- producer manifest schema changes without compatible consumer evidence;
+- consumer code silently upgrades producer knowledge state;
+- classification/freshness or another use-affecting field can change outside integrity protection;
+- repository/storage migration makes pinned historical objects unavailable or unverifiable;
+- a new knowledge backend cannot provide equivalent immutable version/content provenance.
 
-and show the same historical RUN verifies after KNOWLEDGE_CORE head advances, without resolving knowledge from the newer head.
+## Related remaining risks
+Resolution does not replace:
+- durable store/recovery risks such as RISK-0003;
+- production concurrency/transaction concerns;
+- external/untrusted input risks;
+- artifact-envelope integrity concerns;
+- live-provider risk RISK-0011.
+
+## Next maturity proof
+Repeat the same path with a truly atomic `VERIFIED` Security requirement slice and use it in a bounded professional reasoning task with independent expert/Socrates review.
+
+That future proof is a different maturity claim and cannot inherit this resolution automatically.
