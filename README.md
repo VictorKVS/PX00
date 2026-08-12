@@ -61,15 +61,53 @@ The dry-run verified the declared contract behavior for supported claims, unsupp
 
 Architecture decisions: [`ADR-0013`](architecture/adr/ADR-0013-first-governed-role-pilots-analyst-and-critical-reviewer.md) and [`ADR-0014`](architecture/adr/ADR-0014-pilot-dry-run-and-minimal-runtime-opening.md).
 
+## Minimal executable validator
+
+The first code is intentionally narrow and local:
+
+```text
+requirements-validator.txt
+px00/
+├── __init__.py
+├── __main__.py
+└── validator.py
+
+tests/
+└── test_validator.py
+```
+
+Purpose: verify current PX00 contracts, pilot Role Packages, protocol bounds, acceptance gates, references, obvious high-risk secret fields and contiguous `Tree_F` numbering. It performs no network requests, model calls or external side effects.
+
+Run locally:
+
+```powershell
+python -m pip install -r requirements-validator.txt
+python -m unittest discover -s tests -v
+python -m px00 .
+python -m px00 . --json
+```
+
+Direct dependency: `PyYAML==6.0.3`. Tests use Python standard-library `unittest` rather than adding another framework dependency.
+
+Evidence and controls:
+
+- [`ADR-0015`](architecture/adr/ADR-0015-minimal-local-contract-validator.md)
+- [`TF-0009`](Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md)
+- [`DEVSECOPS_BASELINE_0_1.md`](security/DEVSECOPS_BASELINE_0_1.md)
+- [`VALIDATOR-0001 authoring verification`](assurance/runs/VALIDATOR-0001_AUTHORING_VERIFICATION_2026-08-12.md)
+
+Authoring unit tests: `12/12 PASS`. Full validation against the owner's real local clone is the next acceptance gate; production runtime remains blocked.
+
 ## Development evidence
 
 PX00 development is treated as an auditable production chain, not only as Git history.
 
 - [`DEVELOPMENT_JOURNAL.md`](DEVELOPMENT_JOURNAL.md) — chronological index: what changed, why, evidence, algorithms/dependencies, DevOps/security conclusion, evaluation and next gate.
 - [`Tree_F/`](Tree_F/README.md) — append-only material repository-structure history and per-file engineering dossiers.
-- `Tree_F/TF-0001..TF-0008` — accumulated structural generations; accepted historical records are not deleted during normal evolution.
+- `Tree_F/TF-0001..TF-0009` — accumulated structural generations; accepted historical records are not deleted during normal evolution.
 - [`TF-0007`](Tree_F/TF-0007_2026-08-11_FIRST_GOVERNED_ROLE_PILOTS.md) — first concrete Role Package generation.
 - [`TF-0008`](Tree_F/TF-0008_2026-08-11_PILOT_DRY_RUN_AND_MINIMAL_RUNTIME_GATE.md) — pilot dry-run evidence and narrow runtime gate.
+- [`TF-0009`](Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md) — first executable validation generation.
 
 Git remains the byte-level source of truth. The journal and `Tree_F` explain the production chain and support future `KEEP | IMPROVE | REPLACE | ROLLBACK | EXPERIMENT` decisions, including controlled A/B comparisons.
 
@@ -77,6 +115,6 @@ Git remains the byte-level source of truth. The journal and `Tree_F` explain the
 
 `Architecture Baseline 0.1 — Executable Validation Gate`.
 
-The contract-first gate is now open **only** for a minimal local validator/fixture runner using synthetic/public-safe data and no external side effects. Production agents, live customer data, network mutation and broad orchestration infrastructure remain blocked.
+The contract-first gate is open **only** for a minimal local validator/fixture runner using synthetic/public-safe data and no external side effects. Production agents, live customer data, network mutation and broad orchestration infrastructure remain blocked.
 
 The repository does **not** claim conformity or certification to any standard merely because a standard is referenced or mapped. Formal conformance/certification requires the applicable assessment process.
