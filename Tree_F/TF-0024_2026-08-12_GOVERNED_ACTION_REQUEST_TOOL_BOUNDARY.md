@@ -3,7 +3,7 @@
 **Date:** 2026-08-12  
 **Status:** ACCEPTED FOR CONTRACT DESIGN  
 **Lifecycle decision:** KEEP / CONTRACT BEFORE ADAPTERS  
-**Primary ADR:** `architecture/adr/ADR-0017-governed-action-request-and-tool-boundary.md`
+**Primary ADR:** `architecture/adr/ADR-0021-governed-action-request-and-tool-boundary.md`
 
 ## Trigger
 
