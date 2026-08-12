@@ -21,7 +21,8 @@ Every material Factory Builder generation records:
 - FFB-0 Internal Incubation: ACTIVE
 - Current strategic objective: `SUMMIT-FFB-01 — Agent Factory Blueprint`
 - First audited concept blueprint: `FFB-BP-0001-V2 v0.2 — PASS_WITH_ACTIONS at M0_CONCEPT`
-- M1 prototype gate: BLOCKED until declared M1 acceptance criteria pass, including treatment of `RISK-0002`.
+- M1 strategy: MVP-first, frozen by `FFB-MVP-0001`.
+- M1 harness: implemented; repository/audit gate pending.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
 
@@ -96,4 +97,24 @@ Achievement: Factory Builder has completed its first full design → criticism �
 
 Maturity impact: `SUMMIT-FFB-01` has reached its concept-design sub-summit, but operational Agent Factory Blueprint acceptance remains incomplete until the M1 contract/runtime evidence is built.
 
-Next gate: define the governed `PROTO-RD-*` chain, enforce producer/verifier assignment separation, and eliminate or verified-isolate `RISK-0002` before attempting M1.
+## 2026-08-12 — FFBJ-0006 — MVP-first execution cut
+Adopted an explicit MVP-first strategy after the audited M0 concept. Created `FFB-MVP-0001` and froze the smallest M1 scope before further architecture expansion.
+
+Implemented the first executable deterministic Agent R&D Factory harness in `px00/factory_mvp.py` with tests in `tests/test_factory_mvp.py`.
+
+The MVP enforces:
+- strict problem-to-delivery stage order;
+- independent producer and verifier assignments;
+- explicit trust gate for untrusted input;
+- security precheck before bounded prototype execution;
+- verification and Socrates before delivery;
+- append-only run identity and trace;
+- no material external action.
+
+Deliberately deferred until after MVP: live LLM providers, production database, distributed queue, UI, multi-tenancy, confidential/regulated data, autonomous external tools, production SLA, scaling, rich dashboards, automatic role generation, robotics and broad optimization work.
+
+Risk decision: `RISK-0002` is not claimed closed. It is isolated for this narrow MVP through synthetic/explicitly gated input and absence of material external action. Wider scope remains blocked until adversarial trust-gate evidence exists.
+
+Maturity impact: M1 moved from architecture-only backlog to executable implementation. M1 is not yet accepted; repository CI and Socrates/ARGUS review of executable evidence remain mandatory.
+
+Next gate: validate the executable harness, review negative-gate evidence, and issue M1 PASS or REWORK without adding nonessential features.
