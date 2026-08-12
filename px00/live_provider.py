@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import hashlib
 import json
 import os
+import re
 import time
 from typing import Mapping, Protocol
 from urllib.error import HTTPError, URLError
@@ -12,6 +13,7 @@ from urllib.request import Request, urlopen
 
 
 DATA_CLASSIFICATIONS = {"PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"}
+_AUTH_HEADER_RE = re.compile(r"^[A-Za-z0-9-]+$")
 
 
 def _canonical_json(value: object) -> str:
@@ -35,6 +37,8 @@ class LiveProviderProfile:
     timeout_seconds: int
     max_response_bytes: int
     allowed_data_classifications: tuple[str, ...]
+    auth_header_name: str = "Authorization"
+    auth_header_prefix: str = "Bearer "
     status: str = "ACTIVE"
 
     def validate(self) -> None:
@@ -56,6 +60,10 @@ class LiveProviderProfile:
             raise ValueError("INVALID_LIVE_PROVIDER_DATA_CLASSIFICATION")
         if not self.auth_secret_env_ref or not self.live_enable_env_ref:
             raise ValueError("LIVE_PROVIDER_ENV_REF_REQUIRED")
+        if not _AUTH_HEADER_RE.fullmatch(self.auth_header_name):
+            raise ValueError("LIVE_PROVIDER_AUTH_HEADER_INVALID")
+        if "\r" in self.auth_header_prefix or "\n" in self.auth_header_prefix:
+            raise ValueError("LIVE_PROVIDER_AUTH_PREFIX_INVALID")
 
 
 @dataclass(frozen=True)
@@ -192,7 +200,7 @@ class LiveHttpsExecutorAdapter:
         started = time.monotonic()
         response = self.transport.post_json(
             url=self.profile.endpoint_url,
-            headers={"Authorization": f"Bearer {auth_value}"},
+            headers={self.profile.auth_header_name: f"{self.profile.auth_header_prefix}{auth_value}"},
             payload=request_payload,
             timeout_seconds=self.profile.timeout_seconds,
             max_response_bytes=self.profile.max_response_bytes,
