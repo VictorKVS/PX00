@@ -1,0 +1,40 @@
+registry_version: 0.1
+project_ref: PROJECT-FFB-0001
+status: incubation
+
+roles:
+  - role_id: FFB-ROLE-0001
+    canonical_name: Chief Factory Architect
+    package_ref: roles/FFB-ROLE-0001_CHIEF_FACTORY_ARCHITECT.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0002
+    canonical_name: Enterprise and Systems Architect
+    package_ref: roles/FFB-ROLE-0002_ENTERPRISE_SYSTEMS_ARCHITECT.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0003
+    canonical_name: Organization Architect
+    package_ref: roles/FFB-ROLE-0003_ORGANIZATION_ARCHITECT.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0004
+    canonical_name: Knowledge Architect
+    package_ref: roles/FFB-ROLE-0004_KNOWLEDGE_ARCHITECT.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0005
+    canonical_name: Security and Risk Architect
+    package_ref: roles/FFB-ROLE-0005_SECURITY_RISK_ARCHITECT.yaml
+    state: PROPOSED
+
+future_core_roles:
+  - Principal Software Engineer
+  - Quality and Assurance Architect
+  - Capability Architect
+  - Resource and Economics Architect
+  - Socrates Independent Reviewer
+  - ARGUS Audit Council
+
+rules:
+  - role_exists_before_executor_assignment
+  - every_material_role_has_explicit_non_responsibilities
+  - role_knowledge_is_bound_by_logical_ids
+  - no_role_may_expand_its_own_authority
+  - conflicting_independent_review_must_use_separate_assignment
