@@ -21,6 +21,7 @@ class TaskRouterTests(unittest.TestCase):
         self.context = ContextPackage(
             context_package_id="CTX-1", knowledge_request_ref="KREQ-1", run_ref="RUN-1", role_ref="ROLE-ANALYST",
             assignment_ref="ASSIGN-ANALYST-1", binding_refs=("KBI-ANALYSIS",), knowledge_object_refs=("EVD-1",),
+            knowledge_object_version_refs=(f"EVD-1@v1#{'1' * 64}",),
             route_snapshot_refs=("KBROUTE-1@v1",), package_hash="a" * 64,
         )
         self.request = TaskRoutingRequest("TASK-1", "RUN-1", "ANALYZE_EVIDENCE", "PROTO-ANALYSIS")
