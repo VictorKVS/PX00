@@ -259,4 +259,36 @@ Create a RADAR entry when any of the following appears repeatedly or materially:
 - S2: track, assign owner and deadline/maturity trigger.
 - S1/S0: improve/observe, but promote if recurrence or impact rises.
 
+# Quantitative risk overlay
+Qualitative S0..S4 remains the governance/severity language. It is now complemented, not replaced, by `QUANTITATIVE_RISK_ASSESSMENT` when probability and impact can be meaningfully estimated.
+
+Minimum quantitative inputs:
+- probability of occurrence over a declared horizon;
+- impact minimum;
+- impact mode / most likely value;
+- impact maximum;
+- impact unit such as money, downtime, compute budget or delay days;
+- tolerance limit;
+- percentile level;
+- simulation trial count and random seed.
+
+Reference simulation model for bounded estimates:
+`LOSS = BERNOULLI(probability) × TRIANGULAR(minimum, mode, maximum)`.
+
+Report at least three outputs separately:
+1. expected loss / mean;
+2. tail percentile (for example P95);
+3. probability that loss exceeds the declared tolerance.
+
+Rules:
+- mean loss must never hide tail risk;
+- probability above tolerance must be visible even when mean is acceptable;
+- simulation seed and trial count are pinned so the estimate can be reproduced;
+- distributions are assumptions and must carry evidence/owner/horizon;
+- correlated risks must not be silently treated as independent in portfolio calculations;
+- quantitative results do not auto-accept risk and do not override an S4 veto;
+- uncertainty in the input estimate is itself a risk and should be exposed rather than converted into false precision.
+
+This overlay is suitable for project/economic risks, API/compute cost, schedule delay, outage impact and similar measurable consequences. Some legal, safety, security or ethical risks may still require qualitative veto rules regardless of modeled expected loss.
+
 The atlas is versioned and expected to grow from incidents, audits, research and new factory domains.
