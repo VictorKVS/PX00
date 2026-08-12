@@ -8,11 +8,14 @@
 - Repository visibility: `public`.
 - Default branch: `main`.
 - Connected account has administrative repository permission.
-- Repository rulesets endpoint was rechecked after the structure-evidence gate and again returned an empty set (`[]`): no repository ruleset is currently visible through the API used for this verification.
+- Repository rulesets endpoint has repeatedly returned an empty set (`[]`): no repository ruleset is currently visible through the API used for this verification.
 - Minimal GitHub Actions contract-validation workflow exists and has successful hosted runs.
-- Minimal dependency provenance / SBOM gate is implemented and accepted in CI.
-- Accepted dependency-provenance CI run: `31570702457`.
-- Accepted test result: `17/17 PASS` plus repository contract validation `PASS`, `0 errors`, `0 warnings`.
+- Minimal dependency provenance / CycloneDX SBOM gate is implemented and accepted in hosted CI and reproduced in the owner's isolated local `.venv`.
+- Local isolated dependency-provenance result: `17/17 PASS`, `pip check` clean, repository validator `PASS`, `0 errors`, `0 warnings`.
+- Dependency artifact hash locking is implemented for the two currently verified execution targets: CPython 3.10 Windows x86-64 and Linux manylinux x86-64.
+- Hosted Linux hash-lock execution passed in GitHub Actions run `31571447150`.
+- Hosted hash-lock test result: `19/19 PASS`, `pip check` clean, repository validator `PASS`, `0 errors`, `0 warnings`.
+- Failed workflow run `31571384335` is preserved as development evidence; it was caused by YAML scalar representation of the new install command and was corrected without disabling the security control.
 
 ## Not verified through the current GitHub integration
 
@@ -26,40 +29,42 @@ A `403` is **not** evidence that the feature is disabled and is **not** evidence
 ## Current control state
 
 ```text
-CI contract validation             PASS
-Dependency provenance / SBOM gate  PASS
-Workflow token permission           contents: read
-Action identities pinned            YES
-Repository rulesets visible         NONE
-main branch protection              UNVERIFIED
-Secret scanning                     UNVERIFIED
-Push protection                     UNVERIFIED
-Required status check enforcement   UNVERIFIED
-Signed commit requirement            NOT REQUIRED BY CURRENT BASELINE
-Release signing                     NOT IMPLEMENTED
-Artifact hash locking               NOT IMPLEMENTED
-External SBOM schema validation     NOT IMPLEMENTED
-Vulnerability monitoring            NOT IMPLEMENTED
+CI contract validation                 PASS
+Dependency provenance / SBOM gate      PASS
+Local isolated SBOM reproduction       PASS
+Hosted Linux artifact hash lock        PASS
+Windows artifact hash execution        PENDING LOCAL VERIFICATION
+Workflow token permission               contents: read
+Action identities pinned                YES
+Repository rulesets visible             NONE
+main branch protection                  UNVERIFIED
+Secret scanning                         UNVERIFIED
+Push protection                         UNVERIFIED
+Required status check enforcement       UNVERIFIED
+Signed commit requirement               NOT REQUIRED BY CURRENT BASELINE
+Release signing                         NOT IMPLEMENTED
+External SBOM schema validation         NOT IMPLEMENTED
+Vulnerability monitoring                NOT IMPLEMENTED
 ```
 
 ## Security interpretation
 
-The repository now detects contract regressions and direct dependency/SBOM drift automatically. The accepted SBOM baseline records the current direct dependency and provenance metadata without adding a new runtime library.
+The repository now detects contract regressions, direct dependency/SBOM drift, dependency-lock drift and missing SHA256 artifact hashes. The hosted Linux dependency installation is constrained by exact version, binary-only selection and locally recorded SHA256 values.
 
-However, a successful CI workflow does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists.
+The Windows artifact hash is recorded but is not yet accepted as an executed control until the owner recreates/uses the isolated `.venv` with `--require-hashes --only-binary=:all:` and reruns the test suite.
 
-Therefore CI **execution** and the dependency-provenance gate are accepted, while CI **enforcement as a merge/push gate** remains unproven.
+A successful CI workflow still does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists. Therefore CI **execution** is accepted while CI **enforcement as a merge/push gate** remains unproven.
 
 Secret-scanning controls must also be verified separately before PX00 can claim repository-level secret prevention/detection coverage.
 
 ## Required next controls
 
-1. Verify or establish a `main` branch/ruleset policy appropriate to the project's current single-maintainer phase.
-2. Require the `PX00 Contract Validation / Validate contracts` check before governed merges once PR-based change control becomes the normal workflow.
-3. Verify secret scanning and push protection for the public repository.
-4. Keep workflow permissions read-only and action dependencies pinned.
-5. Before a releasable distribution, evaluate artifact hash locking, external SBOM schema validation, vulnerability scanning and release provenance/signing.
+1. Execute the Windows hash-locked install in the isolated local `.venv` and preserve the result.
+2. Verify or establish a `main` branch/ruleset policy appropriate to the project's current single-maintainer phase.
+3. Require the `PX00 Contract Validation / Validate contracts` check before governed merges once PR-based change control becomes the normal workflow.
+4. Verify secret scanning and push protection for the public repository.
+5. Before a releasable distribution, decide the minimum justified vulnerability-monitoring and release-signing controls.
 
 ## Occam constraint
 
-Do not add enterprise-grade approval bureaucracy merely for appearance. The minimum useful repository control is: prevent silent bypass of the accepted contract gate while keeping emergency recovery possible and traceable.
+Do not add enterprise-grade approval bureaucracy or a large dependency-management stack merely for appearance. Current minimum useful supply-chain controls are: exact pin + SBOM + SHA256 artifact lock + deterministic tests + CI enforcement of the lock. Repository change-control enforcement remains a separate unresolved gate.
