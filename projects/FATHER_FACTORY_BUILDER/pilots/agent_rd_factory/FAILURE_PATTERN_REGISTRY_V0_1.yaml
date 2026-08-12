@@ -1,4 +1,4 @@
-registry_version: 0.1
+registry_version: 0.2
 project_ref: PROJECT-FFB-0001
 scope: bounded Agent R&D Factory M1 reference MVP
 status: active
@@ -26,7 +26,19 @@ patterns:
     related_risk_refs: [RISK-0002]
     recurrence_count: 1
 
+  - pattern_id: FFB-FP-0003
+    pattern_type: EXECUTOR_CANDIDATE_REJECTED
+    first_observed_run_ref: MVP-EXEC-RUN-0001
+    first_observed_stage: VERIFY_AND_VALIDATE
+    evidence_refs: [EX-ART-006, EX-ART-007, EXEC-INV-0001]
+    summary: an allowed and successfully invoked worker still produced functionally wrong candidate content that independent verification rejected
+    control_or_mitigation: treat executor output as candidate content, pin exact executor/version, preserve rejected output, and use governed rework before invoking a replacement worker
+    status: CONTROLLED
+    related_risk_refs: [RISK-0011]
+    recurrence_count: 1
+
 notes:
   - blocked-by-security is an expected safe outcome and must not be optimized away merely to increase delivery rate
   - a later successful rework does not remove or rewrite the failed verification artifact
+  - successful executor invocation is not equivalent to successful task verification
   - future recurrences should increment or supersede observations without reusing pattern identity
