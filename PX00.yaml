@@ -39,6 +39,14 @@ development_evidence:
     - EXPERIMENT
   sensitive_evidence_in_public_repo: prohibited
 
+structure_evidence:
+  canonical_repository_view: git_tracked_files
+  canonical_command: git ls-files
+  local_filesystem_tree: diagnostic_only
+  ignored_generated_state_is_product_structure: false
+  verification_run: assurance/runs/STRUCTURE-0001_GIT_TRACKED_FILES_2026-08-12.md
+  decision_record: Tree_F/TF-0016_2026-08-12_GIT_TRACKED_STRUCTURE_EVIDENCE.md
+
 baseline_contracts:
   canonical_object_model: architecture/CANONICAL_OBJECT_MODEL.md
   canonical_object_envelope: schemas/CANONICAL_OBJECT_ENVELOPE.yaml
@@ -121,6 +129,7 @@ minimal_validator:
     - Tree_F/TF-0013_2026-08-12_MINIMAL_CI_CONTRACT_GATE.md
     - Tree_F/TF-0014_2026-08-12_MINIMAL_CI_VALIDATION_PASS.md
     - Tree_F/TF-0015_2026-08-12_REPOSITORY_SECURITY_STATUS.md
+    - Tree_F/TF-0016_2026-08-12_GIT_TRACKED_STRUCTURE_EVIDENCE.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
@@ -203,6 +212,7 @@ current_phase:
     - minimal_ci_contract_gate_implemented
     - minimal_ci_contract_gate_passed
     - repository_security_status_partially_verified
+    - git_tracked_structure_evidence_adopted
   next_gate:
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
