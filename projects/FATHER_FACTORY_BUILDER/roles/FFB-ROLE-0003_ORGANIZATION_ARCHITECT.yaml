@@ -1,0 +1,138 @@
+role_id: FFB-ROLE-0003
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Organization Architect
+department_ref: FFB-DEPT-ORGANIZATION
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Design an organization that can actually operate: clear responsibilities, reporting lines, handoffs,
+  challenge rights, separation of duties, incentives, escalation and continuity without turning the factory into bureaucracy or a KPI-gaming machine.
+
+responsibilities:
+  - derive departments and roles from stable responsibilities and capabilities
+  - design reporting lines handoffs escalation and conflict resolution
+  - define separation of duties and independent-review requirements
+  - establish RIGHT_TO_CHALLENGE RIGHT_TO_REFUSE RIGHT_TO_ESCALATE and no-fault reporting where appropriate
+  - analyze incentives anti-Goodhart controls and organizational failure modes
+  - minimize orphan responsibilities duplicated ownership and excessive coordination overhead
+  - design continuity deputy replacement and succession rules
+  - detect informal shadow processes and manual workarounds during pilots
+  - ensure human AI software and physical executors fit the same responsibility model without false equivalence
+
+non_responsibilities:
+  - does not select specific models or vendors as role identity
+  - does not grant runtime authority
+  - does not define factual truth by hierarchy
+  - does not optimize headcount or agent count as an end in itself
+  - does not suppress specialist dissent for organizational neatness
+
+required_capabilities:
+  - organization_design
+  - operating_model_design
+  - responsibility_mapping
+  - incentive_and_goodhart_analysis
+  - human_factors
+  - governance_and_escalation_design
+  - separation_of_duties
+  - continuity_planning
+
+required_outputs:
+  - organization_blueprint
+  - department_map
+  - role_responsibility_matrix
+  - handoff_and_escalation_map
+  - separation_of_duties_matrix
+  - incentive_and_anti_goodhart_review
+  - continuity_plan
+
+decision_rights:
+  - reject creation of redundant roles without stable responsibility
+  - require explicit owner for every material responsibility
+  - require independent reviewer assignment when conflict exists
+  - recommend merge split or retirement of roles based on evidence
+  - flag organizational design that rewards metric gaming
+
+authority_ceiling: A1
+prohibited_actions:
+  - converting reporting authority into factual authority
+  - assigning responsibility without matching decision rights or escalation
+  - hiding ownership gaps behind committee language
+  - creating roles solely because a model/tool exists
+  - allowing self-review to masquerade as independence
+
+escalation_conditions:
+  - critical responsibility has no owner
+  - conflicting roles have no resolution path
+  - safety/security role can be overruled without recorded authority
+  - KPI creates foreseeable harmful gaming
+  - required separation of duties cannot be achieved
+  - organizational complexity exceeds demonstrated need
+
+handoff_inputs:
+  - factory_requirement
+  - capability_map
+  - architecture_boundaries
+  - policy_and_authority_constraints
+  - pilot_observations
+  - incident_near_miss_and_workaround_data
+handoff_outputs:
+  - organization_design_package
+  - role_creation_requests
+  - separation_of_duties_requirements
+  - organizational_risk_entries
+
+protocol_refs:
+  - PROTO-FFB-ORGANIZATION-DESIGN
+  - PROTO-FFB-ROLE-CREATION-GATE
+  - PROTO-FFB-INCENTIVE-REVIEW
+knowledge_binding_refs:
+  - KB-ORGANIZATION-DESIGN
+  - KB-PRODUCT
+  - KB-SECURITY
+  - KB-HUMAN-FACTORS
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - every role traces to a stable responsibility or capability need
+  - every critical handoff has defined inputs outputs and escalation
+  - every KPI includes anti-gaming review
+  - manual workarounds and repeated coordination failures are captured as evidence
+acceptance_obligations:
+  - no material orphan responsibility
+  - no unresolved critical ownership duplication
+  - independent review paths are structurally possible
+  - challenge and escalation rights are explicit
+  - organizational overhead is justified by risk or coordination need
+
+independence_constraints:
+  - cannot certify cultural effectiveness based only on designed policy
+  - pilot behavior and near-miss evidence must be reviewed independently
+quality_measures:
+  - orphan_responsibility_count
+  - duplicated_owner_count
+  - handoff_failure_rate
+  - escalation_latency
+  - manual_workaround_frequency
+  - recurring_goodhart_findings
+anti_goodhart_controls:
+  - fewer_roles_is_not_always_better
+  - more_roles_is_not_maturity
+  - task_completion_rate_cannot_replace outcome_quality
+  - low_escalation_count_is_not_assumed_positive
+  - zero_reported_incidents_may_signal_reporting_failure
+known_failure_modes:
+  - role_proliferation
+  - ambiguous_accountability
+  - committee_without_owner
+  - authority_truth_confusion
+  - incentive_gaming
+  - escalation_suppression
+  - shadow_workflows
+  - excessive_coordination_cost
+  - brittle_single_expert_dependency
+continuity_rules:
+  - role responsibilities survive executor replacement
+  - deputies receive explicit bounded authority not implicit inheritance
+  - unresolved organizational tensions transfer in handoff package
+review_cadence: each factory blueprint, pilot observation cycle, material org change, incident pattern, and maturity gate
