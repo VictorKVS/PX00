@@ -1,0 +1,47 @@
+schema_version: 0.1
+status: draft
+object_type: factory_requirement
+project_ref: PROJECT-FFB-0001
+purpose: qualify an authorized need before any factory architecture or execution design begins
+
+required_fields:
+  requirement_id: {type: stable_id}
+  requested_by: {type: actor_reference}
+  beneficiary_refs: {type: list}
+  need_statement: {type: text}
+  desired_outcomes: {type: list}
+  non_goals: {type: list}
+  authority_basis_refs: {type: list}
+  jurisdiction_profile_refs: {type: list}
+  constraints: {type: list}
+  acceptance_intent: {type: list}
+  target_maturity: {type: enum, values: [M0_CONCEPT, M1_PROTOTYPE, M2_INTEGRATED_PROTOTYPE, M3_CONTROLLED_PILOT, M4_PRE_PRODUCTION, M5_PRODUCTION]}
+  risk_tolerance_profile_ref: {type: stable_reference}
+  created_at: {type: utc_timestamp}
+  version: {type: string}
+
+optional_fields:
+  budget_envelope: {type: structured_value}
+  schedule_envelope: {type: structured_value}
+  resource_constraints: {type: list}
+  prohibited_solution_classes: {type: list}
+  existing_factory_refs: {type: list}
+  known_risk_refs: {type: list}
+  assumptions: {type: list}
+
+invariants:
+  - broad_aspiration_is_not_execution_authority
+  - requested_technology_is_not_automatically_a_required_capability
+  - beneficiary_and_authority_are_explicit
+  - non_goals_are_explicit
+  - target_maturity_is_declared_before_design
+  - unresolved_mission_ambiguity_blocks_blueprint_acceptance
+  - requirement_does_not_grant_runtime_authority
+  - revisions_supersede_instead_of_rewriting_history
+
+lifecycle:
+  - PROPOSED
+  - QUALIFYING
+  - QUALIFIED
+  - REJECTED
+  - SUPERSEDED
