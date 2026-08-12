@@ -1,0 +1,51 @@
+schema_version: 0.1
+status: draft
+object_type: task_routing_decision
+purpose: record why one governed task was routed to one responsibility, role and active agent assignment
+
+required_fields:
+  routing_decision_id:
+    type: stable_id
+  task_ref:
+    type: TASK-reference
+  responsibility_ref:
+    type: role_responsibility_reference
+  role_ref:
+    type: ROLE-reference
+  department_ref:
+    type: department_reference
+  assignment_ref:
+    type: agent_assignment_reference
+  agent_ref:
+    type: stable_id
+  executor_type:
+    type: enum
+    values: [LLM, HUMAN, DETERMINISTIC, HYBRID]
+  model_ref:
+    type: string
+  protocol_ref:
+    type: PROTO-reference
+  context_package_ref:
+    type: context_package_reference
+  context_package_hash:
+    type: sha256_hex
+  reason_codes:
+    type: string_list
+
+invariants:
+  - task_routes_by_declared_responsibility_not_agent_name
+  - selected_responsibility_belongs_to_selected_role
+  - selected_assignment_belongs_to_selected_role_and_department
+  - selected_assignment_is_active
+  - selected_protocol_is_allowed_by_responsibility
+  - context_package_matches_task_run_role_and_assignment
+  - assignment_and_model_are_pinned_before_material_execution
+  - later_staffing_changes_do_not_rewrite_routing_history
+  - routing_decision_does_not_grant_tool_authority
+
+non_goals:
+  - execute_task
+  - grant_capabilities
+  - infer_undeclared_responsibilities
+
+library_dependency: none
