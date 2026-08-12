@@ -44,9 +44,21 @@ conditional_fields:
   protocol_version:
     type: string
     required_when: protocol_id is present
+  action_request_ref:
+    type: ACTREQ-reference
+    required_when: event records a governed material action request or execution
   authority_decision_ref:
     type: canonical_reference
     required_when: event records a material tool/action execution
+  capability_grant_ref:
+    type: canonical_reference
+    required_when: event records execution performed under a capability grant
+  policy_snapshot_ref:
+    type: policy_snapshot_reference
+    required_when: authority_decision_ref is present
+  policy_snapshot_hash:
+    type: sha256_hex
+    required_when: policy_snapshot_ref is present
   project_id:
     type: PRJ-reference
     required_when: action belongs to a governed project
@@ -83,7 +95,10 @@ invariants:
   - hidden_chain_of_thought_is_not_required
   - rationale_is_explicit_summary_not_private_reasoning_dump
   - secrets_and_unnecessary_protected_values_are_not_logged
-  - material_tool_actions_reference_authority_decision
+  - material_tool_actions_reference_action_request_authority_and_policy_snapshot
+  - event_run_id_must_match_action_request_authority_and_policy_snapshot_run
+  - event_policy_snapshot_ref_and_hash_must_match_authority_decision
+  - granted_execution_event_must_reference_the_exact_capability_grant_used
   - failed_and_retried_runs_remain_distinguishable
   - display_brand_changes_do_not_change_canonical_lineage
 
