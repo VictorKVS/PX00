@@ -1,37 +1,26 @@
-schema_version: 0.2
+schema_version: 0.3
 status: draft
 object_type: claim_assessment
 purpose: immutable time-bounded assessment of one claim against an exact evidence and quality-assessment set
 
 required_fields:
-  assessment_id:
-    type: stable_id
-  claim_id:
-    type: CLM-reference
-  evaluated_at:
-    type: utc_timestamp
-  evaluator_ref:
-    type: actor_or_component_reference
-  evaluator_version:
-    type: string
+  assessment_id: {type: stable_id}
+  claim_id: {type: CLM-reference}
+  evaluated_at: {type: utc_timestamp}
+  evaluator_ref: {type: actor_or_component_reference}
+  evaluator_version: {type: string}
   status:
     type: enum
     values: [UNSUPPORTED, SINGLE_SOURCE, CORROBORATED, CONTRADICTED, DISPUTED, REFUTED]
-  evidence_refs:
-    type: ordered_EVD_reference_list
-  source_assessment_refs:
-    type: ordered_source_assessment_reference_list
-  evidence_assessment_refs:
-    type: ordered_evidence_assessment_reference_list
-  evidence_set_hash:
-    type: sha256_hex
+  evidence_refs: {type: ordered_EVD_reference_list}
+  source_assessment_refs: {type: ordered_source_assessment_reference_list}
+  evidence_assessment_refs: {type: ordered_evidence_assessment_reference_list}
+  evidence_set_hash: {type: sha256_hex}
   hash_algorithm:
     type: enum
     values: [sha256]
-  support_score:
-    type: float_0_1
-  contradiction_score:
-    type: float_0_1
+  support_score: {type: float_0_1}
+  contradiction_score: {type: float_0_1}
   dimensions:
     required: [source_reliability, evidence_quality, independence, recency, directness, corroboration]
     range: 0.0_to_1.0
@@ -40,6 +29,9 @@ conditional_fields:
   previous_assessment_ref:
     type: assessment_reference
     required_when: claim has an earlier assessment
+  caused_by_review_ref:
+    type: review_reference
+    required_when: assessment was created by accepted quality reassessment propagation
 
 invariants:
   - assessment_is_immutable
@@ -52,6 +44,8 @@ invariants:
   - assessment_does_not_declare_absolute_truth
   - removed_new_or_reassessed_evidence_requires_new_assessment
   - contradiction_is_preserved
+  - propagated_reassessment_preserves_review_causality
+  - accepted_source_reassessment_requires_compatible_refreshed_evidence_assessments
 
 non_goals:
   - overwrite historical belief state
