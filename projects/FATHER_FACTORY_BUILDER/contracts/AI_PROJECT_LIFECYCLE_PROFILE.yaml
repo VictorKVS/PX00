@@ -1,0 +1,55 @@
+schema_version: 0.1
+status: draft
+object_type: ai_project_lifecycle_profile
+purpose: keep ML lifecycle activity, business delivery evidence stage, and PX00 system maturity as separate governed dimensions
+
+required_fields:
+  lifecycle_profile_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  crisp_mlq_phase:
+    type: enum
+    values:
+      - BUSINESS_AND_DATA_UNDERSTANDING
+      - DATA_ENGINEERING
+      - MODEL_ENGINEERING
+      - QUALITY_ASSURANCE
+      - DEPLOYMENT
+      - MONITORING_AND_MAINTENANCE
+  delivery_stage:
+    type: enum
+    values: [DEMO, POC, MVP, PRODUCTION]
+  system_maturity_ref:
+    type: maturity_reference
+  stage_question: {type: string}
+  audience_refs: {type: list}
+  measurable_success_criteria: {type: list}
+  evidence_refs: {type: list}
+  risk_refs: {type: list}
+  qa_method_refs: {type: list}
+  decision:
+    type: enum
+    values: [OPEN, GO, NO_GO, REWORK, HOLD]
+
+optional_fields:
+  baseline_ref: {type: reference}
+  data_quality_ref: {type: reference}
+  architecture_ref: {type: reference}
+  contract_strategy_ref: {type: reference}
+  ci_profile_ref: {type: reference}
+  supersedes_ref: {type: reference}
+
+invariants:
+  - crisp_mlq_phase_is_not_delivery_stage
+  - delivery_stage_is_not_system_maturity
+  - later_crisp_mlq_results_may_trigger_revision_of_earlier_phases
+  - every_phase_records_requirements_constraints_risks_and_qa_methods
+  - delivery_stage_promotion_requires_evidence_not_calendar_pressure
+  - no_go_preserves_evidence_and_does_not_rewrite_prior_stage_history
+  - production_claim_requires_operational_evidence_not_only_model_quality
+  - profile_does_not_grant_runtime_authority
+
+source_notes:
+  - CRISP-ML(Q) six-phase lifecycle with quality assurance integrated per phase
+  - OTUS strategic ascent framing uses Demo -> PoC -> MVP -> Production as different questions and evidence gates
+
+library_dependency: none
