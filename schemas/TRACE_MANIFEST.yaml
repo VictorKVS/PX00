@@ -17,7 +17,20 @@ required_fields:
     values: [OPEN, SUCCEEDED, FAILED, CANCELLED, ESCALATED]
   event_refs:
     type: EVT-reference-list
-    rule: ordered or otherwise sequence-addressable material events
+    rule: ordered material events
+  event_count:
+    type: integer
+    minimum: 0
+  event_hashes:
+    type: list
+    item_type: sha256_hex
+    rule: ordered one-to-one with event_refs
+  integrity_algorithm:
+    type: enum
+    values: [sha256_chain_v1]
+  chain_head_hash:
+    type: sha256_hex_or_null
+    rule: null only when event_count is zero
 
 conditional_fields:
   project_id:
@@ -35,6 +48,12 @@ conditional_fields:
     type: canonical_reference_list
   authority_decision_refs:
     type: canonical_reference_list
+  policy_snapshot_refs:
+    type: canonical_reference_list
+  action_request_refs:
+    type: ACTREQ-reference-list
+  capability_grant_refs:
+    type: canonical_reference_list
   evaluation_refs:
     type: EVAL-reference-list
   failure_ref:
@@ -48,8 +67,11 @@ invariants:
   - trace_id_is_immutable
   - retries_do_not_overwrite_prior_trace_or_run_history
   - event_references_preserve_material_sequence
+  - event_refs_and_event_hashes_have_equal_length_equal_to_event_count
+  - event_hash_chain_detects_deletion_insertion_reordering_or_payload_tampering
+  - chain_head_hash_matches_last_verified_event_hash
   - successful_status_does_not_erase_prior_failures
   - trace_manifest_contains_references_not_unnecessary_sensitive_payloads
 
-runtime_validator: not_selected
+runtime_validator: deterministic_reference_implementation
 library_dependency: none
