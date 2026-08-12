@@ -1,0 +1,50 @@
+schema_version: 0.1
+acceptance_id: ACCEPTANCE-VALIDATOR-ISOLATED-0001
+subject: PX00 minimal contract validator in isolated local environment
+date: 2026-08-12
+state: PASS
+scope: local_isolated_validation_only
+
+basis:
+  run: assurance/runs/VALIDATOR-0003_ISOLATED_VENV_RUN_2026-08-12.md
+  validator: px00/validator.py
+  tests: tests/test_validator.py
+  dependency_file: requirements-validator.txt
+
+criteria:
+  isolated_environment_created: PASS
+  pinned_dependency_installed: PASS
+  dependency_consistency:
+    expected: no_broken_requirements
+    observed: no_broken_requirements
+    state: PASS
+  unit_and_integration_tests:
+    expected_count: 13
+    observed_count: 13
+    state: PASS
+  repository_validation:
+    expected: PASS
+    observed: PASS
+    errors: 0
+    warnings: 0
+  json_validation:
+    status: PASS
+    issues: 0
+
+security:
+  network_side_effects: none_required
+  external_system_mutation: none
+  customer_data: not_used
+  secrets: not_used
+  production_runtime_approval: false
+
+interpretation:
+  local_reproducibility_for_validator_gate: proven
+  production_runtime_security: not_proven
+  release_supply_chain_integrity: not_proven
+
+next_gate:
+  - minimal_github_ci
+  - ci_action_identity_and_permissions_review
+  - repository_security_feature_verification
+  - sbom_before_releasable_distribution
