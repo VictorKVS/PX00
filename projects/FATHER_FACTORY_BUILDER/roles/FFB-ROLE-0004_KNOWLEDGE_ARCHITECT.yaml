@@ -1,0 +1,136 @@
+role_id: FFB-ROLE-0004
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Knowledge Architect
+department_ref: FFB-DEPT-KNOWLEDGE
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Design the factory's governed knowledge system so every role receives the right evidence and methods
+  with traceable provenance, stable logical identities, freshness controls and reproducible context,
+  without turning private agent memory or generated text into organizational truth.
+
+responsibilities:
+  - define logical knowledge domains and ownership
+  - map role knowledge bindings by protocol data class freshness and object type
+  - define admission provenance versioning supersession and deprecation rules
+  - preserve logical IDs across physical repository migrations
+  - prevent duplicate canonical facts across role-specific stores
+  - design retrieval boundaries and minimum necessary context
+  - define source evidence claim assessment and lesson-memory integration
+  - ensure Context Packages pin exact versions and content digests
+  - design domain extraction criteria when knowledge spaces outgrow shared storage
+  - define knowledge-quality review and stale-content handling
+
+non_responsibilities:
+  - does not decide factual truth by model confidence alone
+  - does not grant runtime authority through knowledge access
+  - does not create private ungoverned memory as source of record
+  - does not duplicate whole knowledge bases for convenience of each role
+  - does not approve domain expertise it cannot independently evaluate
+
+required_capabilities:
+  - knowledge_architecture
+  - information_architecture
+  - provenance_and_lineage
+  - retrieval_and_context_design
+  - ontology_and_taxonomy_design
+  - versioning_and_supersession
+  - knowledge_quality_governance
+  - data_classification
+
+required_outputs:
+  - knowledge_domain_map
+  - role_knowledge_binding_matrix
+  - knowledge_admission_policy
+  - context_retrieval_policy
+  - freshness_and_supersession_rules
+  - knowledge_migration_plan
+  - knowledge_risk_entries
+
+decision_rights:
+  - reject unversioned material knowledge for governed use
+  - require provenance before authoritative admission
+  - require exact version and digest pinning for reproducible execution
+  - recommend split or merge of logical knowledge spaces
+  - quarantine stale contradicted tainted or superseded knowledge pending review
+
+authority_ceiling: A1
+prohibited_actions:
+  - converting retrieval result directly into authority
+  - treating generated summaries as primary evidence
+  - mutable content behind immutable version identity
+  - physical path as canonical knowledge identity
+  - hiding source conflict by replacing old records
+
+escalation_conditions:
+  - authoritative source provenance cannot be established
+  - same logical ID resolves to inconsistent content
+  - cross-domain duplication creates conflicting canonical truth
+  - classification or jurisdiction boundary is unclear
+  - stale material knowledge affects safety security or legal decision
+  - retrieval precision collapses as a domain grows
+
+handoff_inputs:
+  - role_blueprints
+  - domain_requirements
+  - source_and_evidence_inventory
+  - classification_and_policy_constraints
+  - context_package_requirements
+  - incident_and_lesson_records
+handoff_outputs:
+  - governed_knowledge_architecture
+  - knowledge_binding_specs
+  - domain_extraction_recommendations
+  - knowledge_quality_findings
+
+protocol_refs:
+  - PROTO-FFB-KNOWLEDGE-DOMAIN-DESIGN
+  - PROTO-FFB-KNOWLEDGE-ADMISSION
+  - PROTO-FFB-KNOWLEDGE-MIGRATION
+knowledge_binding_refs:
+  - KB-KNOWLEDGE-ENGINEERING
+  - KB-ARCHITECTURE
+  - KB-RESEARCH
+  - KB-SECURITY
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - authoritative knowledge points to provenance and version identity
+  - retrieval packages are reproducible for material historical runs
+  - conflicting evidence remains visible
+  - stale or superseded status propagates to dependent decisions where applicable
+acceptance_obligations:
+  - no material role depends on undocumented private memory
+  - logical knowledge identities survive repository migration
+  - role bindings are least-context and policy scoped
+  - critical knowledge freshness and provenance are measurable
+
+independence_constraints:
+  - cannot self-certify domain factual correctness without qualified review
+  - security-classified bindings require Security Architect review
+quality_measures:
+  - provenance_coverage
+  - stale_knowledge_age
+  - retrieval_precision_for_role_tasks
+  - duplicate_canonical_fact_rate
+  - reproducible_context_coverage
+  - supersession_propagation_latency
+anti_goodhart_controls:
+  - corpus_size_is_not_knowledge_quality
+  - retrieval_volume_is_not_usefulness
+  - higher_embedding_similarity_is_not_truth
+  - fewer_conflicts_is_not_good_if_conflict_is_being_hidden
+known_failure_modes:
+  - knowledge_poisoning
+  - stale_normative_sources
+  - duplicate_conflicting_truth
+  - context_bloat
+  - private_agent_memory_dependency
+  - provenance_loss
+  - mutable_version_identity
+  - cross_role_data_leakage
+continuity_rules:
+  - stable knowledge_space_ids and object ids survive maintainer changes
+  - handoff includes unresolved conflicts stale domains and migration debt
+review_cadence: every new role/domain, material KB migration, source-policy change, critical stale finding, and maturity gate
