@@ -67,7 +67,7 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0017-minimal-dependency-provenance-and-sbom-gate.md
+  latest_contract_decision: architecture/adr/ADR-0018-hash-locked-validator-dependency-install.md
 
 pilot_roles:
   ROLE-0201:
@@ -103,6 +103,7 @@ runtime_gate:
     - acceptance_evidence_generation
     - minimal_ci_contract_validation
     - dependency_provenance_validation
+    - dependency_artifact_hash_validation
   prohibited:
     - production_agents
     - live_customer_or_protected_data
@@ -116,9 +117,12 @@ minimal_validator:
   entry_point: python -m px00 .
   validator: px00/validator.py
   dependency_file: requirements-validator.txt
+  dependency_lock_file: requirements-validator-lock.txt
   direct_dependencies:
     PyYAML: 6.0.3
-  tests: tests/test_validator.py
+  tests:
+    contracts: tests/test_validator.py
+    dependency_provenance: tests/test_dependency_provenance.py
   integration_test: RepositoryIntegrationTests.test_current_repository_contracts
   test_framework: python_stdlib_unittest
   devsecops_baseline: security/DEVSECOPS_BASELINE_0_1.md
@@ -132,10 +136,13 @@ minimal_validator:
     - Tree_F/TF-0015_2026-08-12_REPOSITORY_SECURITY_STATUS.md
     - Tree_F/TF-0016_2026-08-12_GIT_TRACKED_STRUCTURE_EVIDENCE.md
     - Tree_F/TF-0017_2026-08-12_MINIMAL_DEPENDENCY_PROVENANCE_SBOM_GATE.md
+    - Tree_F/TF-0018_2026-08-12_LOCAL_DEPENDENCY_PROVENANCE_PASS.md
+    - Tree_F/TF-0019_2026-08-12_DEPENDENCY_ARTIFACT_HASH_LOCK_GATE.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
     - architecture/adr/ADR-0017-minimal-dependency-provenance-and-sbom-gate.md
+    - architecture/adr/ADR-0018-hash-locked-validator-dependency-install.md
   network_required: false
   external_side_effects: false
   authoring_unit_tests:
@@ -168,15 +175,19 @@ ci_gate:
   action_dependencies:
     actions_checkout: d23441a48e516b6c34aea4fa41551a30e30af803
     actions_setup_python: ece7cb06caefa5fff74198d8649806c4678c61a1
-  accepted_run_id: 31567474530
-  prior_successful_run_id: 31567451236
-  acceptance: assurance/records/ACCEPTANCE-CI-0001.yaml
+  hash_locked_install: true
+  accepted_hash_lock_run_id: 31571447150
+  failed_hash_lock_workflow_run_id: 31571384335
+  accepted_hash_lock_commit: ad810f2fc292864beae1e882c1c7d728dae8506f
+  accepted_total_tests: 19
   production_deployment: false
 
 dependency_provenance:
-  state: PASS
+  state: PASS_WITH_ACTIONS
   baseline: security/DEPENDENCY_PROVENANCE_BASELINE_0_1.md
+  artifact_hash_baseline: security/DEPENDENCY_ARTIFACT_HASH_BASELINE_0_1.md
   requirement_source: requirements-validator.txt
+  artifact_lock: requirements-validator-lock.txt
   sbom: security/sbom/PX00-validator.cdx.json
   sbom_format: CycloneDX
   sbom_spec_version: '1.7'
@@ -184,13 +195,16 @@ dependency_provenance:
   tests: tests/test_dependency_provenance.py
   exact_direct_pins_required: true
   requirement_sbom_agreement_required: true
-  new_runtime_dependencies_added_for_sbom_gate: false
-  accepted_ci_run_id: 31570702457
-  accepted_ci_commit: cbcd866a99be0f2b0a74cbdfd8adaac45b912418
-  accepted_total_tests: 17
-  acceptance: assurance/records/ACCEPTANCE-SBOM-0001.yaml
-  run: assurance/runs/SBOM-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
-  artifact_hash_locking: NOT_IMPLEMENTED
+  requirement_hash_lock_agreement_required: true
+  hash_algorithm: sha256
+  binary_only_ci_install: true
+  hosted_linux_hash_lock: PASS
+  hosted_linux_run: assurance/runs/HASHLOCK-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
+  hosted_linux_acceptance: assurance/records/ACCEPTANCE-HASHLOCK-0001.yaml
+  local_isolated_sbom_validation: PASS
+  local_isolated_sbom_run: assurance/runs/SBOM-0002_LOCAL_ISOLATED_PASS_2026-08-12.md
+  local_isolated_sbom_acceptance: assurance/records/ACCEPTANCE-SBOM-LOCAL-0001.yaml
+  windows_hash_lock_execution: PENDING
   external_schema_validation: NOT_IMPLEMENTED
   vulnerability_monitoring: NOT_IMPLEMENTED
   release_signing: NOT_IMPLEMENTED
@@ -210,7 +224,7 @@ current_phase:
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0017
+    - architecture_adr_0001_0018
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -240,10 +254,13 @@ current_phase:
     - git_tracked_structure_evidence_adopted
     - minimal_dependency_provenance_sbom_gate_implemented
     - minimal_dependency_provenance_sbom_gate_passed
+    - local_isolated_dependency_provenance_reproduced
+    - hosted_linux_dependency_artifact_hash_lock_passed
   next_gate:
+    - verify_windows_hash_locked_install_locally
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
-    - evaluate_artifact_hash_locking_before_release
-    - preserve_ci_regression_history
+    - decide_minimal_vulnerability_monitoring_before_release
+    - preserve_failed_and_successful_ci_history
     - keep_production_runtime_blocked
   exit_gate: repository_security_controls_and_dependency_provenance_baseline_are_evidenced_before_any_releasable_distribution
