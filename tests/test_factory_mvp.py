@@ -156,6 +156,51 @@ class FactoryMvpTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "FRESH_STAGE_ARTIFACT_REQUIRED"):
             self.mvp.advance("MVP-RUN-1", "SECURITY_PRECHECK")
 
+    def test_rework_requires_failed_stage(self):
+        self.create()
+        with self.assertRaisesRegex(ValueError, "REWORK_REQUIRES_FAILED_STAGE"):
+            self.mvp.request_rework("MVP-RUN-1", "QUALIFY_PROBLEM", "FINDING-1")
+
+    def test_failed_verification_can_rework_to_implementation_with_append_only_lineage(self):
+        self.create()
+        self.advance_until("VERIFY_AND_VALIDATE")
+        failed_ref = self.submit_current(outcome="FAIL")
+        self.mvp.advance("MVP-RUN-1", "VERIFY_AND_VALIDATE", outcome="FAIL")
+
+        failed_run = self.mvp.runs["MVP-RUN-1"]
+        self.assertEqual(failed_run.last_outcome, "FAIL")
+        self.assertFalse(failed_run.verification_passed)
+        self.assertTrue(failed_run.security_precheck_passed)
+
+        self.mvp.request_rework(
+            "MVP-RUN-1", "IMPLEMENT_BOUNDED_PROTOTYPE", "VERIFY-FINDING-1"
+        )
+        rework_run = self.mvp.runs["MVP-RUN-1"]
+        self.assertEqual(rework_run.stage, "IMPLEMENT_BOUNDED_PROTOTYPE")
+        self.assertEqual(rework_run.rework_count, 1)
+        self.assertTrue(rework_run.security_precheck_passed)
+        self.assertFalse(rework_run.verification_passed)
+        self.assertIn(
+            "REWORK:VERIFY_AND_VALIDATE->IMPLEMENT_BOUNDED_PROTOTYPE:VERIFY-FINDING-1",
+            rework_run.trace,
+        )
+
+        rework_ref = self.submit_current()
+        self.assertEqual(self.mvp.artifacts[rework_ref].input_artifact_refs, (failed_ref,))
+        self.mvp.advance("MVP-RUN-1", "IMPLEMENT_BOUNDED_PROTOTYPE")
+        self.pass_current()
+        self.assertTrue(self.mvp.runs["MVP-RUN-1"].verification_passed)
+
+    def test_rework_target_must_be_earlier_and_reasoned(self):
+        self.create()
+        self.advance_until("VERIFY_AND_VALIDATE")
+        self.submit_current(outcome="FAIL")
+        self.mvp.advance("MVP-RUN-1", "VERIFY_AND_VALIDATE", outcome="FAIL")
+        with self.assertRaisesRegex(ValueError, "REWORK_TARGET_MUST_BE_EARLIER"):
+            self.mvp.request_rework("MVP-RUN-1", "SOCRATES_CHALLENGE", "FINDING-1")
+        with self.assertRaisesRegex(ValueError, "REWORK_REASON_REQUIRED"):
+            self.mvp.request_rework("MVP-RUN-1", "IMPLEMENT_BOUNDED_PROTOTYPE", "")
+
     def test_happy_path_reaches_governed_delivery_with_artifact_chain(self):
         self.create(untrusted_input_present=True)
         self.mvp.pass_trust_gate("MVP-RUN-1")
