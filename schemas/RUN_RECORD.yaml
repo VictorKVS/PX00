@@ -1,4 +1,4 @@
-schema_version: 0.2
+schema_version: 0.3
 status: draft
 purpose: execution-instance contract for one bounded governed RUN
 
@@ -41,6 +41,9 @@ traceability:
   evidence_ids: []
   decision_ids: []
   evaluation_ids: []
+  trace_manifest_ref: null
+  trace_manifest_hash: null
+  trace_manifest_hash_algorithm: sha256
 
 failure:
   failure_class: null
@@ -61,8 +64,11 @@ invariants:
   - retry_identity_is_distinct
   - missing_authority_cannot_be_interpreted_as_allow
   - completed_state_requires_declared_completion_criteria
+  - terminal_run_with_material_events_requires_persisted_trace_manifest
+  - trace_manifest_run_task_trace_context_must_match_run_record
+  - trace_manifest_hash_must_verify_before_acceptance
 
 validation_stage:
   current: deterministic_reference_validation
-  runtime_validator: px00_profile_registry_and_kernel_tests
+  runtime_validator: px00_profile_registry_kernel_and_trace_tests
   library_dependency: none
