@@ -1,0 +1,51 @@
+schema_version: 0.1
+profile_id: LIVE-GEMINI-INTERACTIONS-0001
+provider_ref: GOOGLE_GEMINI_API
+driver_ref: px00.gemini_provider.GeminiInteractionsDriver
+endpoint_url: https://generativelanguage.googleapis.com/v1/interactions
+allowed_host_refs:
+  - generativelanguage.googleapis.com
+model_ref: gemini-3.6-flash
+auth_secret_env_ref: GEMINI_API_KEY
+live_enable_env_ref: PX00_GEMINI_LIVE_ENABLED
+auth_header_name: x-goog-api-key
+auth_header_prefix: ""
+timeout_seconds: 30
+max_response_bytes: 1000000
+allowed_data_classifications:
+  - PUBLIC
+status: ACTIVE
+
+pilot_scope:
+  delivery_stage: POC
+  maturity: M1_PROTOTYPE
+  external_effects: NETWORK_INFERENCE_ONLY
+  tools: FORBIDDEN
+  provider_agent: FORBIDDEN
+  grounding: FORBIDDEN
+  file_upload: FORBIDDEN
+  multimodal_input: FORBIDDEN
+  background_execution: FORBIDDEN
+  candidate_status: UNVERIFIED_UNTIL_INDEPENDENT_REVIEW
+
+runtime_requirements:
+  - GEMINI_API_KEY must exist only in runtime environment or managed secret store
+  - PX00_GEMINI_LIVE_ENABLED must be explicitly enabled for a live pilot
+  - input must be PUBLIC for this first pilot
+  - no API key or credential value may be persisted in trace, artifact, test fixture or repository
+  - provider response is candidate content only
+  - exact returned model and interaction ID must be captured when provider returns them
+
+provider_contract_basis:
+  verified_on: 2026-08-13
+  official_api_family: Gemini Interactions API
+  api_version: v1
+  authentication: x-goog-api-key header
+  request_shape: model + input + store=false
+  response_shape: interaction with status + steps/model_output/text
+
+non_claims:
+  - profile_presence_does_not_prove_a_live_call
+  - local_driver_tests_do_not_close_SUMMIT_FFB_02
+  - model_name_does_not_prove_immutable_provider_build_identity
+  - provider_output_does_not_equal_truth_verification_or_acceptance
