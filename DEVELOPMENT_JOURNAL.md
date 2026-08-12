@@ -304,6 +304,39 @@ Trigger
 
 ---
 
+## DJ-0010 — First executable contract validator
+
+**Date:** 2026-08-12  
+**Status:** IMPLEMENTED / LOCAL REPOSITORY RUN PENDING  
+**Decision:** KEEP / VERIFY LOCALLY
+
+**Why:** The previous gate explicitly allowed only a minimal local validator. YAML is already the machine-readable contract format, so the smallest useful implementation is a read-only Python validator rather than a workflow engine, API service or custom parser.
+
+**Evidence / files:**
+
+- [Validator](px00/validator.py)
+- [Module entry point](px00/__main__.py)
+- [Pinned dependency](requirements-validator.txt)
+- [Negative unit tests](tests/test_validator.py)
+- [DevSecOps baseline](security/DEVSECOPS_BASELINE_0_1.md)
+- [Authoring verification](assurance/runs/VALIDATOR-0001_AUTHORING_VERIFICATION_2026-08-12.md)
+- [ADR-0015](architecture/adr/ADR-0015-minimal-local-contract-validator.md)
+- [TF-0009](Tree_F/TF-0009_2026-08-12_MINIMAL_CONTRACT_VALIDATOR.md)
+
+**Data & processing:** The validator reads current PX00 YAML plus package/file structure and deterministically checks canonical identity, production runtime gate, role/protocol IDs, A1 side-effect prohibition, retrieval/evidence separation, referenced package files, protocol bounds/steps, acceptance evidence rule, pilot side-effect prohibition, cross references, obvious high-risk secret fields and contiguous Tree_F numbering.
+
+**Algorithms / libraries:** Python deterministic rule evaluation. One direct dependency: `PyYAML==6.0.3`, used via `yaml.safe_load`. Tests use standard-library `unittest`; no pytest/framework dependency is added yet.
+
+**DevOps:** Local commands are defined. CI remains intentionally deferred until the real clone produces a stable PASS/FAIL signal; this prevents premature pipeline complexity. Exact direct dependency pin and security baseline are recorded now; full SBOM automation remains a release gate.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Executable checks now catch several governance/security regressions, but this validator is not a production authorization boundary. Repository-level secret scanning/branch controls, CI enforcement, dependency/SBOM automation, tenant isolation and live runtime controls remain future evidence requirements.
+
+**Tests / evaluation:** Source compilation and 12 isolated unit tests passed during authoring. Full execution in `G:\1\PX00` is still pending and is the authoritative next acceptance result.
+
+**Next gate:** Pull the current repository locally; install the pinned validator dependency; execute unit tests and full `python -m px00 .` validation; preserve the result; fix any defect before adding minimal CI or widening runtime scope.
+
+---
+
 ## Entry template
 
 ```text
