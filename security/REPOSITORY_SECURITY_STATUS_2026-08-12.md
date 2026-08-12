@@ -15,6 +15,8 @@
 - Dependency artifact hash locking is implemented for the two currently verified execution targets: CPython 3.10 Windows x86-64 and Linux manylinux x86-64.
 - Hosted Linux hash-lock execution passed in GitHub Actions run `31571447150`.
 - Hosted hash-lock test result: `19/19 PASS`, `pip check` clean, repository validator `PASS`, `0 errors`, `0 warnings`.
+- Local Windows hash-lock execution passed after a forced binary-only reinstall under `--require-hashes`; the selected artifact was `pyyaml-6.0.3-cp310-cp310-win_amd64.whl`.
+- Local Windows result: `19/19 PASS`, `pip check` clean, repository validator `PASS`, `0 errors`, `0 warnings`, clean Git working tree.
 - Failed workflow run `31571384335` is preserved as development evidence; it was caused by YAML scalar representation of the new install command and was corrected without disabling the security control.
 
 ## Not verified through the current GitHub integration
@@ -33,7 +35,8 @@ CI contract validation                 PASS
 Dependency provenance / SBOM gate      PASS
 Local isolated SBOM reproduction       PASS
 Hosted Linux artifact hash lock        PASS
-Windows artifact hash execution        PENDING LOCAL VERIFICATION
+Windows artifact hash execution        PASS
+Two-target artifact hash baseline      PASS
 Workflow token permission               contents: read
 Action identities pinned                YES
 Repository rulesets visible             NONE
@@ -49,21 +52,20 @@ Vulnerability monitoring                NOT IMPLEMENTED
 
 ## Security interpretation
 
-The repository now detects contract regressions, direct dependency/SBOM drift, dependency-lock drift and missing SHA256 artifact hashes. The hosted Linux dependency installation is constrained by exact version, binary-only selection and locally recorded SHA256 values.
+The repository now detects contract regressions, direct dependency/SBOM drift, dependency-lock drift and missing SHA256 artifact hashes. The declared validator dependency installation paths on both hosted Linux x86-64 and local Windows x86-64 have been executed under exact version pinning, binary-only selection and recorded SHA256 allow-lists.
 
-The Windows artifact hash is recorded but is not yet accepted as an executed control until the owner recreates/uses the isolated `.venv` with `--require-hashes --only-binary=:all:` and reruns the test suite.
+Artifact hashes prove that the installed bytes match an accepted distribution digest. They do not by themselves prove publisher identity, absence of future vulnerabilities or release authenticity.
 
-A successful CI workflow still does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists. Therefore CI **execution** is accepted while CI **enforcement as a merge/push gate** remains unproven.
+A successful CI workflow still does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists. Therefore CI **execution** and dependency artifact integrity are accepted while CI **enforcement as a merge/push gate** remains unproven.
 
 Secret-scanning controls must also be verified separately before PX00 can claim repository-level secret prevention/detection coverage.
 
 ## Required next controls
 
-1. Execute the Windows hash-locked install in the isolated local `.venv` and preserve the result.
-2. Verify or establish a `main` branch/ruleset policy appropriate to the project's current single-maintainer phase.
-3. Require the `PX00 Contract Validation / Validate contracts` check before governed merges once PR-based change control becomes the normal workflow.
-4. Verify secret scanning and push protection for the public repository.
-5. Before a releasable distribution, decide the minimum justified vulnerability-monitoring and release-signing controls.
+1. Verify or establish a `main` branch/ruleset policy appropriate to the project's current single-maintainer phase.
+2. Require the `PX00 Contract Validation / Validate contracts` check before governed merges once PR-based change control becomes the normal workflow.
+3. Verify secret scanning and push protection for the public repository.
+4. Before a releasable distribution, decide the minimum justified vulnerability-monitoring and release-signing controls.
 
 ## Occam constraint
 
