@@ -1,4 +1,4 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: authority_decision
 purpose: machine-readable contract for pre-action authority evaluation
@@ -14,10 +14,14 @@ required_fields:
     type: ROLE-reference
   role_version:
     type: string
+  run_id:
+    type: RUN-reference
+  action_request_id:
+    type: ACTREQ-reference
   action_class:
     type: string
   target_ref:
-    type: canonical_reference
+    type: canonical_or_governed_resource_reference
   project_id:
     type: PRJ-reference
   requested_autonomy:
@@ -36,6 +40,13 @@ required_fields:
     rule: explicit concise rationale; hidden chain-of-thought is not required or stored
   trace_id:
     type: TRACE-reference
+  policy_snapshot_ref:
+    type: governed_runtime_reference
+  policy_snapshot_hash:
+    type: sha256_hex
+  policy_hash_algorithm:
+    type: enum
+    values: [sha256]
 
 constraint_references:
   role_authority:
@@ -52,6 +63,8 @@ constraint_references:
     type: canonical_reference_list
   data_classification_permissions:
     type: canonical_reference_list
+  exact_policy_profile_refs:
+    type: governed_reference_list
 
 conditional_fields:
   approval_refs:
@@ -74,6 +87,9 @@ invariants:
   - approval_must_match_action_and_scope
   - denied_or_escalated_actions_do_not_execute_as_if_allowed
   - material_decisions_link_to_trace
+  - authority_decision_policy_snapshot_must_match_bound_run_snapshot
+  - policy_snapshot_hash_mismatch_is_blocking
+  - policy_snapshot_lineage_cannot_be_changed_by_executor_output
 
-runtime_validator: not_selected
+runtime_validator: deterministic_reference_implementation
 library_dependency: none
