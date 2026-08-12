@@ -1,8 +1,8 @@
 # Governed Action Validation Gate — 2026-08-12
 
 **Development journal entry:** `DJ-0014`  
-**Status:** IMPLEMENTED / REAL REPOSITORY EXECUTION PENDING  
-**Decision:** KEEP / VERIFY LOCALLY
+**Status:** IMPLEMENTED / CI RE-VERIFICATION IN PROGRESS  
+**Decision:** KEEP / VERIFY CI
 
 ## Why
 
@@ -16,7 +16,9 @@ The Minimal Governed Execution Kernel and Universal Tool Boundary were already a
 - `schemas/TOOL_DEFINITION.yaml`
 - `schemas/CAPABILITY_GRANT.yaml`
 - `assurance/fixtures/KERNEL-0001_GOVERNED_ACTION_BOUNDARY_ACCEPTANCE.yaml`
-- `Tree_F/TF-0013_2026-08-12_GOVERNED_ACTION_VALIDATION_GATE.md`
+- `Tree_F/TF-0023_2026-08-12_MINIMAL_GOVERNED_EXECUTION_KERNEL.md`
+- `Tree_F/TF-0024_2026-08-12_GOVERNED_ACTION_REQUEST_TOOL_BOUNDARY.md`
+- `Tree_F/TF-0025_2026-08-12_GOVERNED_ACTION_VALIDATION_GATE.md`
 - `architecture/adr/ADR-0016-minimal-governed-execution-kernel.md`
 - `architecture/adr/ADR-0017-governed-action-request-and-tool-boundary.md`
 
@@ -34,24 +36,40 @@ During implementation the first validator draft was found to use field names tha
 
 ## DevOps
 
-Changes were written directly to the GitHub `main` branch as discrete commits. No CI widening or production runtime was introduced.
+Changes were written directly to the GitHub `main` branch as discrete commits. Existing GitHub Actions immediately executed the test suite.
+
+The first CI run after this generation produced a useful integration failure: all new governed-action unit tests passed, but `RepositoryIntegrationTests.test_current_repository_contracts` detected duplicate `Tree_F` sequence numbers. The repository already contained material generations through `TF-0022`; the new work had initially reused `TF-0011..TF-0013` based on stale context.
+
+The correction preserves the validator and renumbers the new material generations to the next free sequence:
+
+```text
+TF-0023 — Minimal Governed Execution Kernel
+TF-0024 — Governed Action Request / Tool Boundary
+TF-0025 — Governed Action Validation Gate
+```
+
+The duplicate files were removed after their correctly numbered replacements were committed. This is a correction of invalid identifiers, not deletion of accepted unique historical generations.
 
 ## Security conclusion
 
-`PASS_WITH_ACTIONS` at authoring level. Contract guards now cover key privilege-boundary invariants, but no claim of runtime enforcement is made before the real repository test run and synthetic execution implementation.
+`PASS_WITH_ACTIONS` at authoring level. Contract guards now cover key privilege-boundary invariants. The CI failure demonstrated that the repository integration gate is actively detecting governance-history defects rather than merely checking isolated unit rules.
 
 ## Tests / evaluation
 
-New positive/negative unit tests are committed, but authoritative execution in `G:\1\PX00` is still pending. The existing repository integration gate remains blocking.
+CI evidence from the failed run:
+
+- dependency provenance tests: PASS;
+- secret hygiene tests: PASS;
+- governed action schema tests: PASS;
+- role/protocol/acceptance tests: PASS;
+- repository integration: FAIL due only to duplicate Tree_F identifiers;
+- total: 30 tests, 1 integration failure.
+
+Tree_F identifiers have been corrected and CI re-verification is the current gate.
 
 ## Next gate
 
-Run:
-
-```powershell
-python -m unittest discover -s tests -v
-python -m px00 .
-python -m px00 . --json
-```
-
-If the real checkout is clean, preserve the result as assurance evidence and implement only the smallest synthetic `math.multiply` ActionRequest → Authority → Capability Grant → Tool Boundary → Event/result path. Live GitHub/mail/shell/database/network mutation adapters remain blocked.
+1. Confirm GitHub Actions PASS on the corrected `TF-0023..TF-0025` sequence.
+2. Preserve the successful run as assurance evidence.
+3. Implement only the smallest synthetic `math.multiply` ActionRequest → Authority → Capability Grant → Tool Boundary → Event/result path.
+4. Keep live GitHub/mail/shell/database/network mutation adapters blocked.
