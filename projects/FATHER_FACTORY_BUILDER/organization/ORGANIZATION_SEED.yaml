@@ -1,0 +1,43 @@
+organization_seed_version: 0.1
+project_ref: PROJECT-FFB-0001
+state: PROPOSED
+
+mission: design governed factory blueprints for later operation by PX00/FATHER
+
+departments:
+  - department_id: FFB-DEPT-ARCHITECTURE
+    name: Factory Architecture
+    purpose: integrate factory design across structural, capability and lifecycle domains
+  - department_id: FFB-DEPT-ORGANIZATION
+    name: Organization Design
+    purpose: design responsibilities roles handoffs incentives and continuity
+  - department_id: FFB-DEPT-KNOWLEDGE
+    name: Knowledge Architecture
+    purpose: design governed role knowledge and institutional memory
+  - department_id: FFB-DEPT-ASSURANCE
+    name: Security Risk and Assurance
+    purpose: challenge trust risk maturity and assurance boundaries
+
+reporting:
+  - role_id: FFB-ROLE-0001
+    reports_to: HUMAN-OWNER
+  - role_id: FFB-ROLE-0002
+    reports_to: FFB-ROLE-0001
+  - role_id: FFB-ROLE-0003
+    reports_to: FFB-ROLE-0001
+  - role_id: FFB-ROLE-0004
+    reports_to: FFB-ROLE-0001
+  - role_id: FFB-ROLE-0005
+    reports_to: FFB-ROLE-0001
+
+independent_controls:
+  - SOCRATES and ARGUS are not subordinate approval functions of FFB-ROLE-0001
+  - critical review assignments must be organizationally separate from producer assignments
+  - owner override is allowed only as explicit governed decision and cannot delete dissent or risk history
+
+operating_principles:
+  - architecture_synthesis_occurs_after_specialist_inputs
+  - dissent_is_preserved
+  - role_creation_requires_stable_responsibility
+  - knowledge_access_does_not_grant_authority
+  - factory_blueprint_does_not_grant_runtime_execution_authority
