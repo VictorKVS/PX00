@@ -1,0 +1,88 @@
+schema_version: 0.1
+status: draft
+object_type: ai_delivery_stage_gate
+purpose: define what must be proven before an AI project advances from Demo to PoC to MVP to Production
+
+required_fields:
+  gate_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  stage:
+    type: enum
+    values: [DEMO, POC, MVP, PRODUCTION]
+  key_question: {type: string}
+  required_evidence: {type: list}
+  prohibited_claims: {type: list}
+  decision:
+    type: enum
+    values: [GO, NO_GO, REWORK, HOLD]
+  decision_evidence_refs: {type: list}
+  risk_posture_refs: {type: list}
+
+optional_fields:
+  stage_budget_ref: {type: reference}
+  contract_model:
+    type: enum
+    values: [TIME_AND_MATERIALS, HYBRID, FIXED_PRICE, FIXED_PRICE_SLA, INTERNAL]
+  supersedes_gate_ref: {type: reference}
+
+stage_semantics:
+  DEMO:
+    key_question: did we understand the problem and intended experience correctly
+    evidence_examples:
+      - clickable_prototype_or_scenario
+      - stakeholder_alignment
+      - fake_or_stub_data_is_allowed
+    prohibited_claim_examples:
+      - technical_feasibility_proven
+      - production_ready
+  POC:
+    key_question: is the key technical hypothesis feasible under declared constraints
+    evidence_examples:
+      - data_feasibility
+      - baseline
+      - model_or_pipeline_experiment
+      - technical_metrics
+      - known_data_gaps
+      - explicit_go_no_go
+    prohibited_claim_examples:
+      - user_value_proven
+      - production_ready
+  MVP:
+    key_question: do real users obtain measurable product and business value from the smallest usable system
+    evidence_examples:
+      - real_users
+      - real_data
+      - business_metric
+      - product_metric
+      - technical_slo
+      - basic_observability
+      - rollback_or_disable_path
+    prohibited_claim_examples:
+      - full_scale_reliability_proven
+      - production_sla_proven
+  PRODUCTION:
+    key_question: can the business safely and reliably depend on the system at the required operating scale
+    evidence_examples:
+      - sla_slo
+      - ci_cd_release_governance
+      - security_controls
+      - monitoring_and_alerting
+      - drift_detection
+      - recovery_and_disaster_recovery
+      - support_and_incident_process
+      - model_governance
+      - confirmed_economic_effect
+    prohibited_claim_examples:
+      - none_if_all_required_evidence_is_accepted
+
+invariants:
+  - demo_is_not_poc
+  - poc_is_not_mvp
+  - mvp_is_not_production
+  - failed_gate_stops_promotion_and_preserves_findings
+  - architecture_may_be_intentionally_disposable_at_demo_or_poc_if_declared
+  - shortcuts_must_have_expiry_stage
+  - production_requires_process_reliability_security_and_recovery_not_only_code
+  - gate_decision_does_not_grant_execution_authority
+
+library_dependency: none
