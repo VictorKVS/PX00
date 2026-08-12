@@ -1,0 +1,58 @@
+schema_version: 0.1
+status: draft
+object_type: governed_tool_definition
+canonical_object: false
+purpose: machine-readable contract for a governed tool/adapter capability definition; does not grant authority
+
+required_fields:
+  tool_id:
+    type: stable_governed_resource_id
+  version:
+    type: string
+  name:
+    type: string
+  status:
+    type: enum
+    values: [DRAFT, ACTIVE, SUSPENDED, RETIRED]
+  capabilities:
+    type: list
+    item_type: string
+  adapter_classes:
+    type: list
+    item_type: string
+  supported_side_effect_classes:
+    type: list
+    item_enum: [S0, S1, S2, S3, S4]
+  supported_data_classifications:
+    type: list
+    item_type: string
+
+optional_fields:
+  capability_constraints:
+    type: mapping
+  target_constraints:
+    type: mapping
+  max_autonomy_by_capability:
+    type: mapping
+    value_enum: [A0, A1, A2, A3, A4]
+  network_requirement:
+    type: enum
+    values: [NONE, OPTIONAL, REQUIRED]
+  secret_requirements:
+    type: reference_list
+    rule: references only; no raw secrets in public governance definitions
+  dependency_refs:
+    type: canonical_or_governed_reference_list
+  security_notes:
+    type: string
+
+invariants:
+  - tool_definition_does_not_grant_authority
+  - adapter_implementation_cannot_expand_declared_capability
+  - unsupported_side_effect_class_cannot_execute
+  - unsupported_data_classification_cannot_execute
+  - secrets_are_referenced_not_embedded
+  - suspended_or_retired_tool_is_not_resolved_for_new_execution
+
+runtime_validator: not_selected
+library_dependency: none
