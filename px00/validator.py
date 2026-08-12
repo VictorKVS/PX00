@@ -12,10 +12,13 @@ import yaml
 
 ROLE_RE = re.compile(r"^ROLE-\d{4}$")
 PROTO_RE = re.compile(r"^PROTO-\d{4}$")
+ACTREQ_RE = re.compile(r"^ACTREQ-\d{4,}$")
 TF_RE = re.compile(r"^TF-(\d{4})_.*\.md$")
 AUTONOMY = {"A0", "A1", "A2", "A3", "A4"}
 ACCEPTANCE = {"NOT_TESTED", "PASS", "PASS_WITH_ACTIONS", "FAIL", "BLOCKED"}
 TERMINAL = {"COMPLETED", "FAILED", "DENIED", "ESCALATED", "CANCELLED", "BLOCKED"}
+AUTHORITY_RESULTS = {"ALLOW", "DENY", "ESCALATE"}
+SIDE_EFFECTS = {"S0", "S1", "S2", "S3", "S4"}
 SECRET_KEYS = {
     "api_key", "api_hash", "access_token", "refresh_token", "password",
     "passwd", "secret", "client_secret", "private_key",
@@ -193,6 +196,90 @@ def validate_acceptance_fixture_document(doc: Any, path: str) -> list[Issue]:
     return issues + scan_secrets(fixture, path)
 
 
+def validate_action_request_document(doc: Any, path: str = "ACTION_REQUEST.yaml") -> list[Issue]:
+    request, issues = require_map(doc, path)
+    if request is None:
+        return issues
+    required = request.get("required_fields")
+    if not isinstance(required, dict):
+        return issues + [Issue("ACTREQ_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
+    for field in (
+        "action_request_id", "task_id", "run_id", "trace_id", "requested_by_role_id",
+        "protocol_id", "protocol_version", "step_id", "action_class", "required_capability",
+        "target_ref", "purpose", "requested_autonomy", "classification", "status",
+    ):
+        if field not in required:
+            issues.append(Issue("ACTREQ_FIELD_MISSING", path, f"required_fields.{field} is required."))
+    action_id = required.get("action_request_id")
+    if isinstance(action_id, dict):
+        pattern = action_id.get("pattern")
+        if pattern not in {"ACTREQ-*", "^ACTREQ-\\d{4,}$"}:
+            issues.append(Issue("ACTREQ_ID_PATTERN_INVALID", path, "action_request_id must declare ACTREQ-* canonical identity."))
+    autonomy = required.get("requested_autonomy")
+    if isinstance(autonomy, dict) and set(autonomy.get("values") or []) != AUTONOMY:
+        issues.append(Issue("ACTREQ_AUTONOMY_VALUES_INVALID", path, "requested_autonomy must enumerate A0..A4."))
+    invariants = set(request.get("invariants") or [])
+    for invariant in (
+        "request_does_not_grant_authority",
+        "executor_cannot_select_privileged_adapter_as_authority",
+        "material_execution_requires_separate_authority_decision",
+    ):
+        if invariant not in invariants:
+            issues.append(Issue("ACTREQ_INVARIANT_MISSING", path, invariant))
+    return issues + scan_secrets(request, path)
+
+
+def validate_tool_definition_document(doc: Any, path: str = "TOOL_DEFINITION.yaml") -> list[Issue]:
+    tool, issues = require_map(doc, path)
+    if tool is None:
+        return issues
+    required = tool.get("required_fields")
+    if not isinstance(required, dict):
+        return issues + [Issue("TOOL_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
+    for field in ("tool_id", "version", "capabilities", "side_effect_classes", "supported_data_classes", "max_autonomy_by_capability", "status"):
+        if field not in required:
+            issues.append(Issue("TOOL_FIELD_MISSING", path, f"required_fields.{field} is required."))
+    side_effects = required.get("side_effect_classes")
+    if isinstance(side_effects, dict):
+        values = set(side_effects.get("values") or [])
+        if values != SIDE_EFFECTS:
+            issues.append(Issue("TOOL_SIDE_EFFECT_VALUES_INVALID", path, "side_effect_classes must enumerate S0..S4."))
+    invariants = set(tool.get("invariants") or [])
+    for invariant in (
+        "tool_definition_never_grants_authority",
+        "adapter_implements_capability_not_governance",
+        "tool_output_is_not_evidence_or_knowledge_automatically",
+    ):
+        if invariant not in invariants:
+            issues.append(Issue("TOOL_INVARIANT_MISSING", path, invariant))
+    return issues + scan_secrets(tool, path)
+
+
+def validate_capability_grant_document(doc: Any, path: str = "CAPABILITY_GRANT.yaml") -> list[Issue]:
+    grant, issues = require_map(doc, path)
+    if grant is None:
+        return issues
+    required = grant.get("required_fields")
+    if not isinstance(required, dict):
+        return issues + [Issue("GRANT_REQUIRED_FIELDS_MISSING", path, "required_fields mapping is required.")]
+    for field in (
+        "grant_id", "action_request_id", "authority_decision_id", "capability",
+        "scope", "issued_at", "expires_at", "one_time", "status",
+    ):
+        if field not in required:
+            issues.append(Issue("GRANT_FIELD_MISSING", path, f"required_fields.{field} is required."))
+    invariants = set(grant.get("invariants") or [])
+    for invariant in (
+        "grant_requires_allow_authority_decision",
+        "grant_scope_cannot_exceed_action_request_or_authority_scope",
+        "expired_revoked_or_consumed_grant_cannot_execute",
+        "one_time_grant_cannot_be_replayed",
+    ):
+        if invariant not in invariants:
+            issues.append(Issue("GRANT_INVARIANT_MISSING", path, invariant))
+    return issues + scan_secrets(grant, path)
+
+
 def validate_tree_f(root: Path) -> list[Issue]:
     tree = root / "Tree_F"
     if not tree.is_dir():
@@ -239,7 +326,8 @@ def validate_repository(root: Path) -> list[Issue]:
     for rel in (
         "README.md", "PX00.yaml", "DEVELOPMENT_JOURNAL.md", "Tree_F/README.md",
         "governance/FATHER_CONSTITUTION.md", "protocols/PROTOCOL_EXECUTION_CONTRACT.md",
-        "assurance/ACCEPTANCE_MODEL.md",
+        "assurance/ACCEPTANCE_MODEL.md", "schemas/ACTION_REQUEST.yaml",
+        "schemas/TOOL_DEFINITION.yaml", "schemas/CAPABILITY_GRANT.yaml",
     ):
         if not (root / rel).is_file():
             issues.append(Issue("ROOT_FILE_MISSING", rel, "Required baseline file is missing."))
@@ -256,6 +344,17 @@ def validate_repository(root: Path) -> list[Issue]:
         if not isinstance(gate, dict) or gate.get("production_runtime_allowed") is not False:
             issues.append(Issue("PRODUCTION_RUNTIME_GATE_INVALID", "PX00.yaml", "production_runtime_allowed must remain false."))
         issues.extend(scan_secrets(manifest, "PX00.yaml"))
+
+    schema_validators = (
+        ("schemas/ACTION_REQUEST.yaml", validate_action_request_document),
+        ("schemas/TOOL_DEFINITION.yaml", validate_tool_definition_document),
+        ("schemas/CAPABILITY_GRANT.yaml", validate_capability_grant_document),
+    )
+    for rel, validator in schema_validators:
+        doc, load_issues = load_yaml(root / rel)
+        issues.extend(load_issues)
+        if doc is not None:
+            issues.extend(validator(doc, rel))
 
     role_ids: set[str] = set()
     required_protocols: set[str] = set()
