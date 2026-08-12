@@ -18,17 +18,16 @@ Every material Factory Builder generation records:
 - whether extraction into a separate repository is becoming justified.
 
 ## Current position
-- FFB-0 Internal Incubation: ACTIVE
-- Current strategic objective: `SUMMIT-FFB-01 — Agent Factory Blueprint`
-- First audited concept blueprint: `FFB-BP-0001-V2 v0.2 — PASS_WITH_ACTIONS at M0_CONCEPT`
-- M1 strategy: MVP-first, frozen by `FFB-MVP-0001`.
-- M1 control-flow skeleton: `PASS_WITH_RESTRICTIONS`.
-- M1 functional reference MVP: `FFB-ACCEPT-FUNC-MVP-0001 — PASS_WITH_RESTRICTIONS`.
-- First full functional run: `MVP-FUNC-RUN-0001`.
-- Open maturity blockers include `RISK-0002`, `RISK-0003`, `RISK-0004` and `RISK-0009` according to affected scope.
+- FFB-0 Internal Incubation: ACTIVE.
+- `SUMMIT-FFB-01 — Bounded Functional Agent Factory Reference MVP`: ACHIEVED WITH RESTRICTIONS.
+- Current summit: `SUMMIT-FFB-02 — First Governed Live Executor`: OPEN.
+- Executor boundary: proven with replaceable local workers.
+- AI lifecycle/risk gates: integrated.
+- Live HTTPS provider secret/data-egress boundary: locally proven and CI-green.
+- Real provider-specific driver and authorized live call: pending.
+- `RISK-0011`: MITIGATING, not resolved.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
-- Next direction: prove repeatability on multiple bounded problems, then replace exactly one deterministic stage with a governed executor adapter.
 
 ## 2026-08-12 — FFBJ-0001 — Project foundation
 Established `PROJECT-FFB-0001` inside PX00 with its own charter, design principles, factory construction lifecycle, risk/failure atlas, discovery/learning loop, roadmap and extraction plan.
@@ -49,13 +48,11 @@ Established the first reusable Factory Builder organizational staff as governed 
 Added a role registry, initial department/reporting seed and role-to-knowledge binding matrix. Roles explicitly define responsibilities, non-responsibilities, decision rights, authority ceilings, escalation, handoffs, evidence obligations, independence constraints, anti-Goodhart controls, failure modes and continuity rules.
 
 Important boundaries:
-- the Chief Factory Architect integrates but cannot independently audit its own blueprint;
+- Chief Factory Architect integrates but cannot independently audit its own blueprint;
 - Security/Risk may block only the affected maturity path for unresolved S4 risk and cannot accept S4 risk;
 - Knowledge Architecture governs provenance/version/context but cannot convert retrieved/generated text into truth or authority;
 - Organization Architecture must detect shadow workflows, incentive gaming and orphan responsibilities;
 - role identity remains independent of assigned model/provider/device.
-
-Maturity impact: Factory Builder now has a minimal architectural team structure suitable for beginning `SUMMIT-FFB-01` design work, but roles remain `PROPOSED` until protocol/evaluation packages and independent review are added.
 
 ## 2026-08-12 — FFBJ-0004 — Minimum design team and blueprint synthesis protocol
 Added:
@@ -63,92 +60,86 @@ Added:
 - `FFB-ROLE-0007` Quality and Assurance Architect;
 - `FFB-ROLE-0008` Capability Architect.
 
-Extended the organization seed and role knowledge matrix. Added `PROTO-FFB-0001 Factory Blueprint Synthesis`, a twelve-stage protocol from requirement qualification through capability decomposition, parallel specialist design, tension registration, synthesis, implementability, quality, security gate, Socrates challenge, ARGUS audit, rework/acceptance and governed handoff to FATHER.
+Added `PROTO-FFB-0001 Factory Blueprint Synthesis`, a twelve-stage protocol from requirement qualification through capability decomposition, parallel specialist design, tension registration, synthesis, implementability, quality, security gate, Socrates challenge, ARGUS audit, rework/acceptance and governed handoff to FATHER.
 
 Key decisions:
-- capability decomposition occurs before executor/model/tool selection;
-- specialist reviews run independently where possible;
-- incompatible positions become explicit architectural tensions rather than being silently averaged;
-- Principal Software Engineer can label architecture claims `UNPROVEN` when no executable verification path exists;
-- Quality PASS requires declared criteria and evidence;
-- unresolved S4 blocks the affected maturity path regardless of majority opinion;
+- capability decomposition precedes executor/model/tool selection;
+- incompatible expert positions become explicit architectural tensions;
+- Principal Software Engineer may label architecture claims `UNPROVEN` without executable evidence;
+- unresolved S4 blocks the affected maturity path;
 - Socrates and ARGUS remain outside the producer chain;
-- accepted blueprint handoff to FATHER contains no runtime grants.
-
-Maturity impact: the minimum Factory Builder design team and collaboration sequence now exist as contracts. Roles are still `PROPOSED`; before SUMMIT-FFB-01 acceptance they need evaluation rubrics and at least one synthetic end-to-end blueprint dry-run.
+- accepted blueprint handoff contains no runtime grants.
 
 ## 2026-08-12 — FFBJ-0005 — First audited Agent R&D Factory concept
-Created the machine contracts `FACTORY_REQUIREMENT`, `CAPABILITY` and `FACTORY_BLUEPRINT` and exercised them on the first synthetic design request `FFB-REQ-0001` for a governed Agent R&D Factory.
+Created `FACTORY_REQUIREMENT`, `CAPABILITY` and `FACTORY_BLUEPRINT`, then exercised them on `FFB-REQ-0001`.
 
-The first candidate `FFB-BP-0001 v0.1` targeted M1 and was intentionally sent through the critical path rather than accepted by its author. Socrates and ARGUS rejected its M1 claim because:
-- `RISK-0002` remains S4 and blocks the affected maturity path;
-- the proposed `R&D Manager` duplicated FATHER management responsibilities;
-- referenced `PROTO-RD-*` contracts did not yet exist;
-- acceptance criteria and runtime reviewer independence were not yet sufficiently proven.
+The first candidate `FFB-BP-0001 v0.1` targeted M1 and was rejected by Socrates/ARGUS because `RISK-0002` remained blocking, the proposed R&D Manager duplicated FATHER, referenced protocols did not yet exist and reviewer independence was not proven.
 
-The failed candidate was preserved unchanged. Rework produced immutable revision `FFB-BP-0001-V2 v0.2`:
-- target maturity reduced to honest `M0_CONCEPT`;
-- local management role reduced to `R&D Coordinator` subordinate to FATHER;
-- undefined `PROTO-RD-*` objects moved to explicit required-next artifacts;
-- `FFB-ACC-0001` now separates M0 acceptance from M1 entry evidence;
-- S4 and assignment-independence blockers remain visible.
+The failed candidate was preserved. Immutable rework `FFB-BP-0001-V2 v0.2` reduced the maturity claim to honest M0, replaced the manager with an R&D Coordinator subordinate to FATHER and made missing protocols explicit future requirements.
 
-Socrates re-review result: `PASS_FOR_M0_WITH_ACTIONS`.
-ARGUS re-audit result: `PASS_WITH_ACTIONS_FOR_M0`; `M1 BLOCKED`.
-Acceptance record: `FFB-ACCEPT-0001`.
-
-Achievement: Factory Builder has completed its first full design → criticism → rework → independent re-review loop and produced its first audited factory concept without weakening the maturity gate to obtain a PASS.
-
-Maturity impact: `SUMMIT-FFB-01` has reached its concept-design sub-summit, but operational Agent Factory Blueprint acceptance remains incomplete until the M1 contract/runtime evidence is built.
+Result: first full design → criticism → rework → independent re-review cycle completed without weakening maturity gates.
 
 ## 2026-08-12 — FFBJ-0006 — MVP-first execution cut
-Adopted an explicit MVP-first strategy after the audited M0 concept. Created `FFB-MVP-0001` and froze the smallest M1 scope before further architecture expansion.
+Adopted explicit MVP-first strategy and froze the smallest M1 scope in `FFB-MVP-0001`.
 
-Implemented the first executable deterministic Agent R&D Factory harness in `px00/factory_mvp.py` with tests in `tests/test_factory_mvp.py`.
+Implemented deterministic `AgentRdFactoryMvp` with strict stage order, independent producer/verifier, trust and security prechecks, verification/Socrates before delivery, append-only run identity and no material external action.
 
-The MVP enforces:
-- strict problem-to-delivery stage order;
-- independent producer and verifier assignments;
-- explicit trust gate for untrusted input;
-- security precheck before bounded prototype execution;
-- verification and Socrates before delivery;
-- append-only run identity and trace;
-- no material external action.
-
-Deliberately deferred until after MVP: live LLM providers, production database, distributed queue, UI, multi-tenancy, confidential/regulated data, autonomous external tools, production SLA, scaling, rich dashboards, automatic role generation, robotics and broad optimization work.
-
-Risk decision: `RISK-0002` is not claimed closed. It is isolated for this narrow MVP through synthetic/explicitly gated input and absence of material external action. Wider scope remains blocked until adversarial trust-gate evidence exists.
-
-Maturity impact: M1 moved from architecture-only backlog to executable implementation. The control-flow skeleton subsequently passed restricted audit/acceptance, but useful stage execution still required concrete artifacts.
+Deferred: live LLM, production DB, queue, UI, multi-tenancy, regulated data, autonomous tools, production SLA, scaling, robotics and broad optimization.
 
 ## 2026-08-12 — FFBJ-0007 — First functional reference MVP
-Extended the M1 harness from state transitions to concrete evidence-producing work.
+Extended the harness from state transitions to typed immutable stage artifacts with SHA-256, lineage, verifier/Socrates independence and verdict/outcome consistency.
 
-Created `FACTORY_STAGE_ARTIFACT` and upgraded the runtime so every stage requires a fresh typed immutable artifact with content digest and explicit lineage. Verification evidence must come from the pinned verifier assignment; Socrates evidence must come from an assignment independent of producer and verifier. Security, Verification and Socrates artifact verdicts are checked against the runtime outcome so contradictory evidence cannot silently produce a PASS.
+`MVP-FUNC-RUN-0001` completed a useful bounded R&D case and produced a governed delivery package. Socrates preserved that deterministic idempotency identity is not exactly-once execution.
 
-Executed `MVP-FUNC-RUN-0001`, the first complete bounded functional R&D case. The factory:
-1. qualified a retry/deduplication problem;
-2. recorded research evidence;
-3. assessed claims;
-4. compared design alternatives;
-5. performed a security precheck;
-6. implemented a deterministic idempotency-key prototype;
-7. independently verified it;
-8. passed Socrates with a preserved limitation;
-9. produced a candidate factory lesson;
-10. created a governed delivery package.
+Audit found and fixed ambiguous delimiter encoding and a possible FAIL/PASS evidence mismatch. ARGUS accepted the functional reference MVP with restrictions. `RISK-0009` records that payload hashing does not yet protect the full artifact envelope.
 
-The selected design is SHA-256 over canonical JSON `[run_id, operation, target]`. Socrates explicitly preserved that deterministic idempotency identity does **not** guarantee exactly-once execution; durable uniqueness and atomic state transition remain future controls.
+## 2026-08-12 — FFBJ-0008 — Scenario suite and governed rework
+Expanded the single happy path into multiple observed behaviors:
+- direct governed delivery;
+- verifier FAIL → explicit rework → re-verification → delivery;
+- security scope block before prototype execution.
 
-The audit cycle found and fixed two defects before acceptance:
-- delimiter concatenation could encode distinct tuples ambiguously, so canonical JSON encoding replaced it and a negative test was added;
-- assurance evidence could declare `FAIL` while runtime was told `PASS`, so gated artifact verdict/outcome consistency became a runtime invariant.
+Added an explicit `request_rework` transition with append-only failed evidence and lineage. Created reusable failure patterns `FFB-FP-0001` and `FFB-FP-0002`.
 
-ARGUS verdict: `M1 FUNCTIONAL REFERENCE MVP — PASS_WITH_RESTRICTIONS`.
-Acceptance: `FFB-ACCEPT-FUNC-MVP-0001`.
+Key lesson: safe refusal is a valid control outcome and must not be optimized away merely to increase delivery rate.
 
-New risk: `RISK-0009` records that current SHA-256 protects artifact payload but not the full provenance envelope. The restriction is acceptable for the local in-memory M1 reference MVP but blocks higher persistent evidence maturity until the envelope is canonicalized and hashed/replay-verified.
+## 2026-08-12 — FFBJ-0009 — Governed replaceable executor boundary
+Introduced provider-neutral executor definitions/invocations and proved worker replacement without changing the role contract.
 
-Maturity impact: the Agent R&D Factory now has one audited useful end-to-end reference run rather than only a workflow skeleton. This is not a live autonomous agent factory and not production-ready.
+Proven chain:
+`worker v0.1 → candidate → verifier FAIL → governed rework → worker v0.2 → verifier PASS → Socrates → delivery`.
 
-Next gate: run several different bounded functional problems through the same artifact contract, measure failure/rework patterns, then replace exactly one deterministic producer stage with a governed executor adapter. Broader external input remains gated by `RISK-0002`; persistent evidence maturity remains gated by `RISK-0009`.
+Executor identity/version/provider/model, assignment and input/output hashes remain pinned. Provider invocation success is explicitly separate from verification and acceptance. Created `FFB-FP-0003` and `RISK-0011` for the still-unproven live-provider boundary.
+
+## 2026-08-12 — FFBJ-0010 — AI lifecycle evidence gates and quantitative risk
+Integrated CRISP-ML(Q), Demo→PoC→MVP→Production stage evidence and stage-aware CI/CD without conflating these with PX00 M0…M5 maturity.
+
+Added reproducible quantitative risk simulation using Bernoulli occurrence × triangular impact, reporting expected loss, tail percentile and probability above tolerance. Qualitative S0…S4 remains independent and S4 cannot be overridden by a favorable expected-loss number.
+
+Added TechnoMart as a regression/strategy seed with unknowns preserved as `TBD` rather than invented.
+
+## 2026-08-12 — FFBJ-0011 — Live provider readiness boundary
+Prepared the first real-provider integration without committing credentials or coupling FATHER to a vendor.
+
+Implemented:
+- `LIVE_PROVIDER_PROFILE` and `LIVE_PROVIDER_CALL_RECORD`;
+- provider-neutral `LiveHttpsExecutorAdapter`;
+- HTTPS and exact host allowlist;
+- explicit live opt-in;
+- credential reference/value separation;
+- data-classification egress gate;
+- bounded timeout and response size;
+- HTTP/JSON/shape fail-closed behavior;
+- request/response hashes and provider request/model identity capture;
+- integration through the existing `GovernedExecutorBoundary`.
+
+The first CI run failed the existing secret-hygiene test because a local variable matched the defensive scanner. The scanner was not weakened; implementation was changed. The corrected run passed unit/integration tests, secret scan and repository contract validation.
+
+`RISK-0011` advanced from OPEN to MITIGATING. Local transport/auth/data-egress containment is now proven, but the external provider itself remains unproven.
+
+Current gate:
+- `LIVE_PROVIDER_BOUNDARY_READY = YES`;
+- `LIVE_PROVIDER_PROVEN = NO`;
+- `SUMMIT-FFB-02 = OPEN`.
+
+Next action: configure exactly one authorized provider driver, send only PUBLIC/INTERNAL bounded data, perform one real inference with no tools/material external action, preserve provider evidence and submit the candidate to independent verification and Socrates. Bad live output must remain rejectable and reworkable.
