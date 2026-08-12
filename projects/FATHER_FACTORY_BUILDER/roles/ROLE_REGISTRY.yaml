@@ -1,4 +1,4 @@
-registry_version: 0.1
+registry_version: 0.2
 project_ref: PROJECT-FFB-0001
 status: incubation
 
@@ -23,12 +23,23 @@ roles:
     canonical_name: Security and Risk Architect
     package_ref: roles/FFB-ROLE-0005_SECURITY_RISK_ARCHITECT.yaml
     state: PROPOSED
+  - role_id: FFB-ROLE-0006
+    canonical_name: Principal Software Engineer
+    package_ref: roles/FFB-ROLE-0006_PRINCIPAL_SOFTWARE_ENGINEER.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0007
+    canonical_name: Quality and Assurance Architect
+    package_ref: roles/FFB-ROLE-0007_QUALITY_ASSURANCE_ARCHITECT.yaml
+    state: PROPOSED
+  - role_id: FFB-ROLE-0008
+    canonical_name: Capability Architect
+    package_ref: roles/FFB-ROLE-0008_CAPABILITY_ARCHITECT.yaml
+    state: PROPOSED
 
 future_core_roles:
-  - Principal Software Engineer
-  - Quality and Assurance Architect
-  - Capability Architect
   - Resource and Economics Architect
+  - Operations and Reliability Architect
+  - Domain Safety Architect per physical domain
   - Socrates Independent Reviewer
   - ARGUS Audit Council
 
@@ -38,3 +49,5 @@ rules:
   - role_knowledge_is_bound_by_logical_ids
   - no_role_may_expand_its_own_authority
   - conflicting_independent_review_must_use_separate_assignment
+  - role_count_is_not_a_maturity_metric
+  - prefer_existing_role_extension_when_new_stable_responsibility_is_not_proven
