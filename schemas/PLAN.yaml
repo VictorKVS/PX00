@@ -1,0 +1,28 @@
+schema_version: 0.1
+status: draft
+object_type: plan
+purpose: preserve an immutable explanation of how a goal/project is decomposed into work
+
+required_fields:
+  plan_id: {type: stable_id}
+  project_ref: {type: project_reference}
+  goal_refs: {type: list}
+  revision: {type: integer}
+  rationale: {type: text}
+  task_refs: {type: list}
+  created_by: {type: actor_reference}
+  created_at: {type: utc_timestamp}
+  state: {type: enum, values: [PROPOSED, ACTIVE, SUPERSEDED, REJECTED]}
+
+conditional_fields:
+  supersedes_plan_ref: {type: plan_reference}
+  trigger_ref: {type: replan_trigger_reference}
+
+invariants:
+  - plan_is_immutable_after_creation
+  - revision_greater_than_one_requires_supersedes_plan_ref
+  - plan_revision_never_rewrites_prior_plan
+  - plan_does_not_grant_runtime_authority
+  - task_refs_must_belong_to_same_project
+
+library_dependency: none
