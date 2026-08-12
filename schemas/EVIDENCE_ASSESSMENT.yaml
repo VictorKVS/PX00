@@ -1,0 +1,35 @@
+schema_version: 0.1
+status: draft
+object_type: evidence_assessment
+purpose: immutable governed assessment of evidence quality dimensions
+
+required_fields:
+  evidence_assessment_id:
+    type: stable_id
+  evidence_ref:
+    type: EVD-reference
+  source_assessment_ref:
+    type: source_assessment_reference
+  evaluator_ref:
+    type: actor_or_component_reference
+  evaluator_version:
+    type: string
+  evaluated_at:
+    type: utc_timestamp
+  basis_refs:
+    type: canonical_reference_list
+  dimensions:
+    required: [quality, directness, completeness, reproducibility, relevance]
+    range: 0.0_to_1.0
+  assessment_hash:
+    type: sha256_hex
+
+invariants:
+  - evidence_quality_is_assessed_not_assumed
+  - evidence_assessment_is_immutable_after_creation
+  - source_quality_and_evidence_quality_are_distinct
+  - new_assessment_does_not_overwrite_prior_assessment
+  - dimensions_require_explicit_evaluator_and_basis
+  - evidence_quality_does_not_convert_integrity_into_truth
+
+library_dependency: none
