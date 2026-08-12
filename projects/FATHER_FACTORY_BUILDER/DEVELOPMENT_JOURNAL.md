@@ -26,6 +26,8 @@ Every material Factory Builder generation records:
 - Live HTTPS provider secret/data-egress boundary: locally proven and CI-green.
 - Real provider-specific driver and authorized live call: pending.
 - `RISK-0011`: MITIGATING, not resolved.
+- Product portfolio: canonical master roadmap now lives in `VictorKVS/KNOWLEDGE_CORE/father/product-roadmap/`.
+- Security Knowledge: canonical professional product lives in `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`; Factory Builder binds to `KB-SECURITY` instead of copying domain truth.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
 
@@ -137,9 +139,45 @@ The first CI run failed the existing secret-hygiene test because a local variabl
 
 `RISK-0011` advanced from OPEN to MITIGATING. Local transport/auth/data-egress containment is now proven, but the external provider itself remains unproven.
 
+## 2026-08-12 — FFBJ-0012 — Product portfolio roadmap
+Established a product manufacturing portfolio so Factory Builder work is driven by active products and evidence gates rather than unrestricted architecture expansion.
+
+Primary owner-priority sequence:
+`Security Knowledge Base → Compliance Engine → Evidence-Based Security Architect → Vulnerability & Risk Expert → White-Hat / Continuous Security Assurance → Regulatory Change Engine → Continuous Security Audit Expert`.
+
+Architect-proposed supporting/future tracks remain visible but non-displacing: FATHER/Factory Builder platform, Agent Factory, knowledge infrastructure, assurance, Software/Service Factory, Research Factory, Cyber-Physical/Robotics and Factory-of-Factories.
+
+Rule: later products may be explored as bounded PoCs, but foundational gates cannot be bypassed by a successful demo or schedule pressure.
+
+## 2026-08-12 — FFBJ-0013 — Security Knowledge canonical route
+Corrected the repository boundary after recognizing that `SEC-PROD-0001` already has an active canonical implementation in `VictorKVS/KNOWLEDGE_CORE`.
+
+Canonical ownership:
+- `security-knowledge/` — Security Knowledge product tree;
+- `father/domain-knowledge/` — professional domain management;
+- `father/product-roadmap/` — canonical product roadmaps.
+
+PX00 duplicate Security Knowledge coverage/readiness/source-backlog/runtime-gate artifacts were removed. PX00 now contains route-only product/roadmap records.
+
+Factory Builder rule:
+`ROLE KNOWLEDGE REQUIREMENT ≠ OWNED LOCAL KNOWLEDGE COPY`.
+
+A role requiring Security knowledge binds to stable `KB-SECURITY`; FATHER resolves the canonical route and pins the resulting knowledge/version context for reproducibility.
+
+Security Knowledge remains evidence-first and is not ordinary RAG over PDFs. Canonical pipeline:
+`SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
+
+`VERIFIED` requires an admitted primary source and exact locator.
+
+Parallel decision: `SUMMIT-FFB-02` may proceed independently; live-provider readiness is not a blocker for normative corpus production. Live-model output later used for extraction/interpretation remains candidate knowledge until admitted through canonical review.
+
 Current gate:
 - `LIVE_PROVIDER_BOUNDARY_READY = YES`;
 - `LIVE_PROVIDER_PROVEN = NO`;
-- `SUMMIT-FFB-02 = OPEN`.
+- `SUMMIT-FFB-02 = OPEN`;
+- `SEC-PROD-0001 = ACTIVE CORPUS BUILD, NOT EXPERT_READY`.
 
-Next action: configure exactly one authorized provider driver, send only PUBLIC/INTERNAL bounded data, perform one real inference with no tools/material external action, preserve provider evidence and submit the candidate to independent verification and Socrates. Bad live output must remain rejectable and reworkable.
+Next actions:
+1. continue canonical Security Knowledge corpus roadmap in KNOWLEDGE_CORE;
+2. complete exactly one authorized live-provider pilot in PX00;
+3. later combine them in the first closed FATHER Security-domain loop using a VERIFIED knowledge slice.
