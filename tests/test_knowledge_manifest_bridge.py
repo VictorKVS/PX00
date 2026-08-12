@@ -31,7 +31,7 @@ MANIFEST = {
             ),
         }
     ],
-    "manifest_digest": "a30941f9ec8311221c72b501ea2575038f75ad8786febf65d8c5c040cc701936",
+    "manifest_digest": "8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2",
 }
 
 
@@ -51,6 +51,12 @@ class KnowledgeManifestBridgeTests(unittest.TestCase):
             domain_ref="SECURITY",
         )
 
+    def tampered_manifest(self, field, value):
+        tampered = dict(MANIFEST)
+        tampered["selected_objects"] = [dict(MANIFEST["selected_objects"][0])]
+        tampered["selected_objects"][0][field] = value
+        return tampered
+
     def test_real_manifest_digest_matches_consumer_algorithm(self):
         self.assertEqual(
             self.bridge.producer_manifest_digest(MANIFEST),
@@ -69,6 +75,8 @@ class KnowledgeManifestBridgeTests(unittest.TestCase):
             imported.objects[0].source_locator_ref,
             "publication.pravo.gov.ru:0001202503260008",
         )
+        self.assertEqual(imported.objects[0].freshness_state, "CURRENT_METADATA_AT_PINNED_COMMIT")
+        self.assertEqual(imported.objects[0].context_object.classification, "PUBLIC")
 
     def test_imported_real_slice_builds_snapshot_bound_context_package(self):
         imported = self.import_slice()
@@ -108,18 +116,20 @@ class KnowledgeManifestBridgeTests(unittest.TestCase):
         self.assertEqual(len(package.package_hash), 64)
 
     def test_tampered_selection_state_fails_manifest_integrity(self):
-        tampered = dict(MANIFEST)
-        tampered["selected_objects"] = [dict(MANIFEST["selected_objects"][0])]
-        tampered["selected_objects"][0]["knowledge_state"] = "VERIFIED"
         with self.assertRaisesRegex(ValueError, "PRODUCER_MANIFEST_DIGEST_MISMATCH"):
-            self.import_slice(tampered)
+            self.import_slice(self.tampered_manifest("knowledge_state", "VERIFIED"))
 
     def test_tampered_source_locator_fails_manifest_integrity(self):
-        tampered = dict(MANIFEST)
-        tampered["selected_objects"] = [dict(MANIFEST["selected_objects"][0])]
-        tampered["selected_objects"][0]["source_locator_ref"] = "invented-locator"
         with self.assertRaisesRegex(ValueError, "PRODUCER_MANIFEST_DIGEST_MISMATCH"):
-            self.import_slice(tampered)
+            self.import_slice(self.tampered_manifest("source_locator_ref", "invented-locator"))
+
+    def test_tampered_classification_fails_manifest_integrity(self):
+        with self.assertRaisesRegex(ValueError, "PRODUCER_MANIFEST_DIGEST_MISMATCH"):
+            self.import_slice(self.tampered_manifest("classification", "INTERNAL"))
+
+    def test_tampered_freshness_fails_manifest_integrity(self):
+        with self.assertRaisesRegex(ValueError, "PRODUCER_MANIFEST_DIGEST_MISMATCH"):
+            self.import_slice(self.tampered_manifest("freshness_state", "STALE"))
 
     def test_wrong_repository_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "PRODUCER_REPOSITORY_MISMATCH"):
