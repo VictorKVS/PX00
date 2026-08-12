@@ -1,4 +1,4 @@
-schema_version: 0.2
+schema_version: 0.3
 status: draft
 object_type: context_package
 purpose: immutable traceable knowledge context delivered to one agent assignment for one RUN
@@ -30,6 +30,8 @@ required_fields:
     values: [sha256]
 
 optional_fields:
+  knowledge_snapshot_refs:
+    type: KNOWLEDGE_SNAPSHOT_reference_list
   source_refs:
     type: SRC_reference_list
   evidence_refs:
@@ -50,9 +52,12 @@ invariants:
   - package_contains_only_objects_allowed_by_request_and_bindings
   - package_uses_stable_logical_knowledge_ids
   - every_selected_object_has_exact_version_and_sha256_content_digest
-  - package_hash_covers_object_id_version_content_digest_and_material_selection_metadata
+  - external_repository_selection_may_pin_one_or_more_KNOWLEDGE_SNAPSHOT_refs
+  - knowledge_snapshot_refs_participate_in_package_hash_when_present
+  - package_hash_covers_object_id_version_content_digest_snapshot_refs_and_material_selection_metadata
   - changing_content_under_same_object_id_changes_package_hash
   - changing_version_under_same_object_id_changes_package_hash
+  - changing_external_repository_snapshot_changes_package_hash
   - physical_endpoint_change_does_not_rewrite_historical_object_identity
   - route_snapshot_change_remains_visible_in_historical_package_hash
   - assignment_receives_context_not_whole_repository
