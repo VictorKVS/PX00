@@ -1,0 +1,42 @@
+schema_version: 0.1
+status: draft
+object_type: EVD
+purpose: persistent evidence item with source provenance and stance
+
+required_fields:
+  evidence_id:
+    type: EVD-reference
+  source_ref:
+    type: SRC-reference
+  stance:
+    type: enum
+    values: [SUPPORT, CONTRADICT]
+  independence_group:
+    type: string
+  observed_at:
+    type: utc_timestamp
+  recorded_at:
+    type: utc_timestamp
+  dimensions:
+    required: [source_reliability, evidence_quality, recency, directness]
+    range: 0.0_to_1.0
+
+conditional_fields:
+  artifact_ref:
+    type: canonical_reference
+  excerpt_ref:
+    type: canonical_reference
+  parent_evidence_refs:
+    type: EVD-reference-list
+  claim_refs:
+    type: CLM-reference-list
+
+invariants:
+  - evidence_identity_is_immutable
+  - evidence_must_reference_source
+  - duplicated_source_derivatives_share_independence_group_unless_independence_is_proven
+  - stance_is_explicit
+  - raw_source_content_need_not_be_copied_when_reference_is_sufficient
+  - evidence_revision_creates_new_evidence_identity
+
+library_dependency: none
