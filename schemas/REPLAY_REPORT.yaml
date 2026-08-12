@@ -1,0 +1,34 @@
+schema_version: 0.1
+status: draft
+object_type: replay_report
+canonical_object: false
+purpose: read-only verification result for persisted governed execution lineage
+
+required_fields:
+  status:
+    type: enum
+    values: [VERIFIED_RECORD, BROKEN_LINEAGE, TAMPER_DETECTED, POLICY_MISMATCH, INSUFFICIENT_EVIDENCE]
+  run_id:
+    type: RUN-reference
+  trace_id:
+    type: TRACE-reference
+  verified_event_count:
+    type: integer
+    minimum: 0
+  reason_code:
+    type: string
+
+conditional_fields:
+  policy_snapshot_ref:
+    type: policy_snapshot_reference
+  policy_snapshot_hash:
+    type: sha256_hex
+
+invariants:
+  - replay_verifier_is_read_only
+  - replay_does_not_call_tool_boundary_or_execute_external_side_effects
+  - verified_record_means_integrity_and_lineage_verified_not_factual_truth_proven
+  - tamper_or_lineage_failure_cannot_be_reported_as_verified_record
+  - missing_material_evidence_cannot_be_reported_as_verified_record
+
+library_dependency: none
