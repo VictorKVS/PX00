@@ -18,6 +18,9 @@ class SyntheticGovernedKernelTests(unittest.TestCase):
         self.assertEqual(result.output, 20)
         self.assertEqual(result.authority_decision.result, "ALLOW")
         self.assertTrue(result.authority_decision.policy_refs)
+        self.assertEqual(result.policy_snapshot.run_id, request.run_id)
+        self.assertEqual(result.authority_decision.policy_snapshot_ref, result.policy_snapshot.snapshot_id)
+        self.assertEqual(result.authority_decision.policy_snapshot_hash, result.policy_snapshot.snapshot_hash)
         self.assertIsNotNone(result.capability_grant)
         self.assertEqual(result.capability_grant.status, "CONSUMED")
         self.assertTrue(any(event.event_type == "TOOL_BOUNDARY" for event in result.events))
@@ -57,6 +60,29 @@ class SyntheticGovernedKernelTests(unittest.TestCase):
         self.assertEqual(result.run_state, "COMPLETED")
         self.assertEqual(result.output, 12)
         self.assertEqual(result.authority_decision.effective_autonomy, "A1")
+
+    def test_snapshot_from_another_run_is_denied(self):
+        request_a = self.kernel.prepare_request(2, 3)
+        request_b = self.kernel.prepare_request(4, 5)
+        snapshot_b = self.kernel.create_policy_snapshot(request_b)
+        result = self.kernel.execute_request(request_a, allow=True, policy_snapshot=snapshot_b)
+        self.assertEqual(result.run_state, "DENIED")
+        self.assertEqual(result.blocking_reason, "POLICY_SNAPSHOT_RUN_MISMATCH")
+        self.assertIsNone(result.capability_grant)
+
+    def test_grant_rejects_policy_snapshot_ref_mismatch(self):
+        request = self.kernel.prepare_request(2, 5)
+        snapshot = self.kernel.create_policy_snapshot(request)
+        authority = self.kernel.evaluate_authority(request, allow=True, policy_snapshot=snapshot)
+        tampered = replace(authority, policy_snapshot_ref="POLSNAP-tampered")
+        self.assertIsNone(self.kernel.issue_grant(request, tampered, snapshot))
+
+    def test_grant_rejects_policy_snapshot_hash_mismatch(self):
+        request = self.kernel.prepare_request(2, 5)
+        snapshot = self.kernel.create_policy_snapshot(request)
+        authority = self.kernel.evaluate_authority(request, allow=True, policy_snapshot=snapshot)
+        tampered = replace(authority, policy_snapshot_hash="0" * 64)
+        self.assertIsNone(self.kernel.issue_grant(request, tampered, snapshot))
 
 
 class DeterministicToolBoundaryTests(unittest.TestCase):
