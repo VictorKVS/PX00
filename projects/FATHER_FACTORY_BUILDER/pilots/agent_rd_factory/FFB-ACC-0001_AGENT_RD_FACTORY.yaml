@@ -1,0 +1,81 @@
+acceptance_matrix_id: FFB-ACC-0001
+requirement_ref: FFB-REQ-0001
+blueprint_family_ref: FFB-BP-0001
+version: 0.1
+status: ACTIVE
+
+maturity_gates:
+  M0_CONCEPT:
+    required:
+      - id: ACC-M0-001
+        criterion: authorized need beneficiary scope non-goals and maturity target are explicit
+        evidence_refs: [FFB-REQ-0001]
+      - id: ACC-M0-002
+        criterion: required capabilities are decomposed without model vendor or tool identity
+        evidence_refs: [FFB-CAPMAP-0001]
+      - id: ACC-M0-003
+        criterion: accountable roles handoffs and independence boundaries are explicit
+        evidence_refs: [FFB-RBSET-0001]
+      - id: ACC-M0-004
+        criterion: system trust knowledge and external-effect boundaries are explicit
+        evidence_refs: [FFB-BP-0001]
+      - id: ACC-M0-005
+        criterion: Socrates and ARGUS have reviewed the candidate and dissent is preserved
+        evidence_refs: [SOCRATES_REVIEW_V0_1, ARGUS-FFB-0001]
+      - id: ACC-M0-006
+        criterion: unresolved S4 is explicitly recognized as blocking the affected M1 path
+        evidence_refs: [RISK-0002, ARGUS-FFB-0001]
+    blocking_failures:
+      - unresolved_mission_ambiguity
+      - hidden_or_deleted_material_dissent
+      - blueprint_claims_execution_authority
+      - known_S4_is_omitted_from_maturity_limits
+
+  M1_PROTOTYPE:
+    required:
+      - id: ACC-M1-001
+        criterion: every material workflow step has an approved governed PROTO-RD contract with typed inputs outputs failure and escalation behavior
+        evidence_type: protocol_contract_set
+      - id: ACC-M1-002
+        criterion: RISK-0002 is resolved or the affected action path is technically isolated and adversarially verified
+        evidence_type: adversarial_end_to_end_test
+      - id: ACC-M1-003
+        criterion: producer and independent verifier assignments are enforced as different eligible assignments for material outputs
+        evidence_type: runtime_negative_and_positive_tests
+      - id: ACC-M1-004
+        criterion: prototype execution is reproducible in a bounded sandbox and cannot perform unauthorized material external effects
+        evidence_type: reproducible_harness_and_boundary_tests
+      - id: ACC-M1-005
+        criterion: each critical capability has measurable test evidence and explicit failure disposition
+        evidence_type: capability_acceptance_records
+      - id: ACC-M1-006
+        criterion: exact executor configuration is pinned sufficiently to reproduce material prototype comparisons
+        evidence_type: executor_snapshot
+      - id: ACC-M1-007
+        criterion: knowledge objects used in material decisions are version-and-digest pinned
+        evidence_type: context_package_verification
+      - id: ACC-M1-008
+        criterion: no undefined protocol role knowledge or acceptance reference is treated as existing
+        evidence_type: reference_integrity_test
+    blocking_failures:
+      - any_unresolved_S4_on_affected_path
+      - independent_verification_only_declarative
+      - undefined_material_protocol
+      - external_effect_bypass
+      - acceptance_criteria_not_measurable
+
+  M2_INTEGRATED_PROTOTYPE:
+    required:
+      - durable_authoritative_state_for_integration_scope
+      - idempotency_and_concurrency_semantics_verified
+      - crash_recovery_and_replay_for_material_runs
+      - integrated_model_tool_and_knowledge_adapters_under_policy
+    note: not evaluated by first summit
+
+verdict_rules:
+  - PASS_requires_all_required_criteria_for_target_maturity
+  - PASS_WITH_ACTIONS_allowed_only_when_actions_do_not_violate_target_maturity_gate
+  - unresolved_S4_cannot_be_waived_by_majority_vote
+  - evidence_absence_means_UNPROVEN_not_PASS
+  - producer_self_attestation_is_not_independent_verification
+  - acceptance_does_not_grant_runtime_authority
