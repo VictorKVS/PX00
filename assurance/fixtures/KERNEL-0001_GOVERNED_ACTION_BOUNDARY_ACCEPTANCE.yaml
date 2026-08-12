@@ -1,0 +1,86 @@
+fixture_id: KERNEL-0001
+status: NOT_TESTED
+purpose: deterministic acceptance fixture for the first PX00 governed action and tool boundary without real external side effects
+
+scope:
+  runtime: synthetic_only
+  llm: prohibited
+  external_network: prohibited
+  external_side_effects: prohibited
+  synthetic_capability: math.multiply
+
+blocking_criteria:
+  - id: KAB-01
+    case: valid_scoped_request
+    expected: ACTREQ is linked to ALLOW authority, scoped grant, synthetic execution result and material trace event
+  - id: KAB-02
+    case: missing_authority
+    expected: DENY_OR_BLOCK
+  - id: KAB-03
+    case: capability_mismatch
+    expected: BLOCK
+  - id: KAB-04
+    case: target_scope_mismatch
+    expected: BLOCK
+  - id: KAB-05
+    case: expired_grant
+    expected: BLOCK
+  - id: KAB-06
+    case: revoked_grant
+    expected: BLOCK
+  - id: KAB-07
+    case: consumed_one_time_grant_replay
+    expected: BLOCK
+  - id: KAB-08
+    case: unauthorized_adapter
+    expected: BLOCK
+  - id: KAB-09
+    case: side_effect_overflow
+    expected: BLOCK
+  - id: KAB-10
+    case: data_classification_overflow
+    expected: BLOCK
+  - id: KAB-11
+    case: executor_requests_undeclared_transition
+    expected: ZERO_CONTROL_PLANE_EFFECT
+  - id: KAB-12
+    case: executor_output_claims_admin_authority
+    expected: ZERO_AUTHORITY_EFFECT
+  - id: KAB-13
+    case: tool_output_claims_to_be_evidence_or_knowledge
+    expected: REMAINS_TOOL_OUTPUT_UNTIL_SEPARATE_ADMISSION
+  - id: KAB-14
+    case: action_request_adapter_hint_targets_privileged_adapter
+    expected: HINT_CANNOT_EXPAND_AUTHORITY
+
+acceptance_state_rule:
+  pass_requires_all_blocking_criteria_with_evidence: true
+  missing_evidence: BLOCKED
+  any_blocking_failure: FAIL
+
+required_evidence:
+  - deterministic_test_result
+  - action_request_record
+  - authority_decision_record
+  - capability_grant_record_when_allowed
+  - material_event_or_artifact_record
+  - negative_case_result_set
+
+security:
+  runtime_side_effects: prohibited
+  real_credentials: prohibited
+  real_customer_data: prohibited
+  network_access: prohibited
+  shell_execution: prohibited
+  direct_role_tool_access: prohibited
+
+next_gate:
+  condition: all blocking criteria pass with preserved evidence
+  permits: smallest synthetic action-boundary implementation only
+  does_not_permit:
+    - production_runtime
+    - live GitHub mutation adapter
+    - live mail adapter
+    - shell adapter
+    - database mutation adapter
+    - autonomous network access
