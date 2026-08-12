@@ -1,0 +1,44 @@
+schema_version: 0.1
+status: draft
+object_type: knowledge_binding
+purpose: bind PX00 roles/protocols to governed knowledge domains stored outside PX00
+
+required_fields:
+  binding_id:
+    type: stable_id
+  role_ref:
+    type: ROLE_reference
+  knowledge_repository:
+    type: string
+  domain_path:
+    type: string
+  access_mode:
+    type: enum
+    values: [READ, QUERY, PROPOSE]
+  purpose:
+    type: string
+  protocol_refs:
+    type: protocol_reference_list
+
+optional_fields:
+  object_type_allowlist:
+    type: string_list
+  classification_ceiling:
+    type: classification_label
+  version_or_ref:
+    type: string
+  freshness_policy_ref:
+    type: policy_reference
+
+invariants:
+  - binding_does_not_copy_knowledge_into_px00
+  - binding_does_not_grant_tool_authority_by_itself
+  - role_uses_knowledge_only_for_declared_purpose
+  - protocol_context_constrains_binding_use
+  - knowledge_repository_identity_is_explicit
+  - write_or_admission_requires_separate_governed_action
+
+reference_repository:
+  repository: VictorKVS/KNOWLEDGE_CORE
+
+library_dependency: none
