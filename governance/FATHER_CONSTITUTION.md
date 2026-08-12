@@ -18,13 +18,16 @@ PX00 shall not treat an LLM as an authority, legal basis, source of evidence, or
 6. LLM output is never evidence by itself.
 7. Material knowledge requires provenance and lifecycle state.
 8. Material decisions require traceability to requirements, evidence, applicable rules, roles, protocols, and approvals.
-9. Autonomous actions require explicit authority and bounded scope.
-10. Material decisions shall be evaluated before execution and, where outcomes are observable, after execution.
-11. Material disagreement, uncertainty, exception, or normative conflict shall be represented explicitly rather than silently resolved.
-12. Rebranding shall not alter provenance, licensing, audit, security identity, SBOM, or supply-chain records.
-13. Customer differentiation shall use controlled profiles and extensions instead of uncontrolled forks.
-14. Regional, industry, organization, and project rules extend the global core without silently rewriting historical records.
-15. Superseded knowledge, rules, decisions, and controls remain traceable.
+9. **Decision materiality governs assurance depth: the higher the cost of error, irreversibility, uncertainty and risk, the stronger the mandatory evidence, independent review and approval.**
+10. Autonomous actions require explicit authority and bounded scope.
+11. Material decisions shall be evaluated before execution and, where outcomes are observable, after execution.
+12. Material disagreement, uncertainty, exception, or normative conflict shall be represented explicitly rather than silently resolved.
+13. Rebranding shall not alter provenance, licensing, audit, security identity, SBOM, or supply-chain records.
+14. Customer differentiation shall use controlled profiles and extensions instead of uncontrolled forks.
+15. Regional, industry, organization, and project rules extend the global core without silently rewriting historical records.
+16. Superseded knowledge, rules, decisions, and controls remain traceable.
+
+Canonical decision materiality norm: `governance/DECISION_MATERIALITY_STANDARD.md` (`PX00-NORM-DM-0001`).
 
 ## 3. Governance hierarchy
 
@@ -63,6 +66,8 @@ Raw source, evidence, analysis, hypothesis, decision, and approved knowledge are
 A material decision shall record at least:
 
 - decision identity;
+- declared materiality class and materiality rationale;
+- consequence/reversibility/uncertainty/risk dimensions that set the assurance floor;
 - requirement/problem being addressed;
 - creator role and version;
 - applicable protocol and version;
@@ -74,6 +79,8 @@ A material decision shall record at least:
 - resulting actions/artifacts;
 - pre-decision evaluation;
 - later outcome evaluation where meaningful.
+
+Evidence, independent review and approval requirements shall satisfy `PX00-NORM-DM-0001`. A decision may not be under-classified to reduce assurance effort. S3 imposes at least D2 on the affected path; S4 imposes D3 and retains its veto semantics.
 
 PX00 records formalized rationale and evidence references. It does not depend on hidden model chain-of-thought for auditability.
 
