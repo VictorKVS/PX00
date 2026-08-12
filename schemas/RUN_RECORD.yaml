@@ -1,4 +1,4 @@
-schema_version: 0.3
+schema_version: 0.4
 status: draft
 purpose: execution-instance contract for one bounded governed RUN
 
@@ -10,6 +10,16 @@ identity:
   protocol_version: 0.1.0
   role_id: ROLE-XXXX
   role_version: 0.1.0
+
+staffing:
+  responsibility_ref: RESP-XXXX
+  assignment_ref: ASSIGN-XXXX
+  agent_id: AGENT-XXXX
+  executor_type: null
+  model_ref: null
+  context_package_ref: CTX-XXXX
+  context_package_hash: null
+  context_hash_algorithm: sha256
 
 policy:
   policy_snapshot_ref: POLSNAP-XXXX
@@ -57,6 +67,13 @@ security:
 
 invariants:
   - run_is_bounded
+  - responsibility_role_must_match_run_role
+  - assignment_role_must_match_run_role
+  - assignment_must_be_active_when_run_starts
+  - assignment_model_ref_is_pinned_for_run
+  - replacing_assignment_or_model_does_not_rewrite_active_or_historical_run
+  - context_package_run_role_and_assignment_must_match_run_record
+  - context_package_hash_is_pinned_for_run
   - protocol_version_is_fixed_for_run_unless_explicit_migration_occurs
   - policy_snapshot_is_fixed_for_run_unless_explicit_migration_occurs
   - material_authority_decisions_must_match_run_policy_snapshot_ref_and_hash
@@ -70,5 +87,5 @@ invariants:
 
 validation_stage:
   current: deterministic_reference_validation
-  runtime_validator: px00_profile_registry_kernel_and_trace_tests
+  runtime_validator: px00_profile_registry_kernel_trace_staffing_and_routing_tests
   library_dependency: none
