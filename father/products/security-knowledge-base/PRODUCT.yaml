@@ -1,72 +1,28 @@
 schema_version: "1.0"
+route_id: "SEC-PROD-0001-ROUTE"
 product_id: "SEC-PROD-0001"
 name: "Security Knowledge Base"
-status: "ACTIVE_BUILD"
-portfolio_track: "TRACK-SECURITY"
-roadmap_ref: "father/product-roadmap/security-products.yaml"
-product_owner: "PX00/FATHER"
-factory_builder_ref: "PROJECT-FFB-0001"
+status: "EXTERNAL_CANONICAL_PRODUCT"
+canonical_repository: "VictorKVS/KNOWLEDGE_CORE"
+canonical_product_tree: "security-knowledge/"
+canonical_roadmap: "father/product-roadmap/security-products.yaml"
+canonical_domain_registry: "father/domain-knowledge/domain-registry.yaml"
 logical_knowledge_space_ref: "KB-SECURITY"
 
-mission: >-
-  Build an evidence-based, versioned, reviewable security knowledge foundation from admitted
-  sources, explicit evidence and assessed claims so later security products can reason from
-  traceable knowledge rather than model memory or ungoverned summaries.
+father_role: >-
+  PX00/FATHER orchestrates work that consumes or advances Security Knowledge, but the canonical
+  source/version/requirement/applicability/control/check/evidence graph and expert-readiness state
+  are owned by KNOWLEDGE_CORE.
 
-non_goals:
-  - "Do not treat retrieval output as evidence automatically."
-  - "Do not treat LLM-generated text as an authoritative source."
-  - "Do not hide conflicting interpretations."
-  - "Do not optimize for corpus size without coverage and quality evidence."
-  - "Do not promote downstream products to authoritative maturity before the expert-readiness gate passes."
+canonical_pipeline: >-
+  SOURCE -> VERSION -> CHUNK -> ATOMIC CLAIM/REQUIREMENT -> APPLICABILITY -> RELATIONS -> CONTROL -> CHECK -> EVIDENCE -> EXPERT REVIEW
 
-canonical_pipeline:
-  - "SOURCE_ADMISSION"
-  - "SOURCE_ASSESSMENT"
-  - "EVIDENCE_EXTRACTION"
-  - "EVIDENCE_ASSESSMENT"
-  - "CLAIM_CREATION"
-  - "CLAIM_ASSESSMENT"
-  - "REQUIREMENT_OR_CONTROL_MAPPING"
-  - "DOMAIN_COVERAGE_UPDATE"
-  - "INDEPENDENT_REVIEW"
-  - "KNOWLEDGE_ADMISSION"
-  - "FRESHNESS_AND_CHANGE_MONITORING"
+verified_rule: >-
+  VERIFIED requires an admitted primary source and exact locator. Retrieval/model output is not authoritative knowledge.
 
-quality_dimensions:
-  - "provenance"
-  - "authority"
-  - "version_identity"
-  - "effective_date_or_temporal_scope"
-  - "source_independence"
-  - "evidence_directness"
-  - "coverage"
-  - "freshness"
-  - "conflict_visibility"
-  - "reproducibility"
-  - "expert_benchmark_performance"
+parallel_rule: >-
+  SUMMIT-FFB-02 live-provider development may continue in parallel and does not block Security Knowledge corpus work.
 
-hard_dependencies:
-  - "SOURCE/EVIDENCE/CLAIM provenance contracts"
-  - "immutable knowledge object versioning"
-  - "claim/evidence quality assessment"
-  - "challenge/review/supersession lineage"
-  - "downstream staleness propagation"
-  - "Socrates and ARGUS independent review"
-
-exit_gate_ref: "SEC-GATE-EXPERT-KNOWLEDGE-0001"
-
-maturity_sequence:
-  - stage: "SKB-M0_SCOPE"
-    proves: "Declared domains, jurisdictions, source classes and benchmark plan exist."
-  - stage: "SKB-M1_SEED"
-    proves: "A small representative source/evidence/claim set traverses the governed pipeline."
-  - stage: "SKB-M2_COVERAGE"
-    proves: "Coverage is measurable and major gaps are explicit."
-  - stage: "SKB-M3_EXPERT_REVIEW"
-    proves: "Independent expert benchmark and contradiction handling are demonstrated."
-  - stage: "SKB-M4_EXPERT_READY"
-    proves: "Declared scope passes SEC-GATE-EXPERT-KNOWLEDGE-0001."
-
-current_stage: "SKB-M0_SCOPE"
-next_target: "Build measurable coverage model and first governed seed slice without claiming broad expert coverage."
+anti_duplication_rule: >-
+  Do not create a second Security Knowledge corpus, coverage model, expert-readiness truth or source backlog in PX00.
+  Runtime-specific integrations must reference/pin canonical KNOWLEDGE_CORE objects instead.
