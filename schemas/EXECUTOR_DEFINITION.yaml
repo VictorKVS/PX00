@@ -1,0 +1,28 @@
+schema_version: 0.1
+status: draft
+object_type: executor_definition
+purpose: describe one replaceable execution implementation without granting organizational or tool authority
+
+required_fields:
+  executor_id: {type: stable_id}
+  executor_type: {type: enum, values: [LLM, HUMAN, DETERMINISTIC, HYBRID, TEST_DOUBLE]}
+  version_ref: {type: string}
+  provider_ref: {type: string}
+  allowed_stage_refs: {type: list}
+  external_effects_allowed: {type: boolean}
+  status: {type: enum, values: [ACTIVE, SUSPENDED, RETIRED]}
+
+optional_fields:
+  model_ref: {type: string}
+  notes: {type: string}
+
+invariants:
+  - executor_definition_does_not_grant_role_authority
+  - executor_definition_does_not_grant_tool_capability
+  - active_assignment_remains_the_identity_binding_for_the_worker
+  - run_history_pins_exact_executor_id_and_version_ref_when_invoked
+  - external_effects_are_false_for_the_bounded_M1_executor_experiment
+  - executor_output_is_candidate_content_not_truth_not_acceptance
+  - provider_or_model_replacement_creates_a_new_version_or_definition
+
+library_dependency: none
