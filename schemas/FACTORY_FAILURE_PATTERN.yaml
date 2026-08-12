@@ -1,11 +1,11 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: factory_failure_pattern
 purpose: preserve reusable failure and control observations from Factory Builder functional runs
 
 required_fields:
   pattern_id: {type: stable_id}
-  pattern_type: {type: enum, values: [VERIFICATION_REWORK_REQUIRED, SECURITY_SCOPE_BLOCK, TRUST_GATE_BLOCK, ASSURANCE_MISMATCH, LINEAGE_BREAK, LIMITATION_PRESERVED, OTHER]}
+  pattern_type: {type: enum, values: [VERIFICATION_REWORK_REQUIRED, SECURITY_SCOPE_BLOCK, TRUST_GATE_BLOCK, ASSURANCE_MISMATCH, LINEAGE_BREAK, LIMITATION_PRESERVED, EXECUTOR_CANDIDATE_REJECTED, OTHER]}
   first_observed_run_ref: {type: run_reference}
   first_observed_stage: {type: stage_reference}
   evidence_refs: {type: list}
@@ -26,5 +26,7 @@ invariants:
   - mitigation_does_not_delete_original_failed_artifact
   - pattern_memory_does_not_grant_runtime_authority
   - security_block_is_a_valid_control_outcome_not_a_delivery_failure
+  - executor_candidate_rejection_preserves_exact_executor_identity_and_version
+  - executor_output_never_becomes_truth_or_acceptance_merely_because_execution_completed
 
 library_dependency: none
