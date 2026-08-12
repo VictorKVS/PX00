@@ -1,7 +1,7 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 object_type: TRACE
-purpose: compact manifest linking governed execution events and material lineage
+purpose: compact manifest linking governed execution events, material lineage and pinned knowledge context
 
 required_fields:
   trace_id:
@@ -56,6 +56,22 @@ conditional_fields:
     type: canonical_reference_list
   evaluation_refs:
     type: EVAL-reference-list
+  context_package_ref:
+    type: CONTEXT_PACKAGE_reference
+    required_when: RUN consumed governed knowledge context
+  context_package_hash:
+    type: sha256_hex
+    required_when: context_package_ref is present
+  knowledge_snapshot_refs:
+    type: KNOWLEDGE_SNAPSHOT_reference_list
+  knowledge_snapshot_digests:
+    type: sha256_hex_list
+    rule: ordered one-to-one with knowledge_snapshot_refs
+  producer_manifest_refs:
+    type: canonical_reference_list
+  producer_manifest_digests:
+    type: sha256_hex_list
+    rule: ordered one-to-one with producer_manifest_refs
   failure_ref:
     type: canonical_reference
     required_when: status is FAILED
@@ -72,6 +88,12 @@ invariants:
   - chain_head_hash_matches_last_verified_event_hash
   - successful_status_does_not_erase_prior_failures
   - trace_manifest_contains_references_not_unnecessary_sensitive_payloads
+  - knowledge_bound_trace_pins_context_package_ref_and_hash
+  - knowledge_snapshot_refs_and_digests_have_equal_length
+  - producer_manifest_refs_and_digests_have_equal_length
+  - replay_of_knowledge_bound_trace_requires_expected_knowledge_context
+  - knowledge_context_mismatch_fails_replay_closed
+  - knowledge_provenance_does_not_grant_action_authority
 
 runtime_validator: deterministic_reference_implementation
 library_dependency: none
