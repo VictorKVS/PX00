@@ -157,3 +157,97 @@ Outputs feed `FACTORY_REVISION`, PLAN revision, RADAR and RISK registers.
 
 ## Promotion rule
 A factory advances by evidence and risk posture, never by calendar pressure or feature count.
+
+---
+
+# AI/ML project overlay — CRISP-ML(Q) + strategic delivery ascent
+
+For AI/ML work the factory lifecycle is now evaluated on three independent axes:
+
+`CRISP-ML(Q) PROCESS PHASE ≠ DELIVERY EVIDENCE STAGE ≠ PX00 SYSTEM MATURITY`.
+
+Do not infer one axis from another. A project can, for example, be in `MODEL_ENGINEERING`, be proving a `POC`, and run on an `M1` bounded harness at the same time.
+
+## Axis A — CRISP-ML(Q) process phase
+Use the six-phase lifecycle:
+1. Business and Data Understanding;
+2. Data Engineering;
+3. Model Engineering;
+4. Quality Assurance;
+5. Deployment;
+6. Monitoring and Maintenance.
+
+For every phase preserve four categories explicitly:
+- requirements and constraints;
+- tasks;
+- risks;
+- QA methods.
+
+The process is iterative. Evidence from a later phase may create an explicit rework/replan transition to an earlier phase; this is not a lifecycle violation.
+
+## Axis B — delivery evidence stage
+### DEMO — "Did we understand the problem and intended experience?"
+Allowed:
+- clickable UX/prototype;
+- fake/stub data;
+- scenario walkthrough.
+
+Not proven:
+- technical feasibility;
+- model quality;
+- production readiness.
+
+### POC — "Is the key technical hypothesis feasible?"
+Expected evidence:
+- data feasibility and gaps;
+- non-ML or simple baseline;
+- isolated model/pipeline experiment;
+- technical metrics such as quality, latency or throughput;
+- explicit GO/NO-GO.
+
+PoC architecture may be intentionally disposable. Missing production CI/CD, observability or fault tolerance is acceptable only when explicitly declared as debt with an expiry stage.
+
+### MVP — "Do real users obtain measurable value?"
+Expected evidence:
+- real users and real data;
+- one narrow use case;
+- product metrics;
+- business metrics;
+- minimum technical SLO;
+- basic observability;
+- controlled deployment and rollback/disable path.
+
+MVP success is measured by changed user/business behavior, not only model accuracy.
+
+### PRODUCTION — "Can the business depend on it safely and reliably?"
+Expected evidence:
+- SLA/SLO;
+- governed CI/CD and release process;
+- security controls;
+- monitoring, alerting and traces;
+- drift detection and maintenance/retraining policy where relevant;
+- support/incident process;
+- backup/recovery/disaster recovery;
+- model/executor governance;
+- confirmed economic effect.
+
+Production is an operating system of code + data + models/executors + people + process. A notebook or a passing model metric is not production evidence.
+
+## Axis C — PX00 system maturity
+M0..M5 remains the assurance/operational maturity scale of the implementation itself. Delivery stage does not auto-promote maturity and maturity does not prove business value.
+
+## Contract strategy guidance
+Use uncertainty to choose commercial/commitment shape:
+- Demo / early PoC: Time & Materials is normally the safest default under high uncertainty;
+- MVP: hybrid/T&M with bounded stage budget or narrowly fixed deliverables can be appropriate;
+- Production: fixed commitments/SLA become reasonable only after requirements, architecture and operational evidence are sufficiently stable.
+
+This is guidance, not a mandatory commercial rule; deviations require explicit rationale.
+
+## CI/CD scaling guidance
+- Demo: basic repository validation is enough unless higher assurance is justified.
+- PoC: lint/tests/reproducibility/dependency checks; deployment automation may remain disposable.
+- MVP: integration/data/security tests, versioned build/model artifact, controlled staging/UAT and rollback.
+- Production: governed artifact promotion, release gates, security/dependency checks, observability, rollback and operational readiness.
+
+Do not build production infrastructure merely to make an early experiment look mature. Do not carry PoC shortcuts into Production merely because they once worked.
