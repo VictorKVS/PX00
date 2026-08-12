@@ -1,0 +1,36 @@
+schema_version: 0.1
+status: draft
+object_type: executor_invocation
+purpose: preserve one bounded worker invocation and pin the exact executor identity/version used to produce candidate content
+
+required_fields:
+  invocation_id: {type: stable_id}
+  run_ref: {type: run_reference}
+  stage_ref: {type: stage_reference}
+  assignment_ref: {type: agent_assignment_reference}
+  executor_ref: {type: executor_definition_reference}
+  executor_version_ref: {type: string}
+  input_artifact_ref: {type: artifact_reference}
+  bounded_input_hash: {type: sha256}
+  output_candidate_hash: {type: sha256}
+  status: {type: enum, values: [COMPLETED, REJECTED, FAILED]}
+  created_at: {type: utc_timestamp}
+
+optional_fields:
+  provider_ref: {type: string}
+  model_ref: {type: string}
+  output_artifact_ref: {type: artifact_reference}
+  failure_code: {type: string}
+
+invariants:
+  - invocation_must_match_current_run_stage
+  - invocation_assignment_must_match_the_governed_worker_assignment_for_the_stage
+  - invocation_pins_exact_executor_and_version
+  - bounded_input_is_content_hashed
+  - candidate_output_is_content_hashed_before_artifact_admission
+  - candidate_output_does_not_bypass_verification_or_socrates
+  - invocation_does_not_create_capability_grants
+  - invocation_does_not_call_external_tools_in_the_bounded_M1_experiment
+  - rejected_or_failed_invocation_cannot_be_relabelled_completed
+
+library_dependency: none
