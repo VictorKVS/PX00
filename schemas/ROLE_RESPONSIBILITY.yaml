@@ -1,0 +1,43 @@
+schema_version: 0.1
+status: draft
+object_type: role_responsibility
+purpose: formalize what one governed role is accountable for inside the PX00 organization
+
+required_fields:
+  responsibility_id:
+    type: stable_id
+  role_id:
+    type: ROLE-reference
+  department_id:
+    type: department_reference
+  duty_code:
+    type: string
+  description:
+    type: text
+  required_inputs:
+    type: canonical_reference_or_type_list
+  required_outputs:
+    type: canonical_reference_or_type_list
+  acceptance_criteria_refs:
+    type: list
+  escalation_conditions:
+    type: list
+  allowed_protocol_refs:
+    type: PROTO-reference-list
+  knowledge_binding_refs:
+    type: knowledge_binding_reference_list
+
+invariants:
+  - responsibility_belongs_to_exactly_one_role
+  - responsibility_does_not_grant_runtime_authority
+  - outputs_must_be_declared_before_material_execution
+  - escalation_conditions_are_explicit
+  - knowledge_access_is_via_binding_not_embedded_model_memory
+  - role_is_accountable_for_handoff_quality_of_declared_outputs
+
+non_goals:
+  - select_llm_provider
+  - grant_tool_permissions
+  - store_domain_knowledge
+
+library_dependency: none
