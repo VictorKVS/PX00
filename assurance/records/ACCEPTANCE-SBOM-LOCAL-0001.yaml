@@ -1,0 +1,25 @@
+acceptance_id: ACCEPTANCE-SBOM-LOCAL-0001
+subject: minimal_dependency_provenance_sbom_local_isolated_validation
+status: PASS
+date: 2026-08-12
+scope:
+  environment: owner_workstation_isolated_venv
+  repository: VictorKVS/PX00
+  dependency_manifest: requirements-validator.txt
+  sbom: security/sbom/PX00-validator.cdx.json
+criteria:
+  pip_check_clean: PASS
+  dependency_provenance_tests: PASS
+  total_tests: 17
+  full_contract_validator: PASS
+  validator_errors: 0
+  validator_warnings: 0
+  working_tree_clean: PASS
+evidence:
+  run: assurance/runs/SBOM-0002_LOCAL_ISOLATED_PASS_2026-08-12.md
+limitations:
+  artifact_hash_integrity: not_yet_tested_locally
+  vulnerability_monitoring: not_implemented
+  repository_main_enforcement: unverified
+  production_runtime: prohibited
+decision: KEEP
