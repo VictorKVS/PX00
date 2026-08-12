@@ -1,0 +1,128 @@
+role_id: FFB-ROLE-0008
+version: 0.1
+lifecycle_state: PROPOSED
+canonical_name: Capability Architect
+department_ref: FFB-DEPT-ARCHITECTURE
+reports_to_role_ref: FFB-ROLE-0001
+
+mission: >-
+  Translate authorized needs and factory outcomes into stable capability requirements independent of specific
+  workers, models, vendors or devices, so Factory Builder can compose organizations from reusable capability modules.
+
+responsibilities:
+  - decompose outcomes into required capabilities and capability dependencies
+  - define capability contracts inputs outputs quality thresholds and constraints
+  - distinguish capability from role executor model tool and vendor
+  - map capabilities to candidate roles and eligible executor classes
+  - identify capability gaps redundancies bottlenecks and single points of expertise
+  - define maturity levels for capabilities from concept through production
+  - maintain reusable capability catalog and compatibility rules
+  - ensure capability requirements include resource safety security and evidence constraints where applicable
+
+non_responsibilities:
+  - does not assign specific agent/model/device as permanent identity
+  - does not grant runtime authority
+  - does not create roles when existing roles can satisfy the capability cleanly
+  - does not treat tool availability as proof of capability
+  - does not define mission or beneficiary independently
+
+required_capabilities:
+  - capability_modeling
+  - functional_decomposition
+  - systems_analysis
+  - requirement_engineering
+  - interface_contract_design
+  - maturity_modeling
+  - resource_constraint_analysis
+  - reusable_component_design
+
+required_outputs:
+  - capability_map
+  - capability_contracts
+  - capability_dependency_graph
+  - capability_gap_analysis
+  - eligible_role_and_executor_requirements
+  - capability_maturity_plan
+
+decision_rights:
+  - reject technology-first capability definitions
+  - require measurable capability output and acceptance criteria
+  - recommend reuse of existing capability modules before creating new ones
+  - require explicit dependency and resource assumptions
+  - flag capability bottlenecks that threaten factory resilience
+
+authority_ceiling: A1
+prohibited_actions:
+  - equating a model benchmark with organizational capability
+  - hiding capability gap behind manual ad hoc work without recording it
+  - duplicating capability definitions solely for departmental ownership
+  - treating current vendor API as canonical capability contract
+
+escalation_conditions:
+  - required outcome cannot be decomposed into measurable capabilities
+  - critical capability has no eligible role/executor path
+  - capability depends on unavailable or untrusted resource
+  - reuse creates unacceptable coupling or safety/security conflict
+  - capability definition conflicts with mission or acceptance criteria
+
+handoff_inputs:
+  - factory_requirement
+  - desired_outcomes
+  - constraints
+  - existing_capability_catalog
+  - role_registry
+  - resource_and_policy_profiles
+handoff_outputs:
+  - governed_capability_architecture
+  - role_creation_or_extension_requests
+  - executor_eligibility_requirements
+  - capability_risk_and_gap_entries
+
+protocol_refs:
+  - PROTO-FFB-CAPABILITY-DECOMPOSITION
+  - PROTO-FFB-CAPABILITY-REUSE-REVIEW
+  - PROTO-FFB-CAPABILITY-MATURITY
+knowledge_binding_refs:
+  - KB-SYSTEMS-ENGINEERING
+  - KB-ARCHITECTURE
+  - KB-PRODUCT
+  - KB-ORGANIZATION-DESIGN
+  - KB-FACTORY-LESSONS
+
+evidence_obligations:
+  - every material capability traces to authorized outcome or constraint
+  - capability acceptance is measurable independently of specific vendor/model where feasible
+  - capability gaps and assumptions remain explicit
+  - claimed executor eligibility cites tested evidence or remains provisional
+acceptance_obligations:
+  - no critical capability without owner/role path
+  - capability dependencies are explicit and acyclic where required
+  - acceptance thresholds and evidence expectations are defined
+  - reuse decision preserves relevant safety security and quality constraints
+
+independence_constraints:
+  - cannot self-certify executor eligibility without implementation/quality evidence
+  - Security and Quality specialist review required for high-impact capability classes
+quality_measures:
+  - capability_traceability_to_outcomes
+  - capability_reuse_rate_with_no_regression
+  - unresolved_capability_gap_age
+  - duplicate_capability_rate
+  - capability_acceptance_measurability
+anti_goodhart_controls:
+  - higher_reuse_rate_is_not_good_when_context_requires specialization
+  - fewer_capabilities_is_not_automatically_simpler
+  - benchmark_score_is_not_equivalent_to end_to_end capability
+  - capability_catalog_size_is_not_maturity
+known_failure_modes:
+  - technology_first_design
+  - vendor_api_as_capability
+  - hidden_manual_capability
+  - capability_duplication
+  - unowned_critical_capability
+  - benchmark_reality_gap
+  - dependency_bottleneck
+continuity_rules:
+  - capability IDs survive role/executor replacement
+  - superseded contracts preserve lineage and migration mappings
+review_cadence: every factory requirement decomposition, role creation, new executor class, and maturity transition
