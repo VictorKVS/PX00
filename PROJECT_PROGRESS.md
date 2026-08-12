@@ -13,84 +13,89 @@ Build a governed digital corporate management system in which FATHER can turn go
 ### PX00 / FATHER management foundation
 Status: **FOUNDATION IMPLEMENTED**.
 
-Closed foundations:
-- canonical objects / roles / protocols;
-- authority and capability boundaries;
-- governed Tool Boundary;
-- policy snapshots and RUN pinning;
-- append-only execution trace / replay / acceptance;
-- evidence and claim provenance;
-- corporate organization / responsibilities / staffing / handoff;
-- stable logical knowledge routing and context packages;
-- GOAL → PROJECT → PLAN → TASK graph;
-- FATHER management cycle;
-- long-lived risk memory and maturity gates.
+Closed foundations include canonical objects/roles/protocols, authority and Tool Boundary controls, policy/run pinning, append-only trace/replay/acceptance, evidence provenance, organization/staffing/handoffs, knowledge routing/context, GOAL→PROJECT→PLAN→TASK, FATHER management cycle, long-lived risk memory and maturity gates.
 
 ### Factory Builder / Agent R&D Factory
-Current summit: **SUMMIT-FFB-01 — BOUNDED FUNCTIONAL AGENT FACTORY REFERENCE MVP**.
-Status: **ACHIEVED WITH RESTRICTIONS**.
+Completed summit: **SUMMIT-FFB-01 — BOUNDED FUNCTIONAL AGENT FACTORY REFERENCE MVP ✅**.
 
-Evidence path:
-`M0 concept → executable M1 skeleton → typed artifact chain → functional run → multi-scenario suite → governed rework → security refusal`.
+Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 
-Latest generation: `TF-0061 — Factory MVP Scenario Suite and Governed Rework`.
+Current position inside SUMMIT-FFB-02:
+`provider-neutral executor boundary → local replaceable worker proof → live provider adapter next`.
+
+Latest generation: `TF-0062 — Governed Replaceable Executor Boundary`.
 
 ## WHAT IS CLOSED
 
 ### SUMMIT-FFB-01 — Bounded Functional Agent Factory Reference MVP ✅
-The reference factory can now demonstrate all three required bounded outcomes:
-1. `DELIVERED` — useful deterministic functional output;
-2. `DELIVERED_AFTER_REWORK` — independent verification FAIL causes explicit implementation rework, preserved lineage, re-verification and delivery;
-3. `BLOCKED_BY_SECURITY` — out-of-scope material action is stopped before prototype creation.
+Proven bounded outcomes:
+1. `DELIVERED`;
+2. `DELIVERED_AFTER_REWORK`;
+3. `BLOCKED_BY_SECURITY`.
 
-Important accumulated lessons:
-- idempotency identity is not exactly-once execution;
-- gated evidence cannot say FAIL while runtime records PASS;
-- failed evidence remains preserved after successful rework;
-- safe refusal is a valid control outcome and must not be optimized away to improve delivery metrics;
-- payload digest alone is insufficient for durable artifact-envelope integrity (`RISK-0009`);
-- in-memory rework is not durable orchestration (`RISK-0010`).
+The factory preserves failed evidence, supports explicit governed rework, re-verifies independently and treats safe refusal as a valid control outcome rather than a delivery KPI failure.
+
+### TF-0062 — Governed Replaceable Executor Boundary ✅ boundary capability
+A provider-neutral worker boundary is now locally proven.
+
+Proven chain:
+`worker v0.1 → candidate → VERIFY FAIL → REWORK → worker v0.2 → corrected candidate → VERIFY PASS → SOCRATES → DELIVERY`.
+
+Pinned historical facts include exact executor/version/provider/model metadata, assignment, input artifact, input/output hashes, candidate artifact and rejected verifier evidence.
+
+Important invariant:
+`EXECUTOR INVOCATION SUCCESS ≠ VERIFICATION PASS ≠ ACCEPTANCE`.
+
+The executor cannot gain material external effects in this M1 experiment, impersonate another assignment, bypass the security gate, or manufacture structured capability/tool/authority/acceptance objects as runtime authority.
+
+## FAILURE / LEARNING MEMORY
+- `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
+- `FFB-FP-0002 SECURITY_SCOPE_BLOCK` — safe refusal is a valid outcome.
+- `FFB-FP-0003 EXECUTOR_CANDIDATE_REJECTED` — an allowed, successfully invoked worker may still produce wrong content; its exact version remains pinned after rejection and replacement.
 
 ## VELOCITY
-These are observed engineering velocities, not promises.
+Observed engineering velocities, not promises:
+- broad active build window: about **5.4 TF/hour** wall-clock;
+- earlier short burst: about **15 TF/hour**, not sustainable guidance;
+- `TF-0060 → TF-0061`: about **6.5 TF/hour burst-equivalent**;
+- `TF-0061` at 19:27:17 UTC → `TF-0062` at 19:35:11 UTC: about **7.6 TF/hour burst-equivalent**.
 
-- First broad active build window: about **5.4 TF/hour** wall-clock during the measured active period.
-- Earlier short burst: about **15 TF/hour**; treated only as burst velocity, not sustainable throughput.
-- Latest functional generations: `TF-0060` at 19:18:00 UTC → `TF-0061` at 19:27:17 UTC, about **6.5 TF/hour burst-equivalent** for one generation interval.
-
-Velocity is secondary to summit evidence: a TF that only adds documentation does not count as equal progress to a closed functional control loop.
+Velocity remains secondary to behavioral evidence and green validation.
 
 ## CURRENT BLOCKERS / OPEN RISKS
-The bounded reference MVP is accepted only inside its declared scope.
+The current system is a bounded reference implementation, not production maturity.
 
-Most relevant blockers before broader maturity:
-- `RISK-0002` — untrusted/external input safety beyond the bounded synthetic scope;
+Most relevant blockers:
+- `RISK-0002` — untrusted/external input safety beyond bounded synthetic scope;
 - `RISK-0003` — reference stores are not durable system-of-record implementations;
-- `RISK-0004` — higher-scale/production concerns retained by the maturity model;
+- `RISK-0004` — higher-scale/production concerns retained by maturity model;
 - `RISK-0009` — artifact digest does not yet protect the full provenance envelope;
-- `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness.
+- `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness;
+- `RISK-0011` — live AI/provider behavior has not yet been proven through the executor boundary.
 
 ## NEXT SUMMIT
 
-### SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR ⏭️
-Goal: replace **exactly one** bounded deterministic producer step with a governed executor / AI-agent adapter while keeping the deterministic regression suite intact.
+### SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡
+Boundary prerequisite: **DONE**.
+Live-provider evidence: **NOT YET DONE**.
+
+Next acceptance step: connect exactly one authorized live AI/provider adapter through the existing executor boundary.
 
 Acceptance criteria:
-- executor identity/version is pinned;
-- input comes from the governed task/context boundary;
-- executor receives no implicit authority;
-- output becomes a typed artifact, not automatic truth;
-- independent verifier remains a different assignment;
-- Socrates remains independent;
-- security-block scenario still blocks;
-- failed executor output can enter the explicit rework loop;
-- prior deterministic scenarios remain green;
-- no material external side effect is introduced merely to demonstrate AI integration.
-
-Distance: **one bounded executor integration + audit/rework generation**, not a production-agent platform.
+- provider/model/version identity pinned as far as provider semantics allow;
+- input comes only through the governed bounded request/context path;
+- executor receives no implicit organizational or tool authority;
+- request/output hashes and invocation record preserved;
+- output becomes candidate artifact, not truth;
+- independent verifier remains separate;
+- Socrates remains separate;
+- malformed/bad provider output can be rejected and routed through rework;
+- existing security-block regression still stops before worker invocation;
+- no material external side effect is introduced to demonstrate AI integration;
+- provider/version limitations are recorded rather than hidden.
 
 ### Summit outcome
-After SUMMIT-FFB-02, PX00 will have evidence that the same governed factory controls survive contact with a real non-deterministic worker. That is the point where we can credibly begin calling it an **Agent Factory MVP**, rather than only a deterministic reference factory.
+After SUMMIT-FFB-02, PX00 will have evidence that the governed factory controls survive contact with a real non-deterministic AI worker. At that point it becomes credible to call the system an **Agent Factory MVP**, rather than only a deterministic/test-double reference factory.
 
 ## FOLLOWING SUMMITS
 
