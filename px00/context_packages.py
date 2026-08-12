@@ -28,6 +28,7 @@ class KnowledgeObjectRef:
     domain_id: str
     classification: str
     route_snapshot_ref: str
+    knowledge_snapshot_ref: str | None = None
 
     def version_ref(self) -> str:
         return f"{self.object_id}@{self.version_id}#{self.content_digest}"
@@ -61,6 +62,7 @@ class ContextPackage:
     route_snapshot_refs: tuple[str, ...]
     package_hash: str
     hash_algorithm: str = "sha256"
+    knowledge_snapshot_refs: tuple[str, ...] = ()
 
 
 class ContextPackageBuilder:
@@ -138,6 +140,9 @@ class ContextPackageBuilder:
         refs = tuple(item.object_id for item in results)
         version_refs = tuple(item.version_ref() for item in results)
         routes = tuple(sorted({item.route_snapshot_ref for item in results}))
+        knowledge_snapshots = tuple(sorted({
+            item.knowledge_snapshot_ref for item in results if item.knowledge_snapshot_ref
+        }))
         material = {
             "knowledge_request_ref": request.knowledge_request_id,
             "run_ref": request.run_ref,
@@ -147,6 +152,7 @@ class ContextPackageBuilder:
             "knowledge_object_refs": refs,
             "knowledge_object_version_refs": version_refs,
             "route_snapshot_refs": routes,
+            "knowledge_snapshot_refs": knowledge_snapshots,
         }
         digest = sha256(self._canonical(material)).hexdigest()
         return ContextPackage(
@@ -160,4 +166,5 @@ class ContextPackageBuilder:
             knowledge_object_version_refs=version_refs,
             route_snapshot_refs=routes,
             package_hash=digest,
+            knowledge_snapshot_refs=knowledge_snapshots,
         )
