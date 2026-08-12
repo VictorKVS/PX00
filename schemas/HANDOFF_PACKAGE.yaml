@@ -1,0 +1,52 @@
+schema_version: 0.1
+status: draft
+object_type: handoff_package
+purpose: transfer bounded work products between governed roles/departments
+
+required_fields:
+  handoff_id:
+    type: stable_id
+  task_id:
+    type: TASK-reference
+  from_role_id:
+    type: ROLE-reference
+  to_role_id:
+    type: ROLE-reference
+  protocol_ref:
+    type: PROTO-reference
+  responsibility_ref:
+    type: role_responsibility_reference
+  input_refs:
+    type: canonical_reference_list
+  output_refs:
+    type: canonical_reference_list
+  evidence_refs:
+    type: EVD-reference-list
+  assumptions:
+    type: list
+  unresolved_questions:
+    type: list
+  blocking_findings:
+    type: list
+  acceptance_state:
+    type: enum
+    values: [READY, NEEDS_REWORK, BLOCKED, ESCALATED]
+
+conditional_fields:
+  previous_handoff_ref:
+    type: handoff_reference
+    required_when: package is a rework iteration
+  escalation_ref:
+    type: canonical_reference
+    required_when: acceptance_state is ESCALATED
+
+invariants:
+  - handoff_requires_declared_interrole_protocol
+  - receiving_role_does_not_inherit_sending_role_authority
+  - unresolved_questions_are_never_silently_dropped
+  - blocking_findings_prevent_READY
+  - evidence_and_assumptions_are_distinct
+  - rework_creates_new_handoff_identity
+  - handoff_is_traceable_to_task_and_responsibility
+
+library_dependency: none
