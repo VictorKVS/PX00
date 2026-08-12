@@ -1,0 +1,49 @@
+schema_version: 0.1
+status: draft
+object_type: knowledge_request
+purpose: request a bounded set of governed knowledge objects for one task/run/role context
+
+required_fields:
+  knowledge_request_id:
+    type: stable_id
+  task_ref:
+    type: TASK_reference
+  run_ref:
+    type: RUN_reference
+  role_ref:
+    type: ROLE_reference
+  protocol_ref:
+    type: PROTO_reference
+  binding_refs:
+    type: KNOWLEDGE_BINDING_reference_list
+  query:
+    type: string
+  requested_object_types:
+    type: string_list
+  max_objects:
+    type: integer
+  classification_ceiling:
+    type: classification_label
+  purpose:
+    type: string
+
+optional_fields:
+  required_claim_refs:
+    type: CLM_reference_list
+  freshness_policy_ref:
+    type: policy_reference
+  minimum_assessment_status:
+    type: string
+  include_counterevidence:
+    type: boolean
+
+invariants:
+  - request_scope_must_be_subset_of_role_knowledge_bindings
+  - request_does_not_grant_tool_or_data_authority
+  - protocol_must_allow_binding_use
+  - classification_ceiling_cannot_exceed_binding_ceiling
+  - returned_objects_must_preserve_stable_logical_ids
+  - physical_repository_paths_are_not_part_of_request_identity
+  - knowledge_request_is_traceable_to_task_run_role_and_protocol
+
+library_dependency: none
