@@ -1,0 +1,38 @@
+schema_version: 0.1
+status: draft
+object_type: downstream_impact
+purpose: immutable record of downstream staleness caused by changed upstream knowledge or assessment
+
+required_fields:
+  impact_id: {type: stable_id}
+  trigger_ref: {type: canonical_reference}
+  trigger_type: {type: enum, values: [CLAIM_ASSESSMENT, KNOWLEDGE, DECISION, PLAN]}
+  caused_by_ref: {type: canonical_reference}
+  created_at: {type: utc_timestamp}
+  affected_objects: {type: ordered_reference_list}
+  status_changes: {type: ordered_status_change_list}
+  propagation_depth: {type: integer}
+
+status_semantics:
+  CLAIM_ASSESSMENT: [CURRENT, SUPERSEDED]
+  KNOWLEDGE: [CURRENT, STALE]
+  DECISION: [CURRENT, REASSESSMENT_REQUIRED]
+  PLAN: [CURRENT, REVIEW_REQUIRED]
+
+invariants:
+  - impact_record_is_immutable
+  - propagation_never_deletes_or_mutates_historical_objects
+  - changed_claim_assessment_marks_dependent_knowledge_stale
+  - stale_knowledge_marks_dependent_decisions_reassessment_required
+  - affected_decision_marks_dependent_plans_review_required
+  - propagation_does_not_revoke_decision_or_cancel_plan_without_authority
+  - causal_path_is_preserved
+  - cycles_are_rejected
+  - duplicate_dependency_edges_do_not_duplicate_impact
+
+non_goals:
+  - automatic decision reversal
+  - automatic plan cancellation
+  - automatic external side effects
+
+library_dependency: none
