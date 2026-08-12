@@ -1,0 +1,77 @@
+capability_map_id: FFB-CAPMAP-0001
+requirement_ref: FFB-REQ-0001
+version: 0.1
+status: CANDIDATE
+
+capabilities:
+  - capability_id: CAP-RD-001
+    canonical_name: Problem Qualification
+    outcome_definition: convert an authorized bounded request into explicit scope assumptions constraints acceptance intent and research questions
+    dependencies: []
+    criticality: HIGH
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-002
+    canonical_name: Evidence Research
+    outcome_definition: gather and organize relevant evidence with provenance uncertainty and source-quality metadata
+    dependencies: [CAP-RD-001]
+    criticality: HIGH
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-003
+    canonical_name: Evidence Assessment
+    outcome_definition: distinguish supported contradicted uncertain and unproven claims before design decisions
+    dependencies: [CAP-RD-002]
+    criticality: CRITICAL
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-004
+    canonical_name: Solution Architecture
+    outcome_definition: produce alternatives tradeoffs boundaries assumptions risks and a selected solution design without granting execution authority
+    dependencies: [CAP-RD-001, CAP-RD-003]
+    criticality: HIGH
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-005
+    canonical_name: Prototype Implementation
+    outcome_definition: create bounded executable proof of the selected design in a synthetic or public-safe environment
+    dependencies: [CAP-RD-004]
+    criticality: HIGH
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-006
+    canonical_name: Verification and Validation
+    outcome_definition: test implementation against declared acceptance criteria and identify nonconformance independently from implementation claims
+    dependencies: [CAP-RD-005]
+    criticality: CRITICAL
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-007
+    canonical_name: Independent Critical Challenge
+    outcome_definition: challenge evidence assumptions alternatives scope falsifiability and confidence independently of the producer chain
+    dependencies: [CAP-RD-003, CAP-RD-004, CAP-RD-006]
+    criticality: CRITICAL
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-008
+    canonical_name: Security and Risk Review
+    outcome_definition: identify trust boundaries abuse cases maturity blockers and residual risks before acceptance
+    dependencies: [CAP-RD-004, CAP-RD-005, CAP-RD-006]
+    criticality: CRITICAL
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-009
+    canonical_name: Knowledge Capture
+    outcome_definition: admit reusable evidence lessons risks and decisions into governed knowledge without converting generated text into authority
+    dependencies: [CAP-RD-002, CAP-RD-003, CAP-RD-006, CAP-RD-007]
+    criticality: MEDIUM
+    minimum_maturity: M1_PROTOTYPE
+  - capability_id: CAP-RD-010
+    canonical_name: Governed Delivery and Closure
+    outcome_definition: deliver accepted artifacts provenance residual risks and limitations to the requester and close or replan the work explicitly
+    dependencies: [CAP-RD-006, CAP-RD-007, CAP-RD-008]
+    criticality: HIGH
+    minimum_maturity: M1_PROTOTYPE
+
+bottlenecks:
+  - evidence assessment quality limits all downstream design confidence
+  - independent review capacity can become throughput bottleneck
+  - prototype implementation without idempotency and sandbox boundaries can create false maturity
+  - knowledge capture must not admit unverified generated output
+
+invariants:
+  - no capability is named after a model vendor or tool
+  - critical capabilities require measurable acceptance and independent review path
+  - capability gaps remain explicit rather than being hidden by one generalist agent
