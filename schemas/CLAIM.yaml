@@ -1,0 +1,36 @@
+schema_version: 0.1
+status: draft
+object_type: CLM
+purpose: persistent claim identity and revision lineage
+
+required_fields:
+  claim_id:
+    type: CLM-reference
+  statement:
+    type: text
+  created_at:
+    type: utc_timestamp
+  created_by:
+    type: actor_or_component_reference
+  status_ref:
+    type: claim_status_reference
+
+conditional_fields:
+  supersedes:
+    type: CLM-reference
+  superseded_by:
+    type: CLM-reference
+  support_evidence_refs:
+    type: EVD-reference-list
+  contradiction_evidence_refs:
+    type: EVD-reference-list
+
+invariants:
+  - claim_identity_is_immutable
+  - revised_statement_creates_new_claim_identity
+  - supersession_never_deletes_prior_claim
+  - support_and_contradiction_edges_are_explicit
+  - claim_status_is_derived_from_evidence_evaluation_not_free_text
+  - claim_lineage_must_not_form_cycles
+
+library_dependency: none
