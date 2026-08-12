@@ -1,0 +1,27 @@
+schema_version: 0.1
+status: draft
+object_type: department
+purpose: define an organizational unit with mandate, roles and interfaces
+
+required_fields:
+  department_id:
+    type: stable_id
+  organization_ref:
+    type: organization_reference
+  name:
+    type: string
+  mandate:
+    type: text
+  role_refs:
+    type: ROLE_reference_list
+  inbound_protocol_refs:
+    type: protocol_reference_list
+  outbound_protocol_refs:
+    type: protocol_reference_list
+
+invariants:
+  - mandate_is_explicit
+  - department_does_not_execute_without_role_or_protocol
+  - cross_department_handoff_uses_declared_protocol
+
+library_dependency: none
