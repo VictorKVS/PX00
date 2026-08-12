@@ -282,12 +282,18 @@ class AppendOnlyEventRecorder:
         expected = sha256(self._canonical_json(manifest)).hexdigest()
         if envelope.get("hash_algorithm") != "sha256" or envelope.get("manifest_hash") != expected:
             raise RecorderIntegrityError("TRACE_MANIFEST_HASH_MISMATCH")
-        if self._persisted_manifest_has_knowledge_context(manifest) and expected_knowledge_context is None:
+        has_knowledge = self._persisted_manifest_has_knowledge_context(manifest)
+        has_decision = self._persisted_manifest_has_decision_context(manifest)
+        if has_knowledge and expected_knowledge_context is None:
             raise RecorderIntegrityError("TRACE_KNOWLEDGE_CONTEXT_EXPECTATION_REQUIRED")
-        if self._persisted_manifest_has_decision_context(manifest) and expected_decision_context is None:
+        if has_decision and expected_decision_context is None:
             raise RecorderIntegrityError("TRACE_DECISION_CONTEXT_EXPECTATION_REQUIRED")
         live = self.verify(trace_id, expected_knowledge_context, expected_decision_context)
         if self._canonical_json(manifest) != self._canonical_json(asdict(live)):
+            if has_knowledge and not has_decision:
+                raise RecorderIntegrityError("TRACE_MANIFEST_EVENT_OR_KNOWLEDGE_CONTEXT_MISMATCH")
+            if has_decision and not has_knowledge:
+                raise RecorderIntegrityError("TRACE_MANIFEST_EVENT_OR_DECISION_CONTEXT_MISMATCH")
             raise RecorderIntegrityError("TRACE_MANIFEST_EVENT_KNOWLEDGE_OR_DECISION_CONTEXT_MISMATCH")
         return PersistedTraceManifest(envelope["manifest_ref"], expected, "sha256", live)
 
