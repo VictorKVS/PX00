@@ -1,0 +1,80 @@
+schema_version: 0.1
+status: draft
+object_type: action_request
+canonical_prefix: ACTREQ-
+purpose: machine-readable contract for one governed material capability/action request
+
+required_fields:
+  action_request_id:
+    type: ACTREQ-reference
+  status:
+    type: enum
+    values: [REQUESTED, AUTHORIZED, DENIED, ESCALATED, EXECUTING, SUCCEEDED, FAILED, CANCELLED, BLOCKED]
+  created_at:
+    type: utc_timestamp
+  task_id:
+    type: TASK-reference
+  run_id:
+    type: RUN-reference
+  trace_id:
+    type: TRACE-reference
+  requester_role_id:
+    type: ROLE-reference
+  requester_role_version:
+    type: string
+  protocol_id:
+    type: PROTO-reference
+  protocol_version:
+    type: string
+  step_id:
+    type: string
+  capability:
+    type: string
+  action_class:
+    type: string
+  target_ref:
+    type: canonical_or_governed_resource_reference
+  purpose_code:
+    type: string
+  requested_autonomy:
+    type: enum
+    values: [A0, A1, A2, A3, A4]
+  classification:
+    type: string
+  side_effect_class:
+    type: enum
+    values: [S0, S1, S2, S3, S4]
+
+optional_fields:
+  input_refs:
+    type: canonical_reference_list
+  requested_adapter_hint:
+    type: string
+    rule: hint only; cannot force a privileged adapter or bypass tool resolution
+  resource_constraints:
+    type: mapping
+  time_constraints:
+    type: mapping
+  operation_count_limit:
+    type: integer
+    minimum: 1
+  approval_refs:
+    type: canonical_reference_list
+  authority_decision_ref:
+    type: canonical_or_runtime_reference
+  output_refs:
+    type: canonical_reference_list
+  event_refs:
+    type: EVT-reference-list
+
+invariants:
+  - action_request_is_not_authority
+  - material_execution_requires_linked_allow_authority_decision
+  - requested_adapter_hint_does_not_grant_adapter_permission
+  - action_scope_cannot_expand_after_authority_without_new_authority_decision
+  - denied_or_escalated_request_cannot_execute_as_allowed
+  - untrusted_executor_output_cannot_directly_mutate_control_plane
+  - successful_material_execution_links_to_event_or_artifact_evidence
+
+runtime_validator: not_selected
+library_dependency: none
