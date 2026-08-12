@@ -1,0 +1,41 @@
+schema_version: 0.1
+status: draft
+object_type: live_provider_call_record
+purpose: preserve auditable metadata for one governed external AI-provider call without persisting authentication secrets
+
+required_fields:
+  call_id: {type: stable_id}
+  executor_invocation_ref: {type: executor_invocation_reference}
+  provider_profile_ref: {type: live_provider_profile_reference}
+  provider_ref: {type: stable_id}
+  driver_ref: {type: string}
+  requested_model_ref: {type: string}
+  endpoint_host_ref: {type: string}
+  data_classification: {type: string}
+  request_payload_hash: {type: sha256}
+  response_payload_hash: {type: sha256}
+  http_status: {type: integer}
+  elapsed_ms: {type: integer}
+  status: {type: enum, values: [COMPLETED, REJECTED, FAILED]}
+  created_at: {type: utc_timestamp}
+
+optional_fields:
+  provider_request_ref: {type: string}
+  returned_model_ref: {type: string}
+  failure_code: {type: string}
+  response_metadata: {type: object}
+
+invariants:
+  - authentication_secret_is_never_recorded
+  - request_and_response_hashes_cover_canonical_provider_payloads
+  - provider_request_identity_is_preserved_when_available
+  - returned_model_mismatch_is_visible_not_silently_normalized
+  - completed_call_does_not_imply_verification_or_acceptance
+  - failed_or_rejected_call_remains_append_only_evidence
+
+non_goals:
+  - persist_raw_sensitive_prompt_by_default
+  - persist_raw_provider_response_by_default
+  - grant runtime authority
+
+library_dependency: none
