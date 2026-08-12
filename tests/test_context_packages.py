@@ -39,8 +39,27 @@ class ContextPackageBuilderTests(unittest.TestCase):
             purpose="security analysis",
         )
 
-    def obj(self, oid, otype, digest=D1, version="v1", route="KROUTE-SNAP-1", classification="PUBLIC"):
-        return KnowledgeObjectRef(oid, version, digest, otype, "KB-SECURITY", "controls", classification, route)
+    def obj(
+        self,
+        oid,
+        otype,
+        digest=D1,
+        version="v1",
+        route="KROUTE-SNAP-1",
+        classification="PUBLIC",
+        snapshot=None,
+    ):
+        return KnowledgeObjectRef(
+            oid,
+            version,
+            digest,
+            otype,
+            "KB-SECURITY",
+            "controls",
+            classification,
+            route,
+            snapshot,
+        )
 
     def test_builds_bounded_immutable_context(self):
         candidates = (
@@ -52,7 +71,31 @@ class ContextPackageBuilderTests(unittest.TestCase):
         self.assertEqual(package.knowledge_object_refs, ("EVD-1", "SRC-2"))
         self.assertEqual(package.knowledge_object_version_refs, (f"EVD-1@v1#{D1}", f"SRC-2@v1#{D1}"))
         self.assertEqual(package.route_snapshot_refs, ("KROUTE-SNAP-1",))
+        self.assertEqual(package.knowledge_snapshot_refs, ())
         self.assertEqual(len(package.package_hash), 64)
+
+    def test_external_snapshot_is_preserved_in_context(self):
+        candidate = self.obj("SRC-1", "SRC", snapshot="KSNAP-SEC-0001")
+        package = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(candidate,), context_package_id="CTX-1")
+        self.assertEqual(package.knowledge_snapshot_refs, ("KSNAP-SEC-0001",))
+
+    def test_external_snapshot_change_changes_package_hash(self):
+        first = self.builder.build(
+            self.request,
+            assignment_ref="ASGN-1",
+            bindings=(self.binding,),
+            candidates=(self.obj("SRC-1", "SRC", snapshot="KSNAP-SEC-0001"),),
+            context_package_id="CTX-1",
+        )
+        second = self.builder.build(
+            self.request,
+            assignment_ref="ASGN-1",
+            bindings=(self.binding,),
+            candidates=(self.obj("SRC-1", "SRC", snapshot="KSNAP-SEC-0002"),),
+            context_package_id="CTX-2",
+        )
+        self.assertEqual(first.knowledge_object_version_refs, second.knowledge_object_version_refs)
+        self.assertNotEqual(first.package_hash, second.package_hash)
 
     def test_content_change_under_same_object_id_changes_package_hash(self):
         first = self.builder.build(self.request, assignment_ref="ASGN-1", bindings=(self.binding,), candidates=(self.obj("SRC-1","SRC",D1),), context_package_id="CTX-1")
