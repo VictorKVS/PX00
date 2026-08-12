@@ -1,0 +1,133 @@
+profile_version: 0.1
+status: educational_case_seed
+project_ref: CASE-TECHNOMART-AI-RECOMMENDATIONS
+purpose: exercise the governed AI project lifecycle on the OTUS retail recommendation case without inventing missing business answers
+
+source_facts:
+  business:
+    active_users_monthly: 2000000
+    stores: 150
+    sku_count: ">50000"
+    current_recommendation_type: rule_based_frequently_bought_together
+    current_recommendation_conversion: 0.005
+    stated_goal_aov_increase: 0.10
+  requested_capabilities:
+    - personalized_feed
+    - generative_recommendation_explanations
+    - omnichannel_purchase_awareness
+    - anonymous_session_or_cookie_personalization
+  nonfunctional:
+    recommendation_latency_ms_max: 200
+    first_working_result_deadline: 3_months
+  as_is:
+    backend: PHP_Bitrix_monolith
+    database: MySQL_under_high_load
+    product_catalog_refresh: daily_XML
+    orders_source: 1C
+    orders_sync: 15_minutes
+    clickstream: Google_Analytics_with_little_raw_server_log_retention
+    data_science_team: absent
+    data_engineering_team: absent
+  constraints:
+    gpu_procurement_lead_time: up_to_2_months
+    cloud_preferred_for_start: true
+    personal_data_present: true
+    customer_data_to_public_llm_prohibited: true
+    cto_requires_no_core_monolith_rewrite: true
+
+open_questions_before_commitment:
+  - how_is_AOV_plus_10_percent_attributed_to_recommendations_and_over_what_period
+  - what_exactly_does_current_0_5_percent_recommendation_conversion_measure
+  - what_raw_click_view_cart_search_and_order_events_can_be_legally_and_technically_exported
+  - which_stable_customer_product_order_and_store_identifiers_exist_across_Bitrix_1C_and_offline_sales
+  - what_identity_consent_and_cookie_rules_apply_to_anonymous_personalization
+  - what_is_the_latency_budget_split_between_retrieval_ranking_generation_network_and_monolith
+  - which_cloud_regions_and_providers_are_allowed_for_personal_and_behavioral_data
+  - can_LLM_explanations_receive_only_deidentified_product_and_preference_context
+  - what_is_the_required_availability_SLA_and_fallback_behavior
+  - what_business_metric_will_trigger_project_stop_after_three_months
+  - who_owns_data_quality_recommendation_quality_and_operational_incidents
+
+recommended_delivery_ascent:
+  DEMO:
+    question: did_we_understand_the_customer_experience_and_business_scenario
+    scope:
+      - clickable_personalized_feed_mock
+      - fake_or_synthetic_customer_history
+      - stub_recommendation_API
+      - mock_explanations_without_customer_PII
+    deliberately_not_in_scope:
+      - real_ML
+      - production_integration
+      - real_time_data_pipeline
+    contract_guidance: TIME_AND_MATERIALS
+  POC:
+    question: can_available_data_and_a_bounded_recommender_beat_a_declared_baseline_within_constraints
+    scope:
+      - historical_data_export_and_EDA
+      - data_quality_and_joinability_assessment
+      - non_ML_or_simple_recommender_baseline
+      - one_candidate_model_or_ranking_pipeline
+      - offline_quality_metrics
+      - latency_measurement_for_core_pipeline
+      - explicit_data_gaps_and_GO_NO_GO
+    deliberately_not_in_scope:
+      - site_wide_real_time_serving
+      - production_grade_CI_CD
+      - public_LLM_with_customer_data
+    contract_guidance: TIME_AND_MATERIALS
+  MVP:
+    question: do_real_users_create_measurable_incremental_business_value
+    candidate_scope_inference:
+      - one_web_channel_or_controlled_customer_segment
+      - real_data
+      - bounded_recommendation_use_case
+      - A_B_or_other_controlled_incrementality_measurement
+      - product_metrics_and_business_metrics
+      - basic_observability
+      - disable_or_fallback_to_rule_based_recommender
+      - LLM_explanation_only_if_privacy_boundary_is_proven
+    contract_guidance: HYBRID
+  PRODUCTION:
+    question: can_the_business_depend_on_the_recommendation_system_at_required_scale
+    required_future_evidence:
+      - reliable_event_ingestion
+      - production_serving_architecture
+      - full_CI_CD_and_release_governance
+      - monitoring_alerting_and_tracing
+      - model_or_executor_drift_monitoring
+      - security_and_privacy_controls
+      - fallback_and_disaster_recovery
+      - operational_support_and_incident_process
+      - confirmed_economic_effect
+    contract_guidance: FIXED_PRICE_SLA_when_requirements_are_stable
+
+quantitative_risk_candidates:
+  - risk: missing_or_low_quality_behavioral_data
+    probability: TBD_after_data_discovery
+    impact_min_mode_max: TBD
+    unit: schedule_or_budget
+  - risk: overloaded_monolith_cannot_meet_latency_budget
+    probability: TBD_after_latency_measurement
+    impact_min_mode_max: TBD
+    unit: schedule_or_budget
+  - risk: cross_system_identity_and_omnichannel_join_failure
+    probability: TBD_after_data_joinability_assessment
+    impact_min_mode_max: TBD
+    unit: schedule_or_scope_loss
+  - risk: privacy_or_cloud_boundary_blocks_LLM_explanations
+    probability: TBD_after_security_legal_review
+    impact_min_mode_max: TBD
+    unit: scope_or_budget
+  - risk: three_month_business_gate_not_met
+    probability: TBD_after_baseline_and_experiment_design
+    impact_min_mode_max: TBD
+    unit: project_investment
+
+rules:
+  - unknown_values_remain_TBD_not_invented
+  - each_stage_requires_declared_GO_NO_GO_evidence
+  - POC_success_does_not_prove_MVP_business_value
+  - MVP_business_value_does_not_prove_production_reliability
+  - public_LLM_must_not_receive_customer_personal_data_under_case_constraint
+  - cto_monolith_constraint_is_architectural_input_not_permission_to_hide_integration_risk
