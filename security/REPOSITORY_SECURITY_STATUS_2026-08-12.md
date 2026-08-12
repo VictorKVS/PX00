@@ -8,12 +8,15 @@
 - Repository visibility: `public`.
 - Default branch: `main`.
 - Connected account has administrative repository permission.
-- Repository rulesets endpoint returned an empty set (`[]`): no repository ruleset is currently visible through the API used for this verification.
+- Repository rulesets endpoint was rechecked after the structure-evidence gate and again returned an empty set (`[]`): no repository ruleset is currently visible through the API used for this verification.
 - Minimal GitHub Actions contract-validation workflow exists and has successful hosted runs.
+- Minimal dependency provenance / SBOM gate is implemented and accepted in CI.
+- Accepted dependency-provenance CI run: `31570702457`.
+- Accepted test result: `17/17 PASS` plus repository contract validation `PASS`, `0 errors`, `0 warnings`.
 
 ## Not verified through the current GitHub integration
 
-The following API reads returned `403 Resource not accessible by integration`:
+The following API reads previously returned `403 Resource not accessible by integration`:
 
 - branch protection details for `main`;
 - secret-scanning alert listing.
@@ -24,6 +27,7 @@ A `403` is **not** evidence that the feature is disabled and is **not** evidence
 
 ```text
 CI contract validation             PASS
+Dependency provenance / SBOM gate  PASS
 Workflow token permission           contents: read
 Action identities pinned            YES
 Repository rulesets visible         NONE
@@ -33,14 +37,18 @@ Push protection                     UNVERIFIED
 Required status check enforcement   UNVERIFIED
 Signed commit requirement            NOT REQUIRED BY CURRENT BASELINE
 Release signing                     NOT IMPLEMENTED
-SBOM                                NOT IMPLEMENTED / RELEASE GATE
+Artifact hash locking               NOT IMPLEMENTED
+External SBOM schema validation     NOT IMPLEMENTED
+Vulnerability monitoring            NOT IMPLEMENTED
 ```
 
 ## Security interpretation
 
-The repository now detects contract regressions automatically, but a successful CI workflow does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists.
+The repository now detects contract regressions and direct dependency/SBOM drift automatically. The accepted SBOM baseline records the current direct dependency and provenance metadata without adding a new runtime library.
 
-Therefore CI **execution** is accepted, while CI **enforcement as a merge/push gate** remains unproven.
+However, a successful CI workflow does not stop an administrator or other authorized writer from pushing a commit directly to `main` unless an appropriate branch/ruleset policy exists.
+
+Therefore CI **execution** and the dependency-provenance gate are accepted, while CI **enforcement as a merge/push gate** remains unproven.
 
 Secret-scanning controls must also be verified separately before PX00 can claim repository-level secret prevention/detection coverage.
 
@@ -50,7 +58,7 @@ Secret-scanning controls must also be verified separately before PX00 can claim 
 2. Require the `PX00 Contract Validation / Validate contracts` check before governed merges once PR-based change control becomes the normal workflow.
 3. Verify secret scanning and push protection for the public repository.
 4. Keep workflow permissions read-only and action dependencies pinned.
-5. Add SBOM/dependency provenance before any releasable distribution.
+5. Before a releasable distribution, evaluate artifact hash locking, external SBOM schema validation, vulnerability scanning and release provenance/signing.
 
 ## Occam constraint
 
