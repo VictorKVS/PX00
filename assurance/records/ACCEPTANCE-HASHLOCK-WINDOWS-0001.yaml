@@ -1,0 +1,33 @@
+record_id: ACCEPTANCE-HASHLOCK-WINDOWS-0001
+schema_version: '0.1'
+date: '2026-08-12'
+subject:
+  control: dependency_artifact_hash_lock
+  target: windows_x86_64_cpython_3_10
+  requirement_lock: requirements-validator-lock.txt
+  dependency: PyYAML==6.0.3
+status: PASS
+criteria:
+  binary_only_install: PASS
+  hash_checking_enabled: PASS
+  accepted_windows_wheel_selected: PASS
+  pip_check: PASS
+  tests:
+    expected: 19
+    passed: 19
+  repository_contract_validation: PASS
+  errors: 0
+  warnings: 0
+  working_tree_clean: PASS
+evidence:
+  run: assurance/runs/HASHLOCK-0002_WINDOWS_LOCAL_PASS_2026-08-12.md
+  hash_baseline: security/DEPENDENCY_ARTIFACT_HASH_BASELINE_0_1.md
+  lock_file: requirements-validator-lock.txt
+  related_linux_acceptance: assurance/records/ACCEPTANCE-HASHLOCK-0001.yaml
+limitations:
+  - package_publisher_identity_not_proven_by_hash_alone
+  - future_vulnerability_absence_not_proven
+  - repository_branch_enforcement_not_proven
+  - secret_scanning_and_push_protection_not_verified
+  - release_signing_not_implemented
+decision: KEEP
