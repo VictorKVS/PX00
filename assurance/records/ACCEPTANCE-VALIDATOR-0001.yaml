@@ -1,0 +1,53 @@
+schema_version: 0.1
+acceptance_id: ACCEPTANCE-VALIDATOR-0001
+subject:
+  type: validator
+  id: PX00-MINIMAL-CONTRACT-VALIDATOR
+  version: 0.1
+execution:
+  run: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
+  environment: user_local_clone_windows_python_3_10
+  repository_head_before_evidence_commit: 9181657
+results:
+  unit_and_integration_tests:
+    count: 13
+    state: PASS
+  repository_validation:
+    state: PASS
+    errors: 0
+    warnings: 0
+  json_validation:
+    state: PASS
+blocking_criteria:
+  - id: VAL01
+    requirement: Current repository integration test passes.
+    result: PASS
+    evidence: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
+  - id: VAL02
+    requirement: Full validator exits with PASS and zero errors.
+    result: PASS
+    evidence: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
+  - id: VAL03
+    requirement: Existing negative tests continue to pass.
+    result: PASS
+    evidence: assurance/runs/VALIDATOR-0002_REAL_LOCAL_RUN_2026-08-12.md
+non_blocking_actions:
+  - id: ENV01
+    issue: Shared host Python environment reported an unrelated chromadb/bcrypt dependency conflict during PyYAML installation.
+    action: Run future local validation in an isolated .venv or equivalent disposable environment.
+    owner: PX-00 development process
+  - id: CI01
+    issue: Independent CI reproduction not yet recorded.
+    action: Add minimal CI only after isolated local environment procedure is defined.
+  - id: SBOM01
+    issue: Full SBOM automation is not yet present.
+    action: Add before any releasable distribution.
+acceptance:
+  validator_contract_state: PASS
+  environment_and_supply_chain_state: PASS_WITH_ACTIONS
+  production_runtime_allowed: false
+  wider_runtime_scope_allowed: false
+  next_gate:
+    - isolated_local_validation_environment
+    - independent_minimal_ci_reproduction
+security_conclusion: PASS_WITH_ACTIONS
