@@ -62,8 +62,9 @@ class PolicyProfileRegistry:
     def snapshot(self, *, run_id: str, requested: Mapping[str, tuple[str, str]]) -> PolicySnapshot:
         profiles = self.resolve_exact(requested)
         digest = self.snapshot_hash(profiles)
+        runtime_identity = sha256(f"{run_id}:{digest}".encode("utf-8")).hexdigest()
         return PolicySnapshot(
-            snapshot_id=f"POLSNAP-{digest[:16]}",
+            snapshot_id=f"POLSNAP-{runtime_identity[:16]}",
             run_id=run_id,
             profile_refs=tuple(sorted(f"{p.profile_id}@{p.version}" for p in profiles)),
             profile_types=tuple(sorted(p.profile_type for p in profiles)),
