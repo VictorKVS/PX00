@@ -1,0 +1,43 @@
+receipt_id: SEC-SNAPSHOT-0001-PX00-RECEIPT
+status: INTEGRATION_PROOF
+product_ref: SEC-PROD-0001
+knowledge_space_id: KB-SECURITY
+producer_repository: VictorKVS/KNOWLEDGE_CORE
+producer_manifest_ref: security-knowledge/corpus/snapshots/SEC-SNAPSHOT-0001.yaml
+producer_manifest_id: SEC-SNAPSHOT-0001
+producer_manifest_digest: 8830d3aa51dab48586bdc96945f2e38182ced261eacef05fb10ef42ac9ce81d2
+producer_repository_commit_sha: 8f7e1cb7a5abec39e0432ce7a811591a5dcadc8d
+route_snapshot_ref: KROUTE-SECURITY-v1
+runtime_snapshot_digest: 04d5ec28431e8c13863dab9896533435dac735ceb36b6bf59e4f05eea1f7eac3
+integration_context_package_ref: CTX-SEC-REAL-0001
+integration_context_package_hash: 9c09e6a4075f25ce2e341d1b0bd2fa4f59dedadf364019492be337893c220a2a
+
+selected_object:
+  object_id: FSB-117-2025
+  version_id: record-rev-8f7e1cb7a5ab
+  content_digest_sha256: 5bdfd92728c6be35cdbffba5c57bb843bf1f3e48813c47fab2a755a5a3351710
+  producer_knowledge_state: SOURCE_VERIFIED
+  runtime_preserved_knowledge_state: SOURCE_VERIFIED
+  source_locator_ref: publication.pravo.gov.ru:0001202503260008
+  object_type: SOURCE_METADATA
+  classification: PUBLIC
+
+assurance_boundary:
+  proven:
+    - real canonical KNOWLEDGE_CORE object is pinned by historical Git commit
+    - producer CI verifies the historical object bytes against content SHA-256
+    - producer manifest digest is independently recomputed by PX00 consumer code
+    - knowledge state is preserved without promotion
+    - classification and freshness are integrity-bound in the producer manifest
+    - runtime snapshot and ContextPackage have deterministic expected hashes
+  not_proven:
+    - full text of FSB Order 117/2025 is ingested
+    - any atomic requirement from FSB Order 117/2025 is VERIFIED
+    - applicability to a particular organization or system
+    - compliance status
+    - first closed FATHER Security-domain RUN
+    - historical PX00 RUN replay after later canonical knowledge changes
+
+rule: >-
+  This receipt is integration evidence only. It is not a local copy of canonical Security Knowledge
+  and must never be used to upgrade SOURCE_VERIFIED metadata into VERIFIED requirement knowledge.
