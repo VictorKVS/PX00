@@ -1,0 +1,62 @@
+project_id: PROJECT-FFB-0001
+name: FATHER Factory Builder
+status: INCUBATED_INTERNAL
+parent_project_ref: PX-00
+mission: >-
+  Design, assemble, validate and mature governed production organizations
+  that can convert explicitly authorized needs into accepted outputs using
+  replaceable human, AI, software and physical executors.
+
+scope_in:
+  - factory requirements and beneficiary/problem framing
+  - capability architecture
+  - organization and department design
+  - role/responsibility/protocol design
+  - executor selection abstraction
+  - knowledge and resource architecture
+  - authority, safety, security and quality boundaries
+  - simulation, dry-run, pilot and production maturity gates
+  - risk discovery and treatment
+  - factory observability, learning and revision
+
+scope_out:
+  - deciding universal human needs without authorized problem framing
+  - granting unlimited autonomy from broad mission statements
+  - replacing domain-specific engineering or safety expertise
+  - bypassing applicable law, sector regulation or human accountability
+  - treating an LLM, vendor, robot or device as the permanent identity of a role
+
+north_star_ref: architecture/NORTH_STAR_FACTORY_VISION.md
+architect_foresight_ref: governance/ARCHITECT_FORESIGHT_LOOP.md
+risk_governance_ref: governance/RISK_MANAGEMENT_MATRIX.md
+
+governance_roles:
+  owner: HUMAN_OWNER
+  manager: FATHER
+  factory_architect: ROLE-FACTORY-ARCHITECT
+  independent_audit: ARGUS
+  critical_review: SOCRATES
+
+maturity_levels:
+  - M0_CONCEPT
+  - M1_PROTOTYPE
+  - M2_INTEGRATED_PROTOTYPE
+  - M3_CONTROLLED_PILOT
+  - M4_PRE_PRODUCTION
+  - M5_PRODUCTION
+
+permanent_invariants:
+  - need_does_not_grant_authority
+  - factory_blueprint_does_not_grant_runtime_authority
+  - role_is_not_executor
+  - capability_is_not_vendor
+  - physical_side_effects_require_domain_safety_controls
+  - critical_risks_are_eliminated_or_isolated_before_progression
+  - implementation_progress_is_not_audited_maturity
+  - every_material_factory_revision_preserves_lineage
+  - production_claims_require_evidence
+  - current_shortcuts_must_have_declared_replacement_maturity
+
+future_extraction:
+  enabled: true
+  rule: stable_ids_and_cross_project_lineage_must_survive_physical_repository_split
