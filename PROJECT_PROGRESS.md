@@ -23,7 +23,21 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current position inside SUMMIT-FFB-02:
 `provider-neutral executor boundary → AI/ML lifecycle & risk gates → secret/data-egress live-provider boundary → provider-specific driver + real authorized call next`.
 
-Latest generation: `TF-0064 — Live Provider Readiness Boundary`.
+Latest generation: `TF-0065 — Evidence-Gated Product Portfolio Roadmap`.
+
+### Product portfolio
+Status: **MASTER ROADMAP ESTABLISHED**.
+
+Canonical plans:
+- `father/product-roadmap/master-product-roadmap.yaml`;
+- `father/product-roadmap/security-products.yaml`.
+
+Primary owner-priority domain track:
+`Security Knowledge Base → Compliance Engine → Evidence-Based Security Architect → Vulnerability & Risk Expert → White-Hat / Continuous Security Assurance → Regulatory Change Engine → Continuous Security Audit Expert`.
+
+Hard product gate: downstream Security products may be explored as isolated PoCs, but may not become authoritative MVP/Production products until `SEC-GATE-EXPERT-KNOWLEDGE-0001` is passed for the declared Security Knowledge scope.
+
+Architect-proposed future/supporting tracks are now visible but non-displacing: platform core, generic Knowledge Core, Agent Factory, Software/Service Factory, Research Factory, Assurance, Cyber-Physical/Robotics and Factory-of-Factories.
 
 ## WHAT IS CLOSED
 
@@ -88,6 +102,23 @@ CI itself found an implementation secret-hygiene pattern during the first pass. 
 Important separation:
 `LIVE_PROVIDER_BOUNDARY_READY ≠ LIVE_PROVIDER_PROVEN ≠ SUMMIT_ACCEPTED`.
 
+### TF-0065 — Evidence-Gated Product Portfolio Roadmap ✅
+Established one portfolio-level manufacturing plan so future product ideas accumulate without bypassing dependencies or diluting the active build.
+
+Key controls:
+- owner-priority Security line is explicit;
+- `Security Knowledge Base` has a hard expert-ready evidence gate;
+- later products may run isolated PoCs without maturity promotion;
+- architect-proposed tracks cannot displace the active owner-priority foundation except for direct dependencies, critical-risk remediation or explicit governance reprioritization;
+- product delivery stage remains independent of CRISP-ML(Q) phase and PX00 maturity;
+- S4 remediation outranks feature work on the affected path.
+
+Immediate product order:
+1. finish first governed live executor;
+2. raise Security Knowledge Base toward expert-ready evidence quality;
+3. close first complete FATHER corporate loop on a Security-domain task;
+4. begin bounded Compliance Engine PoC from governed Security Knowledge.
+
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
 - `FFB-FP-0002 SECURITY_SCOPE_BLOCK` — safe refusal is a valid outcome.
@@ -95,6 +126,7 @@ Important separation:
 - Lifecycle lesson: successful PoC evidence must not silently promote a project into MVP or Production claims.
 - Risk lesson: mean expected loss alone can hide unacceptable tail/tolerance exposure.
 - Security implementation lesson: secret-hygiene controls constrain implementation; they are not relaxed simply because a live-provider adapter needs credentials.
+- Portfolio lesson: attractive downstream product ideas remain visible but cannot substitute for proving the foundational knowledge they depend on.
 
 ## VELOCITY
 Observed engineering velocities, not promises:
@@ -104,7 +136,7 @@ Observed engineering velocities, not promises:
 - `TF-0061 → TF-0062`: about **7.6 TF/hour burst-equivalent**;
 - `TF-0062 → TF-0063`: about **4.35 TF/hour burst-equivalent** due to wider lifecycle/risk integration.
 
-Velocity remains secondary to behavioral evidence and green validation.
+Velocity remains secondary to behavioral evidence, product evidence gates and green validation.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 The current system is a bounded reference implementation, not production maturity.
@@ -115,7 +147,8 @@ Most relevant blockers:
 - `RISK-0004` — higher-scale/production concerns retained by maturity model;
 - `RISK-0009` — artifact digest does not yet protect the full provenance envelope;
 - `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness;
-- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised.
+- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised;
+- `SEC-GATE-EXPERT-KNOWLEDGE-0001` — Security Knowledge foundation is not yet expert-ready and therefore blocks authoritative downstream Security products.
 
 ## NEXT SUMMIT
 
@@ -152,6 +185,13 @@ Acceptance criteria:
 ### Summit outcome
 After SUMMIT-FFB-02, PX00 will have evidence that the governed factory controls survive contact with a real non-deterministic AI worker. Only then is it credible to call the system an **Agent Factory MVP**, rather than a deterministic/test-double reference factory with live-provider readiness.
 
+## PRODUCT ROADMAP — NEXT NARROW BUILD
+Parallel but bounded priorities:
+1. **Runtime proof:** complete the first governed live executor.
+2. **Domain foundation:** begin measurable construction of the evidence-based `Security Knowledge Base` and its expert-ready gate.
+
+Do not expand broad future factory tracks until one of these priorities demonstrates a direct dependency or a critical-risk need.
+
 ## FOLLOWING SUMMITS
 
 ### SUMMIT-FFB-03 — Governed external knowledge/input
@@ -162,6 +202,8 @@ Persistent artifact envelopes, transactions, recovery, durable rework and restar
 
 ### SUMMIT-PX00-01 — First closed FATHER corporate loop
 `GOAL → PROJECT → PLAN → TASK → ROLE → AGENT → KNOWLEDGE → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
+
+Preferred first domain proof: a bounded Security Knowledge/product task so platform progress and product progress reinforce each other.
 
 ### FATHER V1 summit
 A working organizational skeleton where FATHER manages a project end to end and specialist agents remain replaceable, governed workers rather than hidden autonomous authorities.
