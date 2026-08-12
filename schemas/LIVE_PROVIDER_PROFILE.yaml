@@ -1,0 +1,42 @@
+schema_version: 0.1
+status: draft
+object_type: live_provider_profile
+purpose: define a provider-neutral, secret-safe and data-classification-aware boundary for one governed live AI executor
+
+required_fields:
+  profile_id: {type: stable_id}
+  provider_ref: {type: stable_id}
+  driver_ref: {type: string}
+  endpoint_url: {type: https_url}
+  allowed_host_refs: {type: list}
+  model_ref: {type: string}
+  auth_secret_env_ref: {type: string}
+  live_enable_env_ref: {type: string}
+  timeout_seconds: {type: integer}
+  max_response_bytes: {type: integer}
+  allowed_data_classifications: {type: list}
+  status: {type: enum, values: [ACTIVE, SUSPENDED, RETIRED]}
+
+optional_fields:
+  provider_region_ref: {type: string}
+  data_processing_profile_ref: {type: string}
+  notes: {type: string}
+
+invariants:
+  - endpoint_must_use_https
+  - endpoint_host_must_be_explicitly_allowlisted
+  - secret_value_is_never_stored_in_profile
+  - live_network_access_requires_explicit_runtime_opt_in
+  - request_data_classification_must_be_allowed_by_profile
+  - timeout_and_response_size_are_bounded
+  - provider_call_does_not_grant_tool_or_organizational_authority
+  - provider_output_is_candidate_content_not_truth_or_acceptance
+  - provider_driver_is_replaceable_without_changing_role_identity
+
+non_goals:
+  - store_api_keys_or_tokens
+  - authorize material external tool actions
+  - claim provider compliance without evidence
+  - claim exact model build when provider does not expose it
+
+library_dependency: none
