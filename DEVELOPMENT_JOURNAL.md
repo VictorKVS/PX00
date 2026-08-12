@@ -365,6 +365,66 @@ Trigger
 
 ---
 
+## DJ-0012 — Minimal governed execution kernel design
+
+**Date:** 2026-08-12  
+**Status:** ACCEPTED FOR CONTRACT DESIGN  
+**Decision:** KEEP / IMPLEMENT AFTER CONTRACT FIXTURES
+
+**Why:** PX00 now needs a minimal execution runtime that can enforce already-defined role/protocol/authority/trace/acceptance contracts without transferring control-plane ownership to an LLM, role, tool or orchestration framework.
+
+**Evidence / files:**
+
+- [ADR-0016 — Minimal Governed Execution Kernel](architecture/adr/ADR-0016-minimal-governed-execution-kernel.md)
+- [TF-0011](Tree_F/TF-0011_2026-08-12_MINIMAL_GOVERNED_EXECUTION_KERNEL.md)
+- [Authority Contract](governance/AUTHORITY_AUTONOMY_CONTRACT.md)
+- [Protocol Execution Contract](protocols/PROTOCOL_EXECUTION_CONTRACT.md)
+
+**Data & processing:** Runtime is separated into Control, Execution and Evidence planes. The planned kernel resolves and pins Role/Protocol versions, validates inputs/preconditions, creates RUN/TRACE state, performs authority checks at material action boundaries, enforces declared transitions, records material evidence, validates completion and invokes acceptance separately from technical completion.
+
+**Algorithms / libraries:** Runtime implementation `NONE` in this generation. Defined algorithm is a finite governed state machine plus fail-closed authority evaluation and append-preserving trace semantics. New third-party libraries: `NONE`.
+
+**DevOps:** No framework, service, database, broker, model SDK or CI widening added. Existing real-repository integration evidence remains a prerequisite for runtime widening.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. The architecture creates a dedicated non-bypassable control location and explicitly treats executor/model/tool output as untrusted data relative to the control plane. Enforcement is not claimed until deterministic acceptance tests exist.
+
+**Tests / evaluation:** Required first fixture is deterministic and LLM-free. Negative cases will cover unknown identities, missing inputs/authority/approval, forbidden actions, undeclared transitions, retry exhaustion, invalid outputs, missing evidence, revocation and attempted executor control injection.
+
+**Next gate:** Define the universal Action Request / Tool Boundary, then instantiate kernel schemas/fixtures before implementation.
+
+---
+
+## DJ-0013 — Governed Action Request and Universal Tool Boundary
+
+**Date:** 2026-08-12  
+**Status:** ACCEPTED FOR CONTRACT DESIGN  
+**Decision:** KEEP / CONTRACT BEFORE ADAPTERS
+
+**Why:** A governed kernel is insufficient if roles can still call GitHub, shell, filesystems, HTTP, databases, mail or other tools through direct role-specific paths. PX00 needs one authority-mediated action boundary before any real external adapter is permitted.
+
+**Evidence / files:**
+
+- [ADR-0017 — Governed Action Request and Universal Tool Boundary](architecture/adr/ADR-0017-governed-action-request-and-tool-boundary.md)
+- [TF-0012](Tree_F/TF-0012_2026-08-12_GOVERNED_ACTION_REQUEST_TOOL_BOUNDARY.md)
+- [Updated Canonical Object Model](architecture/CANONICAL_OBJECT_MODEL.md)
+- [Action Request schema](schemas/ACTION_REQUEST.yaml)
+- [Tool Definition schema](schemas/TOOL_DEFINITION.yaml)
+- [Capability Grant schema](schemas/CAPABILITY_GRANT.yaml)
+
+**Data & processing:** `ACTREQ-*` is added as one new canonical orchestration object because a material action request has a lifecycle and audit meaning distinct from a task and from authority. Tool definitions, capability grants and execution receipts do not become new canonical object families yet; grants derive from authority and material receipts reuse `EVT-*`/`ART-*`. The path is `ROLE/EXECUTOR → ACTREQ → Authority Decision → scoped capability grant → Tool Boundary → adapter → EVT/ART`.
+
+**Algorithms / libraries:** Runtime implementation `NONE`. Defined mechanism is intent/capability normalization, fail-closed authority, narrow scoped grants, adapter dispatch and event/artifact result preservation. New third-party libraries: `NONE`.
+
+**DevOps:** No GitHub/filesystem/network/mail/database/shell adapter is authorized yet. First executable proof will use a deterministic synthetic capability and negative tests before any real external side effect path is introduced.
+
+**Security conclusion:** `PASS_WITH_ACTIONS`. Direct-tool privilege paths are prohibited by design; requested adapter hints cannot grant privilege; tool/source/executor output cannot directly mutate control-plane state; tool output remains distinct from evidence/knowledge admission.
+
+**Tests / evaluation:** Planned negative cases cover denied authority, capability/target mismatch, expired/revoked/replayed grants, unauthorized adapters, side-effect overflow and untrusted result attempts to create authority or transitions.
+
+**Next gate:** Extend the validator for the new canonical/schema invariants, define deterministic kernel/tool acceptance fixtures and only then implement the smallest synthetic execution boundary.
+
+---
+
 ## Entry template
 
 ```text
