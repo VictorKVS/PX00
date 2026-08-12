@@ -23,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current position inside SUMMIT-FFB-02:
 `provider-neutral executor boundary → AI/ML lifecycle & risk gates → secret/data-egress live-provider boundary → provider-specific driver + real authorized call next`.
 
-Latest generation: `TF-0066 — Security Knowledge Canonical Repository Alignment`.
+Latest generation: `TF-0067 — Cross-Repository Knowledge Snapshot Pinning`.
 
 ### Product portfolio
 Status: **CANONICAL MASTER ROADMAP ESTABLISHED IN KNOWLEDGE_CORE**.
@@ -43,8 +43,6 @@ Canonical repository: **`VictorKVS/KNOWLEDGE_CORE`**.
 Canonical tree: **`security-knowledge/`**.
 Current state: **foundation/schemas built; Russian normative corpus actively being populated; NOT EXPERT_READY**.
 
-Already established in the canonical product include evidence-driven KB architecture, atomic requirement/checklist structures, Organization Profile/applicability, legal-force classification, Unified Control model, expert metrics and completeness/expert-readiness structures.
-
 Canonical pipeline:
 `SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
 
@@ -54,7 +52,15 @@ Critical invariant:
 Current normative production order:
 `FSTEC → FSB P0 (GosSOPKA/NKCKI/SKZI + revisions) → Roskomnadzor → base laws/government acts/decrees + cross-links → sector regulators → GOST → ISO → NIST/CIS/OWASP → BDU/CVE/CWE/ATT&CK → pentest/vulnerability/risk → vendor hardening → broad Unified Control/evidence/expert consolidation`.
 
-Hard product rule: downstream Security products may run bounded PoCs on sufficiently VERIFIED slices, but may not claim broad authoritative maturity while dependent Security Knowledge coverage remains incomplete.
+### Cross-repository knowledge boundary
+Status: **CONTRACTS IMPLEMENTED / REAL SLICE REPLAY NOT YET PROVEN**.
+
+`KB-SECURITY` now resolves through a canonical route to `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`.
+
+New historical context chain:
+`KNOWLEDGE_REQUEST → active route → producer selection → immutable KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE → RUN`.
+
+The active route may follow current state. Historical RUN context may not follow `main/latest`; it pins exact repository commit plus exact selected object versions/digests.
 
 ## WHAT IS CLOSED
 
@@ -72,8 +78,6 @@ A provider-neutral worker boundary is locally proven.
 Proven chain:
 `worker v0.1 → candidate → VERIFY FAIL → REWORK → worker v0.2 → corrected candidate → VERIFY PASS → SOCRATES → DELIVERY`.
 
-Pinned historical facts include exact executor/version/provider/model metadata, assignment, input artifact, input/output hashes, candidate artifact and rejected verifier evidence.
-
 Important invariant:
 `EXECUTOR INVOCATION SUCCESS ≠ VERIFICATION PASS ≠ ACCEPTANCE`.
 
@@ -83,27 +87,8 @@ CRISP-ML(Q), Demo→PoC→MVP→Production evidence gates and quantitative risk 
 Architecture separation:
 `CRISP-ML(Q) PROCESS PHASE ≠ DEMO/POC/MVP/PRODUCTION DELIVERY STAGE ≠ PX00 M0..M5 SYSTEM MATURITY`.
 
-Important invariants:
-- `technical feasibility ≠ user/business value ≠ production readiness`;
-- PoC debt may be disposable only when declared with an expiry stage;
-- MVP requires real user/data and business/product evidence;
-- Production requires operational reliability, security, CI/CD, monitoring, drift/maintenance and recovery evidence;
-- quantitative risk never overrides S4.
-
 ### TF-0064 — Live Provider Readiness Boundary ✅ local readiness
-Implemented a provider-neutral live HTTPS boundary beneath the governed executor layer.
-
-Proven locally:
-- HTTPS mandatory;
-- exact host allowlisting;
-- explicit runtime live-enable flag;
-- credential values loaded only at runtime;
-- data-classification egress gate;
-- bounded timeout and response size;
-- HTTP/JSON/response-shape failures fail closed;
-- canonical request/response hashes;
-- provider request/model identity captured when available;
-- output remains candidate evidence under `GovernedExecutorBoundary`.
+Implemented a provider-neutral live HTTPS boundary beneath the governed executor layer with HTTPS allowlist, runtime credentials, egress classification, timeout/response limits and fail-closed response handling.
 
 Important separation:
 `LIVE_PROVIDER_BOUNDARY_READY ≠ LIVE_PROVIDER_PROVEN ≠ SUMMIT_ACCEPTED`.
@@ -112,17 +97,28 @@ Important separation:
 Established portfolio-level product manufacturing order and the rule that future ideas accumulate without bypassing dependencies.
 
 ### TF-0066 — Security Knowledge Canonical Repository Alignment ✅
-Corrected cross-repository ownership after detecting that PX00 had briefly started duplicating Security Knowledge product/gate/coverage artifacts.
-
-Now:
+Corrected cross-repository ownership:
 - `KNOWLEDGE_CORE = canonical professional/domain/product knowledge truth`;
 - `PX00 = governed organizational runtime and Factory Builder`;
-- local Security Knowledge roadmap/product files in PX00 are route-only;
-- duplicate PX00 coverage/readiness/source-backlog/runtime-gate artifacts were removed;
-- canonical master product roadmap is maintained in KNOWLEDGE_CORE.
+- duplicate Security Knowledge truth artifacts were removed from PX00.
 
 Important invariant:
 `ROLE KNOWLEDGE REQUIREMENT ≠ OWNED LOCAL KNOWLEDGE COPY`.
+
+### TF-0067 — Cross-Repository Knowledge Snapshot Pinning ✅ contract/runtime proof
+Implemented:
+- `KNOWLEDGE_SNAPSHOT` contract;
+- fail-closed snapshot builder;
+- `CONTEXT_PACKAGE v0.3` with `knowledge_snapshot_refs` inside package hash;
+- canonical `KB-SECURITY` external route;
+- producer-side `snapshot-export-schema.yaml` in KNOWLEDGE_CORE;
+- negative tests for mutable revisions, bad digests, path traversal, duplicate versions and knowledge-space mismatch;
+- tests proving external snapshot change alters ContextPackage hash.
+
+Important invariant:
+`ACTIVE ROUTE != HISTORICAL SNAPSHOT`.
+
+Both PX00 Contract Validation and KNOWLEDGE_CORE Knowledge Quality Gate passed for the implementation contracts.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — independent verification can cause explicit implementation rework.
@@ -132,7 +128,8 @@ Important invariant:
 - Risk lesson: mean expected loss alone can hide unacceptable tail/tolerance exposure.
 - Security implementation lesson: secret-hygiene controls constrain implementation rather than being weakened for convenience.
 - Portfolio lesson: attractive downstream product ideas remain visible but cannot substitute for proving foundational knowledge.
-- Repository-boundary lesson: FATHER/Factory Builder must bind to canonical professional knowledge, not create a second local truth when a domain product already exists.
+- Repository-boundary lesson: FATHER/Factory Builder binds to canonical professional knowledge rather than creating a second truth store.
+- Snapshot lesson: mutable discovery/routing state and immutable historical RUN context are different architectural objects.
 
 ## VELOCITY
 Observed engineering velocities, not promises:
@@ -153,22 +150,22 @@ Most relevant platform blockers:
 - `RISK-0004` — higher-scale/production concerns retained by maturity model;
 - `RISK-0009` — artifact digest does not yet protect the full provenance envelope;
 - `RISK-0010` — governed rework is mitigated only in the in-memory M1 reference harness;
-- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised.
+- `RISK-0011` — **MITIGATING**: live-provider transport/auth/egress boundary is locally proven, but real provider behavior has not yet been exercised;
+- `RISK-0012` — **MITIGATING**: producer and consumer snapshot contracts exist, but a real `SEC-*` slice has not yet completed export → PX00 validation → RUN → replay after KNOWLEDGE_CORE head advancement.
 
 Security product maturity blocker:
 - `SEC-PROD-0001` is **not EXPERT_READY**: a significant portion of the P0 normative corpus still requires complete atomicization, relationship/applicability mapping and independent re-verification.
 
 ## PARALLEL ACTIVE PRIORITIES
-These two streams proceed independently and reinforce each other later; neither currently blocks the other.
+Three narrow streams may proceed without blocking each other.
 
 ### A. Security Knowledge production — KNOWLEDGE_CORE
-Continue factual corpus production in the canonical repository:
+Continue factual corpus production:
 1. finish FSTEC;
 2. complete FSB P0 including GosSOPKA/NKCKI/SKZI and revision history;
 3. continue the declared corpus roadmap;
 4. keep `VERIFIED` source+locator strictness;
-5. do not turn the product into ordinary RAG over PDFs;
-6. after sufficient corpus density, consolidate overlapping requirements into Unified Controls, checks, evidence and expert review.
+5. do not reduce the product to ordinary RAG over PDFs.
 
 ### B. SUMMIT-FFB-02 — PX00
 Executor boundary prerequisite: **DONE**.
@@ -179,12 +176,21 @@ Actual live-provider evidence: **NOT YET DONE**.
 
 Next acceptance step: select one authorized AI provider, add exactly one provider-specific driver/configuration and execute one real bounded inference with no material external action.
 
+### C. Security Knowledge snapshot integration
+Producer contract: **DONE**.
+Consumer contract/runtime: **DONE**.
+Real producer export: **NOT YET DONE**.
+Cross-repository real slice: **NOT YET DONE**.
+Historical replay after KNOWLEDGE_CORE head moves: **NOT YET DONE**.
+
+Next narrow build: export one small real VERIFIED `SEC-*` slice and run it through `KNOWLEDGE_SNAPSHOT → CONTEXT_PACKAGE`.
+
 ## NEXT INTEGRATION SUMMIT
 
 ### SUMMIT-PX00-01 — First closed FATHER corporate loop on a Security task
 Once a suitable VERIFIED Security Knowledge slice is available and Agent Factory controls are ready:
 
-`GOAL → PROJECT → PLAN → TASK → SECURITY ROLE → KB-SECURITY CONTEXT → AGENT → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
+`GOAL → PROJECT → PLAN → TASK → SECURITY ROLE → KB-SECURITY SNAPSHOT → CONTEXT → AGENT → RUN → RESULT → INDEPENDENT REVIEW → REWORK if needed → ACCEPTANCE → PROJECT CLOSE`.
 
 This will be the first proof that the runtime and a real canonical professional knowledge product work together without copying truth across repositories.
 
