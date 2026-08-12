@@ -67,7 +67,7 @@ baseline_contracts:
   run_record_schema: schemas/RUN_RECORD.yaml
   acceptance_model: assurance/ACCEPTANCE_MODEL.md
   acceptance_record_schema: schemas/ACCEPTANCE_RECORD.yaml
-  latest_contract_decision: architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
+  latest_contract_decision: architecture/adr/ADR-0017-minimal-dependency-provenance-and-sbom-gate.md
 
 pilot_roles:
   ROLE-0201:
@@ -102,6 +102,7 @@ runtime_gate:
     - deterministic_reference_checks
     - acceptance_evidence_generation
     - minimal_ci_contract_validation
+    - dependency_provenance_validation
   prohibited:
     - production_agents
     - live_customer_or_protected_data
@@ -130,9 +131,11 @@ minimal_validator:
     - Tree_F/TF-0014_2026-08-12_MINIMAL_CI_VALIDATION_PASS.md
     - Tree_F/TF-0015_2026-08-12_REPOSITORY_SECURITY_STATUS.md
     - Tree_F/TF-0016_2026-08-12_GIT_TRACKED_STRUCTURE_EVIDENCE.md
+    - Tree_F/TF-0017_2026-08-12_MINIMAL_DEPENDENCY_PROVENANCE_SBOM_GATE.md
   architecture_decisions:
     - architecture/adr/ADR-0015-minimal-local-contract-validator.md
     - architecture/adr/ADR-0016-minimal-ci-contract-validation-gate.md
+    - architecture/adr/ADR-0017-minimal-dependency-provenance-and-sbom-gate.md
   network_required: false
   external_side_effects: false
   authoring_unit_tests:
@@ -170,6 +173,23 @@ ci_gate:
   acceptance: assurance/records/ACCEPTANCE-CI-0001.yaml
   production_deployment: false
 
+dependency_provenance:
+  state: IMPLEMENTED_PENDING_CI_ACCEPTANCE
+  baseline: security/DEPENDENCY_PROVENANCE_BASELINE_0_1.md
+  requirement_source: requirements-validator.txt
+  sbom: security/sbom/PX00-validator.cdx.json
+  sbom_format: CycloneDX
+  sbom_spec_version: '1.7'
+  validator: px00/dependency_provenance.py
+  tests: tests/test_dependency_provenance.py
+  exact_direct_pins_required: true
+  requirement_sbom_agreement_required: true
+  new_runtime_dependencies_added_for_sbom_gate: false
+  artifact_hash_locking: NOT_IMPLEMENTED
+  external_schema_validation: NOT_IMPLEMENTED
+  vulnerability_monitoring: NOT_IMPLEMENTED
+  release_signing: NOT_IMPLEMENTED
+
 repository_security:
   status_file: security/REPOSITORY_SECURITY_STATUS_2026-08-12.md
   visibility: public
@@ -185,7 +205,7 @@ current_phase:
   completed_gates:
     - canonical_identity
     - governance_constitution
-    - architecture_adr_0001_0016
+    - architecture_adr_0001_0017
     - development_evidence_corpus
     - canonical_object_model
     - governed_role_package_contract
@@ -213,10 +233,12 @@ current_phase:
     - minimal_ci_contract_gate_passed
     - repository_security_status_partially_verified
     - git_tracked_structure_evidence_adopted
+    - minimal_dependency_provenance_sbom_gate_implemented
   next_gate:
+    - accept_dependency_provenance_ci_result
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
-    - decide_minimal_dependency_sbom_control
+    - evaluate_artifact_hash_locking_before_release
     - preserve_ci_regression_history
     - keep_production_runtime_blocked
   exit_gate: repository_security_controls_and_dependency_provenance_baseline_are_evidenced_before_any_releasable_distribution
