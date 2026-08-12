@@ -174,7 +174,7 @@ ci_gate:
   production_deployment: false
 
 dependency_provenance:
-  state: IMPLEMENTED_PENDING_CI_ACCEPTANCE
+  state: PASS
   baseline: security/DEPENDENCY_PROVENANCE_BASELINE_0_1.md
   requirement_source: requirements-validator.txt
   sbom: security/sbom/PX00-validator.cdx.json
@@ -185,6 +185,11 @@ dependency_provenance:
   exact_direct_pins_required: true
   requirement_sbom_agreement_required: true
   new_runtime_dependencies_added_for_sbom_gate: false
+  accepted_ci_run_id: 31570702457
+  accepted_ci_commit: cbcd866a99be0f2b0a74cbdfd8adaac45b912418
+  accepted_total_tests: 17
+  acceptance: assurance/records/ACCEPTANCE-SBOM-0001.yaml
+  run: assurance/runs/SBOM-0001_GITHUB_ACTIONS_PASS_2026-08-12.md
   artifact_hash_locking: NOT_IMPLEMENTED
   external_schema_validation: NOT_IMPLEMENTED
   vulnerability_monitoring: NOT_IMPLEMENTED
@@ -234,8 +239,8 @@ current_phase:
     - repository_security_status_partially_verified
     - git_tracked_structure_evidence_adopted
     - minimal_dependency_provenance_sbom_gate_implemented
+    - minimal_dependency_provenance_sbom_gate_passed
   next_gate:
-    - accept_dependency_provenance_ci_result
     - verify_or_establish_main_branch_gate_enforcement
     - verify_secret_scanning_and_push_protection
     - evaluate_artifact_hash_locking_before_release
