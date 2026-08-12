@@ -60,6 +60,13 @@ class PolicyProfileRegistryTests(unittest.TestCase):
             self.registry.snapshot_hash(changed),
         )
 
+    def test_same_policy_content_has_same_hash_but_distinct_run_snapshot_identity(self):
+        first = self.registry.snapshot(run_id="RUN-A", requested=self.requested)
+        second = self.registry.snapshot(run_id="RUN-B", requested=self.requested)
+        self.assertEqual(first.snapshot_hash, second.snapshot_hash)
+        self.assertNotEqual(first.snapshot_id, second.snapshot_id)
+        self.assertNotEqual(first.run_id, second.run_id)
+
     def test_existing_snapshot_does_not_migrate_after_registry_update(self):
         snapshot = self.registry.snapshot(run_id="RUN-OLD", requested=self.requested)
         project = next(p for p in self.profiles if p.profile_type == "PROJECT")
