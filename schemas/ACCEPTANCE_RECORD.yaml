@@ -1,4 +1,4 @@
-schema_version: 0.1
+schema_version: 0.2
 status: draft
 purpose: canonical acceptance evidence record
 
@@ -8,6 +8,7 @@ identity:
   subject_type: null
   subject_version: null
   trace_id: null
+  run_id: null
 
 criteria:
   - criterion_id: C01
@@ -16,6 +17,14 @@ criteria:
     expected: null
     evidence_refs: []
     result: NOT_TESTED
+
+replay_assurance:
+  replay_report_ref: null
+  replay_status: null
+  replay_reason_code: null
+  policy_snapshot_ref: null
+  policy_snapshot_hash: null
+  required_for_material_execution: true
 
 summary:
   state: NOT_TESTED
@@ -48,8 +57,12 @@ invariants:
   - pass_with_actions_lists_remaining_actions
   - missing_evidence_is_not_success
   - protected_evidence_may_be_referenced_without_copying_raw_content
+  - material_execution_pass_requires_verified_replay_record
+  - broken_lineage_tamper_policy_mismatch_or_insufficient_evidence_prevents_pass
+  - replay_verification_is_evidence_for_acceptance_not_acceptance_authority
+  - verified_record_does_not_mean_underlying_factual_claim_is_true
 
 validation_stage:
-  current: contract_only
-  runtime_validator: not_selected
+  current: deterministic_reference_validation
+  runtime_validator: px00_acceptance_replay_tests
   library_dependency: none
