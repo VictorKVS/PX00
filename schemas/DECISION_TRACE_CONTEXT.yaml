@@ -1,0 +1,45 @@
+schema_version: 0.1
+status: active_project_contract
+object_type: DECISION_TRACE_CONTEXT
+norm_ref: PX00-NORM-DM-0001
+purpose: >-
+  Carry immutable references to evidence-backed professional decisions into TRACE persistence
+  and replay without copying full rationale payloads into execution logs.
+
+required_fields:
+  - decision_refs
+  - decision_digests
+  - materiality_classes
+
+fields:
+  decision_refs:
+    type: PROFESSIONAL_DECISION_reference_list
+    minimum_items: 1
+  decision_digests:
+    type: sha256_hex_list
+  materiality_classes:
+    type: list
+    values:
+      - D0_LOCAL_CONVENTIONAL
+      - D1_IMPLEMENTATION
+      - D2_ARCHITECTURE_PRODUCT
+      - D3_REGULATED_SAFETY_CRITICAL
+
+invariants:
+  - decision_refs_are_unique
+  - decision_refs_digests_and_materiality_classes_have_equal_length
+  - each_decision_digest_covers_the_canonical_governed_decision_record
+  - decision_must_pass_PX00_NORM_DM_0001_before_binding
+  - decision_run_role_and_assignment_must_match_expected_execution_identity
+  - selected_option_must_be_declared_in_the_decision_record
+  - d2_and_d3_require_structured_requirements_constraints_options_evidence_review_and_verification_plan
+  - d3_requires_accountable_approval_reference
+  - trace_manifest_persists_decision_context
+  - replay_requires_the_expected_decision_context_when_one_was_persisted
+  - changed_or_omitted_decision_context_fails_replay_closed
+  - professional_decision_record_does_not_expose_hidden_model_chain_of_thought
+  - decision_evidence_does_not_grant_runtime_authority
+
+runtime_reference:
+  binder: px00.decision_context.DecisionContextBinder
+  trace_context: px00.recorder.TraceDecisionContext
