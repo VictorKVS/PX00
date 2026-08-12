@@ -1,0 +1,53 @@
+schema_version: 0.1
+status: draft
+object_type: agent_assignment
+purpose: bind one replaceable executor/model configuration to a governed organizational role without changing the role contract
+
+required_fields:
+  assignment_id:
+    type: stable_id
+  agent_id:
+    type: stable_id
+  role_id:
+    type: ROLE-reference
+  department_id:
+    type: department_reference
+  executor_type:
+    type: enum
+    values: [LLM, HUMAN, DETERMINISTIC, HYBRID]
+  model_ref:
+    type: string
+  capability_refs:
+    type: list
+  tool_profile_refs:
+    type: list
+  knowledge_binding_refs:
+    type: knowledge_binding_reference_list
+  status:
+    type: enum
+    values: [ACTIVE, SUSPENDED, RETIRED]
+  effective_from:
+    type: utc_timestamp
+
+conditional_fields:
+  effective_until:
+    type: utc_timestamp
+  supersedes_assignment_ref:
+    type: agent_assignment_reference
+  fallback_assignment_ref:
+    type: agent_assignment_reference
+
+invariants:
+  - role_contract_is_independent_from_model_provider
+  - assignment_does_not_expand_role_authority
+  - assignment_knowledge_bindings_must_be_subset_of_role_bindings
+  - suspended_or_retired_assignment_cannot_start_new_run
+  - replacing_model_does_not_rewrite_role_history
+  - run_pins_exact_assignment_and_model_ref
+
+non_goals:
+  - store_prompt_secrets
+  - grant_external_tool_authority
+  - embed_domain_knowledge
+
+library_dependency: none
