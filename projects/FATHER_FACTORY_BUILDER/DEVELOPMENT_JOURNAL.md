@@ -28,7 +28,9 @@ Every material Factory Builder generation records:
 - `RISK-0011`: MITIGATING, not resolved.
 - Product portfolio: canonical master roadmap lives in `VictorKVS/KNOWLEDGE_CORE/father/product-roadmap/`.
 - Security Knowledge: canonical professional product lives in `VictorKVS/KNOWLEDGE_CORE/security-knowledge/`; Factory Builder binds to `KB-SECURITY` instead of copying domain truth.
-- Cross-repository snapshot consumer and producer contracts: implemented; first real exported/replayed `SEC-*` slice remains open under `RISK-0012`.
+- First real cross-repository source-metadata snapshot has completed manifest → snapshot → ContextPackage → RUN trace → read-only replay.
+- `RISK-0012`: RESOLVED for bounded M1 cross-repository provenance/replay after ARGUS Audit 0002.
+- A true atomic VERIFIED Security requirement reasoning RUN remains NOT PROVEN.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
 
@@ -191,6 +193,35 @@ Key invariant:
 
 Snapshot integrity records which knowledge was supplied; it does not create truth, applicability, acceptance or authority.
 
-`RISK-0012` is MITIGATING: contracts exist on both sides, but one real exported `SEC-*` slice and historical replay after KNOWLEDGE_CORE head advancement remain to be proven.
+`RISK-0012` was initially MITIGATING because contracts existed but no real slice/replay had yet been proven.
 
-Next Factory Builder evidence: use a real VERIFIED Security Knowledge slice through the snapshot boundary in the first Security-domain FATHER loop.
+## 2026-08-12 — FFBJ-0015 — First real Security Knowledge snapshot bridge
+Moved the boundary from synthetic references to canonical `FSB-117-2025` source metadata.
+
+KNOWLEDGE_CORE now validates the historical object bytes against a pinned Git commit even after `main` advances. PX00 independently validates the producer manifest and builds an immutable snapshot/ContextPackage.
+
+Critical maturity restraint:
+`SOURCE_VERIFIED ≠ VERIFIED REQUIREMENT`.
+
+The first envelope design omitted classification/freshness from the manifest digest. This was caught before acceptance and corrected on both producer and consumer sides.
+
+Real provenance transport is proven; expert Security reasoning remains unproven.
+
+## 2026-08-12 — FFBJ-0016 — Knowledge-bound RUN trace and replay
+Extended the real snapshot proof through a bounded governed RUN and read-only replay.
+
+New reusable pattern:
+`ROLE → BINDING → ROUTE → MANIFEST → SNAPSHOT → CONTEXT PACKAGE → RUN KNOWLEDGE PIN → TRACE → REPLAY`.
+
+`RunKnowledgeBinder` rejects RUN/role/assignment/snapshot-set mismatch. A trace persisted with knowledge provenance cannot be replayed while silently omitting or changing that provenance.
+
+Key distinction:
+`HISTORICAL REPLAY != CURRENT REASSESSMENT`.
+
+The bounded RUN uses a deterministic synthetic operation so the generation proves provenance/replay mechanics, not professional FSB reasoning.
+
+`ARGUS_AUDIT_0002` returns `PASS_WITH_RESTRICTIONS`.
+
+`RISK-0012` is RESOLVED for the bounded M1 cross-repository provenance/replay scope with explicit reopen conditions.
+
+Next useful evidence must come from product value rather than more snapshot plumbing: first live governed AI executor and/or a truly atomic VERIFIED domain requirement used in a professional task.
