@@ -22,9 +22,13 @@ Every material Factory Builder generation records:
 - Current strategic objective: `SUMMIT-FFB-01 — Agent Factory Blueprint`
 - First audited concept blueprint: `FFB-BP-0001-V2 v0.2 — PASS_WITH_ACTIONS at M0_CONCEPT`
 - M1 strategy: MVP-first, frozen by `FFB-MVP-0001`.
-- M1 harness: implemented; repository/audit gate pending.
+- M1 control-flow skeleton: `PASS_WITH_RESTRICTIONS`.
+- M1 functional reference MVP: `FFB-ACCEPT-FUNC-MVP-0001 — PASS_WITH_RESTRICTIONS`.
+- First full functional run: `MVP-FUNC-RUN-0001`.
+- Open maturity blockers include `RISK-0002`, `RISK-0003`, `RISK-0004` and `RISK-0009` according to affected scope.
 - PX00/FATHER remains the runtime/governance management system.
 - Factory Builder designs the factory/organization blueprint that FATHER may later operate.
+- Next direction: prove repeatability on multiple bounded problems, then replace exactly one deterministic stage with a governed executor adapter.
 
 ## 2026-08-12 — FFBJ-0001 — Project foundation
 Established `PROJECT-FFB-0001` inside PX00 with its own charter, design principles, factory construction lifecycle, risk/failure atlas, discovery/learning loop, roadmap and extraction plan.
@@ -115,6 +119,36 @@ Deliberately deferred until after MVP: live LLM providers, production database, 
 
 Risk decision: `RISK-0002` is not claimed closed. It is isolated for this narrow MVP through synthetic/explicitly gated input and absence of material external action. Wider scope remains blocked until adversarial trust-gate evidence exists.
 
-Maturity impact: M1 moved from architecture-only backlog to executable implementation. M1 is not yet accepted; repository CI and Socrates/ARGUS review of executable evidence remain mandatory.
+Maturity impact: M1 moved from architecture-only backlog to executable implementation. The control-flow skeleton subsequently passed restricted audit/acceptance, but useful stage execution still required concrete artifacts.
 
-Next gate: validate the executable harness, review negative-gate evidence, and issue M1 PASS or REWORK without adding nonessential features.
+## 2026-08-12 — FFBJ-0007 — First functional reference MVP
+Extended the M1 harness from state transitions to concrete evidence-producing work.
+
+Created `FACTORY_STAGE_ARTIFACT` and upgraded the runtime so every stage requires a fresh typed immutable artifact with content digest and explicit lineage. Verification evidence must come from the pinned verifier assignment; Socrates evidence must come from an assignment independent of producer and verifier. Security, Verification and Socrates artifact verdicts are checked against the runtime outcome so contradictory evidence cannot silently produce a PASS.
+
+Executed `MVP-FUNC-RUN-0001`, the first complete bounded functional R&D case. The factory:
+1. qualified a retry/deduplication problem;
+2. recorded research evidence;
+3. assessed claims;
+4. compared design alternatives;
+5. performed a security precheck;
+6. implemented a deterministic idempotency-key prototype;
+7. independently verified it;
+8. passed Socrates with a preserved limitation;
+9. produced a candidate factory lesson;
+10. created a governed delivery package.
+
+The selected design is SHA-256 over canonical JSON `[run_id, operation, target]`. Socrates explicitly preserved that deterministic idempotency identity does **not** guarantee exactly-once execution; durable uniqueness and atomic state transition remain future controls.
+
+The audit cycle found and fixed two defects before acceptance:
+- delimiter concatenation could encode distinct tuples ambiguously, so canonical JSON encoding replaced it and a negative test was added;
+- assurance evidence could declare `FAIL` while runtime was told `PASS`, so gated artifact verdict/outcome consistency became a runtime invariant.
+
+ARGUS verdict: `M1 FUNCTIONAL REFERENCE MVP — PASS_WITH_RESTRICTIONS`.
+Acceptance: `FFB-ACCEPT-FUNC-MVP-0001`.
+
+New risk: `RISK-0009` records that current SHA-256 protects artifact payload but not the full provenance envelope. The restriction is acceptable for the local in-memory M1 reference MVP but blocks higher persistent evidence maturity until the envelope is canonicalized and hashed/replay-verified.
+
+Maturity impact: the Agent R&D Factory now has one audited useful end-to-end reference run rather than only a workflow skeleton. This is not a live autonomous agent factory and not production-ready.
+
+Next gate: run several different bounded functional problems through the same artifact contract, measure failure/rework patterns, then replace exactly one deterministic producer stage with a governed executor adapter. Broader external input remains gated by `RISK-0002`; persistent evidence maturity remains gated by `RISK-0009`.
