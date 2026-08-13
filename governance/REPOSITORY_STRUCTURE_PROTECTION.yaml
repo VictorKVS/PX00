@@ -1,0 +1,168 @@
+schema_version: 1
+registry_id: PX00-REPO-PROTECT-0001
+status: ACTIVE
+repository: VictorKVS/PX00
+purpose: >-
+  Protect canonical FATHER/PX00 runtime, governance, history and Factory Builder surfaces from
+  accidental deletion, rename, merge or relocation during repository restructuring.
+
+semantics:
+  content_edits_allowed: true
+  structural_reorganization_rule: >-
+    Protected paths may evolve in content, but their repository identity/path must not be changed
+    as part of generic cleanup or restructuring. Any relocation requires an explicit migration
+    record, old-to-new mapping, reference update plan, replay/provenance impact review and green CI.
+  protection_classes:
+    DO_NOT_MOVE: >-
+      Canonical identity/history surface. Do not rename, relocate, merge into another tree or
+      delete during repository restructuring. Replacement requires explicit owner decision and ADR.
+    MIGRATION_ONLY: >-
+      May be structurally moved only through an explicit repository migration record with old/new
+      paths, affected contracts, compatibility plan, rollback plan and CI evidence.
+    CAN_REORGANIZE: >-
+      Not structurally protected by this registry; ordinary repository cleanup rules apply.
+
+protected_surfaces:
+  - id: PX00-PROT-001
+    path: PX00.yaml
+    kind: file
+    class: DO_NOT_MOVE
+    owner: PX00_CORE
+    reason: root canonical PX00 contract and repository identity
+  - id: PX00-PROT-002
+    path: governance/FATHER_CONSTITUTION.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: FATHER_GOVERNANCE
+    reason: constitutional invariants and authority model
+  - id: PX00-PROT-003
+    path: governance/DECISION_MATERIALITY_STANDARD.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: FATHER_GOVERNANCE
+    reason: project-wide D0-D3 assurance norm PX00-NORM-DM-0001
+  - id: PX00-PROT-004
+    path: governance/ARCHITECT_FORESIGHT_LOOP.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: FATHER_GOVERNANCE
+    reason: long-lived architecture foresight control
+  - id: PX00-PROT-005
+    path: governance/REPOSITORY_STRUCTURE_PROTECTION.yaml
+    kind: file
+    class: DO_NOT_MOVE
+    owner: REPOSITORY_GOVERNANCE
+    reason: self-protecting structural registry
+  - id: PX00-PROT-006
+    path: Tree_F
+    kind: directory
+    class: DO_NOT_MOVE
+    owner: STRUCTURE_HISTORY
+    reason: append-only implementation generation history
+  - id: PX00-PROT-007
+    path: journal
+    kind: directory
+    class: DO_NOT_MOVE
+    owner: DEVELOPMENT_HISTORY
+    reason: root development journal records
+  - id: PX00-PROT-008
+    path: DEVELOPMENT_JOURNAL.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: DEVELOPMENT_HISTORY
+    reason: historical root journal surface
+  - id: PX00-PROT-009
+    path: architecture/adr
+    kind: directory
+    class: DO_NOT_MOVE
+    owner: ARCHITECTURE_HISTORY
+    reason: architecture decision history and stable ADR references
+  - id: PX00-PROT-010
+    path: PROJECT_PROGRESS.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: FATHER_PROGRAM_CONTROL
+    reason: canonical human-readable summit/progress control surface
+  - id: PX00-PROT-011
+    path: projects/FATHER_FACTORY_BUILDER
+    kind: directory
+    class: DO_NOT_MOVE
+    owner: PROJECT-FFB-0001
+    reason: canonical Factory Builder project root including roles, contracts, risks and journals
+  - id: PX00-PROT-012
+    path: px00
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: PX00_RUNTIME
+    reason: governed execution runtime and replay/decision/provider implementation
+  - id: PX00-PROT-013
+    path: schemas
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: PX00_CONTRACTS
+    reason: canonical machine contracts consumed by runtime/tests
+  - id: PX00-PROT-014
+    path: tests
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: PX00_ASSURANCE
+    reason: executable proof and negative-test surface
+  - id: PX00-PROT-015
+    path: protocols
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: PX00_PROTOCOLS
+    reason: governed execution/acceptance protocol surface
+  - id: PX00-PROT-016
+    path: knowledge
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: KNOWLEDGE_CONSUMER_BOUNDARY
+    reason: cross-repository routing, snapshot and context consumer boundary
+  - id: PX00-PROT-017
+    path: father
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: FATHER_MANAGEMENT_PLANE
+    reason: FATHER management-plane artifacts and organization contracts
+  - id: PX00-PROT-018
+    path: assurance
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: PX00_ASSURANCE
+    reason: assurance/maturity evidence surface
+  - id: PX00-PROT-019
+    path: audit
+    kind: directory
+    class: MIGRATION_ONLY
+    owner: ARGUS_AUDIT
+    reason: independent audit and finding memory
+  - id: PX00-PROT-020
+    path: .github/workflows/contract-validation.yml
+    kind: file
+    class: MIGRATION_ONLY
+    owner: PX00_CI
+    reason: primary repository contract gate
+
+explicitly_reorganizable_roots:
+  - path: legacy
+    note: legacy content may be reorganized only after checking that no protected reference targets it
+
+migration_requirements:
+  required_record_path_prefix: governance/repository-migrations/
+  required_fields:
+    - migration_id
+    - rationale
+    - affected_protected_surface_ids
+    - old_to_new_path_map
+    - inbound_reference_inventory
+    - historical_trace_or_replay_impact
+    - compatibility_or_redirect_plan
+    - rollback_plan
+    - reviewer
+    - ci_evidence
+  rules:
+    - generic_cleanup_is_not_a_migration_record
+    - protected_history_must_not_be_squashed_or_rewritten
+    - cross_repository_references_must_be_updated_atomically_or_versioned_compatibly
+    - canonical_owner_boundary_between_PX00_and_KNOWLEDGE_CORE_must_be_preserved
