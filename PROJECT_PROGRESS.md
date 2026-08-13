@@ -23,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current path:
 `executor boundary → lifecycle/risk gates → secret/data-egress boundary → concrete Gemini driver/profile ✅ → one authorized real inference ⏭ → verifier → Socrates → ARGUS`.
 
-Latest generation: **`TF-0076 — D3 Applicability Fail-Closed`**.
+Latest generation: **`TF-0077 — Security Source Registry CI Gate`**.
 
 ### Product portfolio
 Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
@@ -53,31 +53,28 @@ TF-0072 established the strict atomic requirement verification floor:
 
 TF-0074 added a dedicated Security source-pack CI gate for `security-knowledge/corpus/**/*source-pack*.yaml|yml`.
 
-A concurrent KNOWLEDGE_CORE generation then added the current canonical `security-knowledge/legislation/requirements/152-fz-core-operator-obligations-verified.yaml` slice:
-- **19 strict VERIFIED requirements** from Articles 18.1, 19, 21, 22 and 22.1;
-- checked revision/effective date: **2026-07-26**;
-- Article 22 part 1 remains conditional on part 2 exceptions;
-- Article 22 part 7 change/termination clocks are separately represented;
-- exact KoAP consequence mappings are deliberately not asserted yet;
-- the audit scorecard remains `expert_ready: false`.
+A later canonical KNOWLEDGE_CORE slice added **19 strict VERIFIED 152-FZ requirements** from Articles 18.1, 19, 21, 22 and 22.1. Article 22 part 1 remains conditional on part 2 exceptions; Article 22 part 7 clocks are separately represented; the Security Knowledge audit remains `expert_ready: false`.
 
-TF-0075 hardened the proof channel around that progress instead of creating a second truth store:
-- source-pack verification distinguishes official publication metadata from official consolidated legal text;
-- arbitrary mirrors remain rejected;
-- duplicate stale truth was removed when the fresher canonical 19-atom slice appeared;
-- full repository CI exposed and repaired invalid YAML in the run-02 coverage scorecard.
+TF-0075 hardened the primary-source proof channel and repaired a repository-wide YAML integrity defect rather than bypassing it.
 
-TF-0076 exercises the first bounded D3 governance weakness exposed by that slice:
-- the `APPLICABILITY` evidence category can no longer stand in for an actual applicability conclusion;
+TF-0076 hardened D3 applicability semantics:
+- the `APPLICABILITY` evidence category cannot stand in for an actual applicability conclusion;
 - D3 requires an explicit resolved state (`APPLICABLE` or `NOT_APPLICABLE`);
-- unresolved applicability returns `INSUFFICIENT_EVIDENCE / D3_APPLICABILITY_UNRESOLVED` before review or approval;
-- this prevents a reviewer/approver from accidentally converting an unresolved professional applicability question into PASS.
+- unresolved applicability returns `INSUFFICIENT_EVIDENCE / D3_APPLICABILITY_UNRESOLVED` before review or approval.
+
+TF-0077 closed the next observed Security Knowledge infrastructure gap:
+- all **12 P0 source families are now REGISTERED or better** in the canonical master inventory;
+- conservative overall P0 maturity remains **10%** because registration alone does not promote a family;
+- a dedicated `Security Source Registry Gate` now enforces registry/inventory alignment, source/evidence invariants, dynamic snapshot semantics and explicit red-team limitations;
+- the first gate run was intentionally retained as failed evidence and found a missing `status_observed` in the risk registry;
+- the same invariant exposed three VERIFIED dynamic BDU observations lacking `observed_at`; both defects were repaired before merge;
+- KNOWLEDGE_CORE implementation commit: `63caabd66a880fb6af2017642982c55507b4e5c3`.
 
 Current professional Security D3 state:
-**BOUNDED FAIL-CLOSED APPLICABILITY ENFORCEMENT PROVEN; SUBSTANTIVE ARTICLE 22 PART 2 APPLICABILITY STILL OPEN; NOT GENERAL EXPERT READINESS**.
+**BOUNDED FAIL-CLOSED APPLICABILITY + REGISTRY INTEGRITY ENFORCEMENT PROVEN; GENERAL EXPERT READINESS REMAINS OPEN**.
 
 Important distinction:
-`VERIFIED REQUIREMENT != CASE APPLICABILITY DECISION != EXPERT_READY`.
+`REGISTERED SOURCE FAMILY != VERIFIED REQUIREMENT != CASE APPLICABILITY DECISION != EXPERT_READY`.
 
 ## CROSS-REPOSITORY KNOWLEDGE BOUNDARY
 Status: **PROVEN ✅ M1 BOUNDED**.
@@ -132,7 +129,7 @@ Invariant:
 Dedicated source-pack validation prevents generic CI/indexing from being mistaken for proof of VERIFIED source/fact semantics.
 
 ### TF-0075 — Security Primary-Source Proof-Channel Hardening ✅ BOUNDED
-The source-pack proof model supports the official consolidated-law channel without opening trust to arbitrary mirrors. Regression tests protect the boundary; duplicate stale truth was removed; and a full-CI-discovered YAML defect was repaired.
+Official source channels are constrained without opening trust to arbitrary mirrors; duplicate stale truth was removed and full CI defects were repaired rather than ignored.
 
 Invariant:
 `OFFICIAL SOURCE CHANNEL != VERIFIED APPLICABILITY != EXPERT READINESS`.
@@ -142,6 +139,12 @@ The D3 runtime now distinguishes an applicability evidence category from an actu
 
 Invariant:
 `APPLICABILITY EVIDENCE PRESENT != APPLICABILITY RESOLVED != OBLIGATION APPLIES`.
+
+### TF-0077 — Security Source Registry CI Gate ✅ BOUNDED
+New P0 family registries are now checked against the canonical master inventory and fail closed on evidence-bearing metadata drift, dynamic observation timestamp loss, or missing red-team limitations. The gate caught and drove repair of two real evidence defects before merge.
+
+Invariant:
+`REGISTRY CI PASS != FAMILY MATURITY PROMOTION != EXPERT_READY`.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — verifier can force explicit implementation rework.
@@ -156,10 +159,12 @@ Invariant:
 - provider-neutrality must be tested against a real provider contract, not inferred from naming;
 - a specialized proof gate must select only the artifact class whose semantics it actually validates;
 - official publication evidence and official consolidated legal text are distinct proof channels and must not be conflated;
-- concurrent corpus progress must be re-read before committing a new canonical artifact; a fresher canonical slice wins over a redundant local addition;
+- concurrent corpus progress must be re-read before committing a new canonical artifact; fresher canonical truth wins;
 - a positive statutory duty must not be treated as concretely applicable until explicit exceptions are evaluated;
 - evidence-category presence is not equivalent to a completed professional determination;
-- repository-wide CI can expose integrity defects outside the narrow changed subsystem and those defects remain part of completion evidence.
+- repository-wide CI can expose integrity defects outside the narrow changed subsystem and those defects remain part of completion evidence;
+- registry labels such as `STATUS_VERIFIED_METADATA_ONLY` require executable evidence invariants, not trust in naming;
+- dynamic catalog records without `observed_at` are not safely replayable historical evidence.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 PX00 remains a bounded reference implementation, not production maturity.
@@ -173,19 +178,25 @@ Most relevant:
 - `RISK-0011` — **MITIGATING**: Gemini-specific mapping/auth/data-egress behavior is locally tested, but no authorized real provider inference has yet been admitted as evidence.
 
 Security product blockers:
-- the canonical 152-FZ slice has 19 VERIFIED requirements but general expert readiness remains blocked;
-- Article 22 part 2 exception logic has not yet been atomized/verified into a substantive applicability decision path;
-- exact KoAP consequence mappings remain unverified;
-- corpus breadth, additional P0 families, applicability/control/evidence mappings and expert review remain incomplete;
-- four P0 families remain NOT_REGISTERED: GOST, classification/categorization, threat methodology/catalogs, and risk methods.
+- all 12 P0 source families are REGISTERED or better, but conservative overall P0 maturity is still 10%;
+- no P0 family has yet been promoted beyond REGISTERED on family-wide evidence in the current baseline;
+- classification/categorization still lacks complete current decision logic and version chains;
+- primary FSTEK threat-methodology capture and a complete dynamic BDU snapshot/version strategy remain open;
+- GOST clause-level evidence and replacement/amendment audit remain incomplete;
+- risk methods lack clause-level extraction, BIA coverage and organization risk-acceptance authority mapping;
+- 152-FZ remains partially atomized/version-chained and broader KoAP mapping remains incomplete;
+- general applicability/control/evidence mappings and expert review remain incomplete.
 
 ## PARALLEL ACTIVE PRIORITIES
 
 ### A. Security Knowledge — KNOWLEDGE_CORE
 Immediate evidence-producing action:
-**atomize and verify the Article 22 part 2 exception/applicability logic, then run a case-specific D3 determination through the now fail-closed PX00 gate**.
+**promote `CLASSIFICATION_AND_CATEGORIZATION_METHODS` beyond REGISTERED without weakening proof floors**.
 
-Then verify exact current KoAP personal-data offence parts before consequence links are created, and continue missing P0 families without lowering proof floors.
+First bounded target:
+`PP 1119 current version chain + PP 127 current version chain → explicit decision-table inputs/provenance → reassessment triggers/effective dates → repository gate evidence`.
+
+After that continue threat-modeling snapshot/version proof, GOST status/replacement matrix, risk-method clause extraction, and broader 152-FZ/KoAP coverage.
 
 ### B. SUMMIT-FFB-02 — PX00
 Done:
