@@ -13,19 +13,7 @@ Build a governed digital corporate management system in which FATHER can turn go
 ### PX00 / FATHER management foundation
 Status: **FOUNDATION IMPLEMENTED — BOUNDED REFERENCE MATURITY**.
 
-Proven foundations include:
-- canonical objects/roles/protocols;
-- authority and Tool Boundary controls;
-- policy/run pinning;
-- append-only trace/replay/acceptance;
-- claim/evidence provenance;
-- organization/staffing/handoffs;
-- knowledge routing/context and historical snapshots;
-- GOAL → PROJECT → PLAN → TASK;
-- FATHER management cycle;
-- long-lived risk memory and maturity gates;
-- decision materiality `D0–D3`;
-- evidence-backed professional decision trace/replay.
+Proven foundations include canonical objects/roles/protocols, authority and Tool Boundary controls, policy/run pinning, append-only trace/replay/acceptance, claim/evidence provenance, organization/staffing/handoffs, knowledge routing/context and historical snapshots, GOAL → PROJECT → PLAN → TASK, FATHER management cycle, long-lived risk memory and maturity gates, decision materiality `D0–D3`, and evidence-backed professional decision trace/replay.
 
 ### Factory Builder / Agent R&D Factory
 Completed summit: **SUMMIT-FFB-01 — BOUNDED FUNCTIONAL AGENT FACTORY REFERENCE MVP ✅**.
@@ -35,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current path:
 `executor boundary → lifecycle/risk gates → secret/data-egress boundary → concrete Gemini driver/profile ✅ → one authorized real inference ⏭ → verifier → Socrates → ARGUS`.
 
-Latest generation: **`TF-0074 — Security Source-Pack CI Gate`**.
+Latest generation: **`TF-0075 — First VERIFIED Article 22 Requirement`**.
 
 ### Product portfolio
 Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
@@ -56,26 +44,35 @@ Status: **active corpus construction; NOT EXPERT_READY**.
 Canonical pipeline:
 `SOURCE → VERSION → CHUNK → ATOMIC CLAIM/REQUIREMENT → APPLICABILITY → RELATIONS → CONTROL → CHECK → EVIDENCE → EXPERT REVIEW`.
 
-TF-0072 strengthened the requirement proof floor:
-- corpus scan: **9 requirement files / 82 atomic requirements / 0 strict VERIFIED requirements** at the observed baseline;
+### Proof-floor milestones
+TF-0072 established the strict atomic requirement verification floor:
+- observed baseline: **9 requirement files / 82 atomic requirements / 0 strict VERIFIED requirements**;
 - missing verification state is conservatively `UNVERIFIED`;
 - `VERIFIED` requires source document identity + exact locator + source quote;
-- FSTEK-31 atoms that lacked source quotes were corrected from VERIFIED to REVIEWED without deleting atomization.
+- FSTEK-31 atoms that lacked source quotes were corrected from VERIFIED to REVIEWED rather than overstated.
 
-TF-0074 closes a separate source-pack CI gap:
-- canonical `security-knowledge/corpus/**/*source-pack*.yaml|yml` changes now trigger a dedicated validator;
-- VERIFIED source metadata requires official publication identity/date/HTTPS official URL;
-- VERIFIED atomic facts require resolvable source IDs, locator and conservative statement;
-- the first implementation failure was preserved and corrected without weakening VERIFIED semantics;
-- `Security Source Pack Gate` run 3 on KNOWLEDGE_CORE commit `4333a0d9ddb51a53044d9564a8a7afb2b85a84e1` passed.
+TF-0074 added a dedicated Security source-pack CI gate for `security-knowledge/corpus/**/*source-pack*.yaml|yml`.
 
-First requirement promotion target remains: `FSTEK31-REQ-001`, locator `p. 10`.
+TF-0075 closes the **zero strict VERIFIED atom** blocker for one deliberately narrow legal slice:
+- source: Federal Law 152-FZ, current official consolidated text;
+- atom: Article 22 part 1;
+- locator: `Article 22, part 1`;
+- requirement: notify the competent authority before beginning personal-data processing;
+- applicability boundary: only when no Article 22 part 2 exception applies;
+- D3 materiality recorded;
+- actor, trigger, action, deadline boundary and evidence expectations recorded;
+- form mapping to Roskomnadzor Order 180/2022 recorded;
+- unresolved part 2 exceptions are explicitly fail-closed rather than guessed.
 
-Current professional Security D3 run state:
-**`BLOCKED_BY_KNOWLEDGE_PROOF_FLOOR`** until a truly VERIFIED applicable atomic requirement exists.
+While creating the atom, the source-pack validator exposed and corrected a proof-model defect: VERIFIED legacy federal law could not use the official consolidated-text channel. The validator now distinguishes modern official publication metadata at `publication.pravo.gov.ru` from official consolidated legal text at `ips.pravo.gov.ru`, requires `edition_as_of`, and rejects arbitrary mirrors. Regression tests cover acceptance and rejection paths.
+
+`Security Source Pack Gate` run 6 on KNOWLEDGE_CORE commit `b9e6fb9d8cc764fa34d9c6e1f3d4807044a0fc89` passed both regression tests and corpus validation.
+
+Current professional Security D3 state:
+**READY_FOR_ONE_BOUNDED_D3_TEST_SLICE**, not general expert readiness.
 
 Important distinction:
-`SOURCE PACK GATE PASS != VERIFIED APPLICABLE REQUIREMENT != EXPERT_READY`.
+`VERIFIED ATOM != CASE APPLICABILITY DECISION != EXPERT_READY`.
 
 ## CROSS-REPOSITORY KNOWLEDGE BOUNDARY
 Status: **PROVEN ✅ M1 BOUNDED**.
@@ -105,37 +102,11 @@ Risk floor:
 Core law:
 **higher cost of error / irreversibility / uncertainty / risk → stronger evidence + independent review + approval**.
 
-TF-0071 operationalized the law inside historical RUN evidence:
-`requirements/constraints → materiality → alternatives/evidence → decision → digest → TRACE → replay`.
-
-A material decision cannot be bound if its evidence/review floor fails. Replay cannot silently omit or substitute the persisted professional decision context.
+A material decision cannot be bound if its evidence/review floor fails. Replay cannot silently omit or substitute persisted professional decision context.
 
 `POLICY != KNOWLEDGE != PROFESSIONAL DECISION != RUNTIME AUTHORITY`.
 
 ## WHAT IS CLOSED RECENTLY
-
-### TF-0062 — Governed Replaceable Executor Boundary ✅
-Proven:
-`worker v0.1 → candidate → VERIFY FAIL → REWORK → worker v0.2 → VERIFY PASS → SOCRATES → DELIVERY`.
-
-Invariant:
-`EXECUTOR INVOCATION SUCCESS != VERIFICATION PASS != ACCEPTANCE`.
-
-### TF-0063 — AI Lifecycle Evidence Gates and Quantitative Risk ✅
-Kept distinct:
-`CRISP-ML(Q) PROCESS PHASE != DEMO/POC/MVP/PRODUCTION DELIVERY STAGE != PX00 M0..M5 MATURITY`.
-
-### TF-0064 — Live Provider Readiness Boundary ✅ LOCAL
-HTTPS/allowlist, runtime credential separation, egress classification, timeout/response bounds, fail-closed HTTP/JSON handling, request/response hashes.
-
-### TF-0065 — Evidence-Gated Product Portfolio ✅
-Foundational products cannot be bypassed by demos or schedule pressure.
-
-### TF-0066 — Security Knowledge Canonical Repository Alignment ✅
-`KNOWLEDGE_CORE = canonical professional knowledge`; `PX00 = governed runtime/orchestration`.
-
-### TF-0067 → TF-0069 — Historical Knowledge Provenance ✅
-External knowledge is resolved to immutable historical snapshots and survives RUN/trace/read-only replay.
 
 ### TF-0070 — Decision Materiality Norm ✅
 Project-wide D0–D3 proportional assurance became a constitutional/runtime norm.
@@ -147,26 +118,19 @@ Formal evidence-backed decision provenance is pinned into historical RUNs withou
 `VERIFIED` became an earned state enforced by KNOWLEDGE_CORE CI rather than a trusted YAML label.
 
 ### TF-0073 — Gemini Provider Driver Readiness ✅ LOCAL
-First concrete provider mapping:
-- stable Gemini Interactions REST `v1` profile;
-- model reference `gemini-3.6-flash`;
-- `x-goog-api-key` header strategy;
-- PUBLIC-only egress;
-- text-only candidate;
-- `store=false`;
-- no tools/provider-agent/grounding/files/multimodal/background;
-- unexpected function/tool or non-text output fails closed;
-- provider interaction ID/returned model captured when present;
-- credentials remain runtime-only.
+Concrete Gemini profile/driver is locally mapped with PUBLIC-only egress, runtime-only credential handling, text-only candidate mode and fail-closed unexpected output handling.
 
 Invariant:
 `DRIVER READY != LIVE CALL PROVEN != SUMMIT ACCEPTED`.
 
 ### TF-0074 — Security Source-Pack CI Gate ✅ BOUNDED
-A dedicated KNOWLEDGE_CORE gate now validates declared Security Knowledge source packs instead of relying on generic CI/indexing. The first gate run failed on validator scope/type defects; corrections preserved the failure evidence and the third run passed.
+Dedicated source-pack validation now prevents generic CI/indexing from being mistaken for proof of VERIFIED source/fact semantics.
+
+### TF-0075 — First VERIFIED Article 22 Requirement ✅ BOUNDED
+First strict VERIFIED Security atom now exists with primary official proof, bounded applicability and D3 metadata. The generation also added regression-tested support for the official consolidated-law source channel.
 
 Invariant:
-`SOURCE PACK GATE PASS != REQUIREMENT PROOF != APPLICABILITY != EXPERT READINESS`.
+`VERIFIED ATOM != CONCRETE CASE DECISION != EXPERT READINESS`.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — verifier can force explicit implementation rework.
@@ -179,7 +143,9 @@ Invariant:
 - trace integrity proves history, not professional truth;
 - a field named VERIFIED is not evidence — promotion conditions must be executable;
 - provider-neutrality must be tested against a real provider contract, not inferred from naming;
-- a specialized proof gate must select only the artifact class whose semantics it actually validates; broad globs can create false failures and false confidence.
+- a specialized proof gate must select only the artifact class whose semantics it actually validates;
+- official publication evidence and official consolidated legal text are distinct proof channels and must not be conflated;
+- a positive statutory duty must not be treated as concretely applicable until explicit exceptions are evaluated.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 PX00 remains a bounded reference implementation, not production maturity.
@@ -192,19 +158,18 @@ Most relevant:
 - `RISK-0010` — governed rework proven only in bounded in-memory reference harness;
 - `RISK-0011` — **MITIGATING**: Gemini-specific mapping/auth/data-egress behavior is locally tested, but no authorized real provider inference has yet been admitted as evidence.
 
-Security product blocker:
-- 0 strict VERIFIED atomic requirements at TF-0072 baseline, so expert D3 Security reasoning cannot yet be claimed;
-- TF-0074 strengthens source-pack admission but does not remove the requirement-level blocker.
+Security product blocker changed:
+- the baseline zero-strict-VERIFIED requirement blocker is removed for **one narrow Article 22 part 1 slice**;
+- general Security expert readiness remains blocked by corpus breadth, exception atomization, applicability, evidence/control mappings and expert review;
+- Article 22 part 2 must be resolved before asserting a concrete no-notification exception.
 
 ## PARALLEL ACTIVE PRIORITIES
 
 ### A. Security Knowledge — KNOWLEDGE_CORE
-Continue factual corpus production without lowering proof floors.
+Immediate evidence-producing action:
+**exercise the new Article 22 part 1 atom through one bounded D3 professional decision path**, including a negative case where unresolved part 2 exceptions force abstention/fail-closed.
 
-Immediate integration target:
-`FSTEK31-REQ-001 REVIEWED → exact primary-source quote + locator + semantic review + applicability → VERIFIED`.
-
-Then run one bounded D3 professional Security decision.
+Then continue atomization of Article 22 parts 2, 3 and 7, and map consequences/evidence without lowering the proof floor.
 
 ### B. SUMMIT-FFB-02 — PX00
 Done:
@@ -217,13 +182,13 @@ Done:
 Next evidence-producing action:
 **exactly one explicitly authorized PUBLIC Gemini inference** through `LIVE-GEMINI-INTERACTIONS-0001`, then independent verification → governed rework if needed → Socrates → ARGUS.
 
-Do not add another provider or more provider abstraction until this path is exercised unless a real blocker requires replacement.
+Do not invent a credential, simulate live evidence, add another provider, or expand abstraction without a real blocker.
 
 ## NEXT INTEGRATION SUMMIT
 
 ### SUMMIT-PX00-01 — First Closed FATHER Corporate Loop on a Security Task
 Requires both prerequisites:
-1. a truly VERIFIED applicable Security requirement slice;
+1. a VERIFIED applicable Security slice exercised through D3 professional decision governance;
 2. sufficient real-executor evidence from Agent Factory.
 
 Target chain:
