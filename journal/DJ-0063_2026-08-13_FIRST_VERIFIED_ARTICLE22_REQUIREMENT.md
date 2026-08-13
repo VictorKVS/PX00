@@ -1,4 +1,4 @@
-# DJ-0063 — First VERIFIED Article 22 Requirement
+# DJ-0063 — Security Primary-Source Proof-Channel Hardening
 
 Date: 2026-08-13
 Tree_F: `TF-0075`
@@ -7,22 +7,24 @@ Summit: `SUMMIT-FFB-02` remains OPEN
 
 ## Change
 
-Promoted the first genuinely strict VERIFIED Security requirement in canonical `VictorKVS/KNOWLEDGE_CORE`: Federal Law 152-FZ, Article 22 part 1, notification before beginning personal-data processing, bounded by the explicit exceptions in part 2.
+Hardened the Security source-pack verifier so VERIFIED legal sources can use either a modern official publication card (`publication.pravo.gov.ru`) or an official consolidated legal text (`ips.pravo.gov.ru` with `edition_as_of`), while arbitrary mirrors remain rejected.
 
-The atom now carries primary-source locator/quote, actor/trigger/action/deadline, D3 materiality, applicability boundary, evidence expectations and mapping to the Order 180 notification form.
+Added regression tests for the accepted official consolidated-text path and rejected non-official-host path.
 
-## Proof-model defect found and fixed
+## Concurrent-state correction
 
-The source-pack gate initially assumed every VERIFIED Russian source must be represented by a modern `publication.pravo.gov.ru` publication card. That model was too narrow for a long-lived federal law whose current official consolidated text is served by `ips.pravo.gov.ru`.
+During the run, KNOWLEDGE_CORE independently advanced with `security-knowledge/legislation/requirements/152-fz-core-operator-obligations-verified.yaml`: 19 VERIFIED 152-FZ atoms, including Article 22 part 1, on a newer checked edition. The one-atom Article 22 source pack created earlier in this run became redundant and potentially stale, so it was deleted. Canonical truth was not duplicated.
 
-The gate now admits two explicit official evidence channels rather than arbitrary mirrors: official publication records and official consolidated legal text. A regression test rejects non-official hosts.
+## Failed evidence
 
-## Evidence restraint
+Full Knowledge Quality Gate then exposed invalid YAML in `coverage-scorecard-2026-08-13-run-02.yaml` caused by unquoted colons inside plain scalar gap descriptions. The file was corrected; the quality gate was not bypassed.
 
-This requirement is VERIFIED only for the positive duty in Article 22 part 1. It does not prove that notification is required in a concrete case until Article 22 part 2 exceptions are evaluated. A no-notification conclusion must fail closed until those exceptions are atomized or independently resolved from primary law.
+## Maturity restraint
 
-`VERIFIED ATOM != CASE APPLICABILITY DECISION != EXPERT_READY`.
+The wider Security KB remains `expert_ready: false`. Article 22 part 2 exception logic and exact KoAP mappings remain open. `VERIFIED REQUIREMENTS != COMPLETE APPLICABILITY != EXPERT_READY`.
+
+`SUMMIT-FFB-02` remains OPEN because no authorized real Gemini credential/inference is available; no live evidence was fabricated.
 
 ## Next
 
-Run one bounded D3 professional decision using this atom and explicitly test the unresolved-exception path. The independent live-executor stream remains blocked only by absence of an authorized real Gemini credential; no live evidence is being imitated.
+Exercise the current canonical 152-FZ VERIFIED slice through one bounded D3 professional decision, including a fail-closed exception path.
