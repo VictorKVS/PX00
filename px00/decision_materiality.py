@@ -51,6 +51,8 @@ _RISK_FLOOR = {
     "S4": "D3_REGULATED_SAFETY_CRITICAL",
 }
 
+_D3_RESOLVED_APPLICABILITY = frozenset({"APPLICABLE", "NOT_APPLICABLE"})
+
 
 @dataclass(frozen=True)
 class DecisionMaterialityAssessment:
@@ -69,6 +71,7 @@ class DecisionMaterialityAssessment:
     irreversible_material_external_effect: bool = False
     architecture_or_product_boundary: bool = False
     material_vendor_or_lock_in: bool = False
+    applicability_determination: str = "NOT_REQUIRED"
 
 
 @dataclass(frozen=True)
@@ -144,6 +147,20 @@ class DecisionMaterialityGate:
                 independent_review_required=_ORDER[item.declared_class] >= _ORDER["D2_ARCHITECTURE_PRODUCT"],
                 approval_required=item.declared_class == "D3_REGULATED_SAFETY_CRITICAL",
                 reason_code="MINIMUM_EVIDENCE_NOT_SATISFIED",
+            )
+
+        if (
+            item.declared_class == "D3_REGULATED_SAFETY_CRITICAL"
+            and item.applicability_determination not in _D3_RESOLVED_APPLICABILITY
+        ):
+            return MaterialityGateResult(
+                status="INSUFFICIENT_EVIDENCE",
+                declared_class=item.declared_class,
+                required_floor=floor,
+                missing_evidence=("APPLICABILITY_DETERMINATION",),
+                independent_review_required=True,
+                approval_required=True,
+                reason_code="D3_APPLICABILITY_UNRESOLVED",
             )
 
         review_required = _ORDER[item.declared_class] >= _ORDER["D2_ARCHITECTURE_PRODUCT"]
