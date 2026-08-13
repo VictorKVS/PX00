@@ -143,6 +143,18 @@ protected_surfaces:
     class: MIGRATION_ONLY
     owner: PX00_CI
     reason: primary repository contract gate
+  - id: PX00-PROT-021
+    path: governance/CROSS_REPOSITORY_PROTECTED_SECTIONS.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: REPOSITORY_GOVERNANCE
+    reason: human-readable cross-repository protected section index
+  - id: PX00-PROT-022
+    path: governance/repository-migrations/MIGRATION_RULES.md
+    kind: file
+    class: DO_NOT_MOVE
+    owner: REPOSITORY_GOVERNANCE
+    reason: mandatory procedure for any approved protected-path migration
 
 explicitly_reorganizable_roots:
   - path: legacy
