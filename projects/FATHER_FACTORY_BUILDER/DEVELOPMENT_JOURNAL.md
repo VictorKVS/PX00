@@ -31,10 +31,24 @@ Added a third independent assignment after verifier PASS. Producer/verifier cann
 Verdict: `S3 PASS`; `PX00 Contract Validation #606` green.
 
 ## 2026-08-13 — FFBJ-0030 — S4 bounded multi-role handoff
-Added one new complexity only: explicit `ANALYST → PRODUCER → VERIFIER → SOCRATES` handoff over synthetic PUBLIC-safe material. The handoff preserves bounded context and lineage but does not transfer hidden authority. Downstream roles may create fresh evidence; they may not mutate upstream evidence or promote synthetic material to VERIFIED professional knowledge.
+Added explicit `ANALYST → PRODUCER → VERIFIER → SOCRATES` handoff over synthetic PUBLIC-safe material. The handoff preserves bounded context and lineage but does not transfer hidden authority.
 
 Scenario contract: `scenarios/S4_MULTI_ROLE_HANDOFF_2026-08-13.md`.
 
-Verdict at journal update: `S4 VERIFY` pending green Contract Validation for the S4 head. No Tree_F/ADR change is justified unless execution exposes a missing architectural handoff primitive or authority rule.
+Verdict: `S4 PASS`; Contract Validation #609 green.
 
-Next permitted rung only after S4 green: S5 — alternatives + cost/risk/time trade-off under D2.
+## 2026-08-14 — FFBJ-0031 — S5 D2 alternatives trade-off
+Preserved three viable synthetic alternatives and separate cost/risk/time dimensions without inventing a unique optimum or unauthorized aggregate score. Material SELECT/DEFER/BLOCK remains with D2 authority.
+
+Scenario contract: `scenarios/S5_D2_ALTERNATIVES_TRADEOFF_2026-08-14.md`.
+
+Verdict: `S5 PASS`; `PX00 Contract Validation #610` green.
+
+## 2026-08-14 — FFBJ-0032 — S6 dependent tasks + replanning
+Added one complexity: dependent tasks with deterministic first-attempt failure. T2-A1 yields `{A,C}`; T3-A1 must FAIL; failed evidence remains append-only; an explicit replan creates T2-A2 `{A,B,C}`; fresh T3-A2 verification is mandatory before T4 packaging. Replanning cannot weaken acceptance or hide a D2 material change.
+
+Scenario contract: `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md`.
+
+Verdict at journal update: `S6 VERIFY` pending green Contract Validation for the repository generation containing S6 and status updates. No Tree_F/ADR change is justified: this scenario exercises existing dependency/rework/authority principles and introduces no accepted architectural primitive.
+
+Next permitted rung only after S6 green: S7 — capability-based team assembly.
