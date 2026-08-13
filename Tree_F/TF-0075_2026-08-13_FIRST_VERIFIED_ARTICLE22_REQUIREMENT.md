@@ -1,57 +1,42 @@
-# TF-0075 — First VERIFIED Article 22 Requirement
+# TF-0075 — Security Primary-Source Proof-Channel Hardening
 
 Date: 2026-08-13
-Status: COMPLETE — FIRST STRICT VERIFIED APPLICABLE SECURITY ATOM
+Status: COMPLETE — PROOF-CHANNEL + CI HARDENING
 ADR: none; no architecture change justified
 Summit: `SUMMIT-FFB-02` remains OPEN
 
-## Why this generation exists
+## Trigger
 
-TF-0072 established a strict requirement proof floor and TF-0074 added a source-pack CI gate, but the Security product still had no genuinely VERIFIED applicable atomic requirement that could serve as admissible D3 decision evidence.
+During this generation the repository advanced concurrently: `KNOWLEDGE_CORE` gained a broader canonical 152-FZ requirement file with 19 VERIFIED atoms, including Article 22 part 1. The initially created one-atom Article 22 source pack was therefore redundant and, because it referenced an older consolidated edition, could become a conflicting truth source.
 
-## Implemented in KNOWLEDGE_CORE
+The duplicate source pack was removed rather than retained.
 
-Added `security-knowledge/corpus/ru-personal-data/152fz-article22-notification-source-pack.yaml` with one narrowly bounded statutory atom from Federal Law 152-FZ, Article 22 part 1.
+## Durable improvement
 
-The atom records:
-- exact locator: `Article 22, part 1`;
-- short primary-source quote;
-- conservative statement;
-- actor, trigger, action and deadline boundary;
-- explicit applicability condition requiring that no Article 22 part 2 exception applies;
-- evidence expectations;
-- form mapping to Roskomnadzor Order 180/2022;
-- D3 decision materiality;
-- explicit unresolved detail requiring separate atomization of part 2 exceptions before asserting that notification is unnecessary.
+The source-pack validator exposed a real proof-model defect: it recognized only modern publication cards at `publication.pravo.gov.ru`, but long-lived laws may need a current official consolidated text from `ips.pravo.gov.ru`.
 
-## Proof-source correction
+The validator now distinguishes two explicit official channels:
+- `official_publication` → `publication.pravo.gov.ru`;
+- `official_text` → `ips.pravo.gov.ru` + required `edition_as_of`.
 
-While encoding the requirement, the existing source-pack validator exposed a real proof-model defect: it allowed only `publication.pravo.gov.ru`, which fits modern publication records but not the official consolidated text channel used for a long-lived federal law.
+Arbitrary mirrors remain rejected.
 
-The validator now distinguishes:
-- `official_publication` on `publication.pravo.gov.ru`;
-- `official_text` on `ips.pravo.gov.ru`, with required `edition_as_of`.
+Regression tests prove acceptance of the official consolidated-text host and rejection of a non-official host.
 
-This is not a relaxation to arbitrary mirrors. Non-official hosts remain rejected.
+## Failed evidence preserved
 
-Regression tests were added for acceptance of the official IPS consolidated-text source and rejection of an untrusted host.
+Full `Knowledge Quality Gate` on commit `b9e6fb9d8cc764fa34d9c6e1f3d4807044a0fc89` failed on pre-existing invalid YAML in `security-knowledge/audits/coverage-scorecard-2026-08-13-run-02.yaml` (`gap:` values containing unquoted colons). The scorecard YAML was corrected rather than bypassed.
 
-## Primary evidence
+## Current Security proof state
 
-The current official consolidated text of Federal Law 152-FZ exposes Article 22 part 1: the operator must notify the competent authority before beginning personal-data processing, except for the cases in part 2. The same official text states the separate Article 22 part 7 clocks for changes and termination; those were deliberately not merged into this first atom.
+The controlling canonical file is `security-knowledge/legislation/requirements/152-fz-core-operator-obligations-verified.yaml`, which records 19 VERIFIED operator-duty atoms from Articles 18.1, 19, 21, 22 and 22.1, including Article 22 part 1.
+
+The repository itself still marks the broader Security corpus `expert_ready: false`; Article 22 part 2 exception logic and exact KoAP consequence mappings remain open.
 
 ## What is proven
 
-Security Knowledge now has at least one strict VERIFIED D3-capable atomic legal requirement with primary-source locator, bounded applicability and explicit evidence expectations.
-
-## What is not proven
-
-This does not make the whole Security Knowledge Base `EXPERT_READY` and does not prove that every operator must notify. Article 22 part 2 exceptions remain to be atomized before any production decision may assert a no-notification exception.
-
-It also does not complete a professional D3 reasoning RUN by itself; it removes the zero-VERIFIED-requirement blocker for a bounded test slice.
+The proof-floor now supports an official consolidated-law evidence channel without opening verification to arbitrary third-party hosts, regression tests protect that boundary, and a duplicate stale source was removed when a fresher canonical requirement slice appeared.
 
 ## Next
 
-Exercise this atom through one bounded D3 professional Security decision path with independent review and fail-closed handling of unresolved Article 22 part 2 exceptions.
-
-In parallel, `SUMMIT-FFB-02` still requires one authorized real PUBLIC Gemini inference; no credential was invented and no live call was simulated.
+Use the existing canonical 152-FZ VERIFIED slice in one bounded D3 professional decision path, including fail-closed handling where Article 22 part 2 exceptions are unresolved. `SUMMIT-FFB-02` remains independently OPEN pending one authorized PUBLIC Gemini inference.
