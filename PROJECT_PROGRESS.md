@@ -23,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current path:
 `executor boundary → lifecycle/risk gates → secret/data-egress boundary → concrete Gemini driver/profile ✅ → one authorized real inference ⏭ → verifier → Socrates → ARGUS`.
 
-Latest generation: **`TF-0075 — Security Primary-Source Proof-Channel Hardening`**.
+Latest generation: **`TF-0076 — D3 Applicability Fail-Closed`**.
 
 ### Product portfolio
 Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
@@ -62,15 +62,19 @@ A concurrent KNOWLEDGE_CORE generation then added the current canonical `securit
 - the audit scorecard remains `expert_ready: false`.
 
 TF-0075 hardened the proof channel around that progress instead of creating a second truth store:
-- source-pack verification now distinguishes modern official publication metadata at `publication.pravo.gov.ru` from official consolidated legal text at `ips.pravo.gov.ru`;
-- official consolidated text requires `edition_as_of`;
+- source-pack verification distinguishes official publication metadata from official consolidated legal text;
 - arbitrary mirrors remain rejected;
-- regression tests cover acceptance of the official IPS channel and rejection of a non-official host;
-- a one-atom Article 22 pack created during the run was removed after the fresher canonical 19-atom requirement slice appeared, preventing split/stale truth;
-- full repository CI exposed invalid YAML in the run-02 coverage scorecard; the YAML was repaired rather than bypassed.
+- duplicate stale truth was removed when the fresher canonical 19-atom slice appeared;
+- full repository CI exposed and repaired invalid YAML in the run-02 coverage scorecard.
+
+TF-0076 exercises the first bounded D3 governance weakness exposed by that slice:
+- the `APPLICABILITY` evidence category can no longer stand in for an actual applicability conclusion;
+- D3 requires an explicit resolved state (`APPLICABLE` or `NOT_APPLICABLE`);
+- unresolved applicability returns `INSUFFICIENT_EVIDENCE / D3_APPLICABILITY_UNRESOLVED` before review or approval;
+- this prevents a reviewer/approver from accidentally converting an unresolved professional applicability question into PASS.
 
 Current professional Security D3 state:
-**READY_FOR_ONE_BOUNDED_D3_TEST SLICE, NOT GENERAL EXPERT READINESS**.
+**BOUNDED FAIL-CLOSED APPLICABILITY ENFORCEMENT PROVEN; SUBSTANTIVE ARTICLE 22 PART 2 APPLICABILITY STILL OPEN; NOT GENERAL EXPERT READINESS**.
 
 Important distinction:
 `VERIFIED REQUIREMENT != CASE APPLICABILITY DECISION != EXPERT_READY`.
@@ -103,7 +107,7 @@ Risk floor:
 Core law:
 **higher cost of error / irreversibility / uncertainty / risk → stronger evidence + independent review + approval**.
 
-A material decision cannot be bound if its evidence/review floor fails. Replay cannot silently omit or substitute persisted professional decision context.
+A material decision cannot be bound if its evidence/review floor fails. For D3, evidence category presence is insufficient unless applicability itself is explicitly resolved. Replay cannot silently omit or substitute persisted professional decision context.
 
 `POLICY != KNOWLEDGE != PROFESSIONAL DECISION != RUNTIME AUTHORITY`.
 
@@ -128,10 +132,16 @@ Invariant:
 Dedicated source-pack validation prevents generic CI/indexing from being mistaken for proof of VERIFIED source/fact semantics.
 
 ### TF-0075 — Security Primary-Source Proof-Channel Hardening ✅ BOUNDED
-The source-pack proof model now supports the official consolidated-law channel without opening trust to arbitrary mirrors. Regression tests protect the boundary; duplicate stale truth was removed; and a full-CI-discovered YAML defect was repaired.
+The source-pack proof model supports the official consolidated-law channel without opening trust to arbitrary mirrors. Regression tests protect the boundary; duplicate stale truth was removed; and a full-CI-discovered YAML defect was repaired.
 
 Invariant:
 `OFFICIAL SOURCE CHANNEL != VERIFIED APPLICABILITY != EXPERT READINESS`.
+
+### TF-0076 — D3 Applicability Fail-Closed ✅ BOUNDED
+The D3 runtime now distinguishes an applicability evidence category from an actual resolved applicability determination. `UNRESOLVED` fails closed even when independent review and approval flags are present.
+
+Invariant:
+`APPLICABILITY EVIDENCE PRESENT != APPLICABILITY RESOLVED != OBLIGATION APPLIES`.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — verifier can force explicit implementation rework.
@@ -148,6 +158,7 @@ Invariant:
 - official publication evidence and official consolidated legal text are distinct proof channels and must not be conflated;
 - concurrent corpus progress must be re-read before committing a new canonical artifact; a fresher canonical slice wins over a redundant local addition;
 - a positive statutory duty must not be treated as concretely applicable until explicit exceptions are evaluated;
+- evidence-category presence is not equivalent to a completed professional determination;
 - repository-wide CI can expose integrity defects outside the narrow changed subsystem and those defects remain part of completion evidence.
 
 ## CURRENT BLOCKERS / OPEN RISKS
@@ -162,17 +173,19 @@ Most relevant:
 - `RISK-0011` — **MITIGATING**: Gemini-specific mapping/auth/data-egress behavior is locally tested, but no authorized real provider inference has yet been admitted as evidence.
 
 Security product blockers:
-- the zero-strict-VERIFIED baseline is no longer current: the canonical 152-FZ slice has 19 VERIFIED requirements;
-- general expert readiness remains blocked by corpus breadth, primary-source/version-chain strengthening, Article 22 part 2 exception logic, exact KoAP mappings, additional P0 families, applicability/control/evidence mappings and expert review;
-- the run-02 scorecard marks four P0 families NOT_REGISTERED: GOST, classification/categorization, threat methodology/catalogs, and risk methods.
+- the canonical 152-FZ slice has 19 VERIFIED requirements but general expert readiness remains blocked;
+- Article 22 part 2 exception logic has not yet been atomized/verified into a substantive applicability decision path;
+- exact KoAP consequence mappings remain unverified;
+- corpus breadth, additional P0 families, applicability/control/evidence mappings and expert review remain incomplete;
+- four P0 families remain NOT_REGISTERED: GOST, classification/categorization, threat methodology/catalogs, and risk methods.
 
 ## PARALLEL ACTIVE PRIORITIES
 
 ### A. Security Knowledge — KNOWLEDGE_CORE
 Immediate evidence-producing action:
-**exercise the current canonical 152-FZ VERIFIED slice through one bounded D3 professional decision path**, including a negative case where unresolved Article 22 part 2 exceptions force abstention/fail-closed.
+**atomize and verify the Article 22 part 2 exception/applicability logic, then run a case-specific D3 determination through the now fail-closed PX00 gate**.
 
-Then atomize Article 22 part 2 exception/applicability logic, verify exact current KoAP personal-data offence parts before consequence links are created, and continue the missing P0 families without lowering proof floors.
+Then verify exact current KoAP personal-data offence parts before consequence links are created, and continue missing P0 families without lowering proof floors.
 
 ### B. SUMMIT-FFB-02 — PX00
 Done:
