@@ -48,5 +48,8 @@ jobs:
       - name: Scan Git-tracked files for secret leakage
         run: python -m px00.secret_hygiene .
 
+      - name: Validate protected repository surfaces
+        run: python -m px00.repository_structure_guard
+
       - name: Validate PX00 repository contracts
         run: python -m px00 .
