@@ -23,7 +23,7 @@ Current summit: **SUMMIT-FFB-02 — FIRST GOVERNED LIVE EXECUTOR 🟡 OPEN**.
 Current path:
 `executor boundary → lifecycle/risk gates → secret/data-egress boundary → concrete Gemini driver/profile ✅ → one authorized real inference ⏭ → verifier → Socrates → ARGUS`.
 
-Latest generation: **`TF-0075 — First VERIFIED Article 22 Requirement`**.
+Latest generation: **`TF-0075 — Security Primary-Source Proof-Channel Hardening`**.
 
 ### Product portfolio
 Canonical product/domain planning lives in `VictorKVS/KNOWLEDGE_CORE`:
@@ -53,26 +53,27 @@ TF-0072 established the strict atomic requirement verification floor:
 
 TF-0074 added a dedicated Security source-pack CI gate for `security-knowledge/corpus/**/*source-pack*.yaml|yml`.
 
-TF-0075 closes the **zero strict VERIFIED atom** blocker for one deliberately narrow legal slice:
-- source: Federal Law 152-FZ, current official consolidated text;
-- atom: Article 22 part 1;
-- locator: `Article 22, part 1`;
-- requirement: notify the competent authority before beginning personal-data processing;
-- applicability boundary: only when no Article 22 part 2 exception applies;
-- D3 materiality recorded;
-- actor, trigger, action, deadline boundary and evidence expectations recorded;
-- form mapping to Roskomnadzor Order 180/2022 recorded;
-- unresolved part 2 exceptions are explicitly fail-closed rather than guessed.
+A concurrent KNOWLEDGE_CORE generation then added the current canonical `security-knowledge/legislation/requirements/152-fz-core-operator-obligations-verified.yaml` slice:
+- **19 strict VERIFIED requirements** from Articles 18.1, 19, 21, 22 and 22.1;
+- checked revision/effective date: **2026-07-26**;
+- Article 22 part 1 remains conditional on part 2 exceptions;
+- Article 22 part 7 change/termination clocks are separately represented;
+- exact KoAP consequence mappings are deliberately not asserted yet;
+- the audit scorecard remains `expert_ready: false`.
 
-While creating the atom, the source-pack validator exposed and corrected a proof-model defect: VERIFIED legacy federal law could not use the official consolidated-text channel. The validator now distinguishes modern official publication metadata at `publication.pravo.gov.ru` from official consolidated legal text at `ips.pravo.gov.ru`, requires `edition_as_of`, and rejects arbitrary mirrors. Regression tests cover acceptance and rejection paths.
-
-`Security Source Pack Gate` run 6 on KNOWLEDGE_CORE commit `b9e6fb9d8cc764fa34d9c6e1f3d4807044a0fc89` passed both regression tests and corpus validation.
+TF-0075 hardened the proof channel around that progress instead of creating a second truth store:
+- source-pack verification now distinguishes modern official publication metadata at `publication.pravo.gov.ru` from official consolidated legal text at `ips.pravo.gov.ru`;
+- official consolidated text requires `edition_as_of`;
+- arbitrary mirrors remain rejected;
+- regression tests cover acceptance of the official IPS channel and rejection of a non-official host;
+- a one-atom Article 22 pack created during the run was removed after the fresher canonical 19-atom requirement slice appeared, preventing split/stale truth;
+- full repository CI exposed invalid YAML in the run-02 coverage scorecard; the YAML was repaired rather than bypassed.
 
 Current professional Security D3 state:
-**READY_FOR_ONE_BOUNDED_D3_TEST_SLICE**, not general expert readiness.
+**READY_FOR_ONE_BOUNDED_D3_TEST SLICE, NOT GENERAL EXPERT READINESS**.
 
 Important distinction:
-`VERIFIED ATOM != CASE APPLICABILITY DECISION != EXPERT_READY`.
+`VERIFIED REQUIREMENT != CASE APPLICABILITY DECISION != EXPERT_READY`.
 
 ## CROSS-REPOSITORY KNOWLEDGE BOUNDARY
 Status: **PROVEN ✅ M1 BOUNDED**.
@@ -124,13 +125,13 @@ Invariant:
 `DRIVER READY != LIVE CALL PROVEN != SUMMIT ACCEPTED`.
 
 ### TF-0074 — Security Source-Pack CI Gate ✅ BOUNDED
-Dedicated source-pack validation now prevents generic CI/indexing from being mistaken for proof of VERIFIED source/fact semantics.
+Dedicated source-pack validation prevents generic CI/indexing from being mistaken for proof of VERIFIED source/fact semantics.
 
-### TF-0075 — First VERIFIED Article 22 Requirement ✅ BOUNDED
-First strict VERIFIED Security atom now exists with primary official proof, bounded applicability and D3 metadata. The generation also added regression-tested support for the official consolidated-law source channel.
+### TF-0075 — Security Primary-Source Proof-Channel Hardening ✅ BOUNDED
+The source-pack proof model now supports the official consolidated-law channel without opening trust to arbitrary mirrors. Regression tests protect the boundary; duplicate stale truth was removed; and a full-CI-discovered YAML defect was repaired.
 
 Invariant:
-`VERIFIED ATOM != CONCRETE CASE DECISION != EXPERT READINESS`.
+`OFFICIAL SOURCE CHANNEL != VERIFIED APPLICABILITY != EXPERT READINESS`.
 
 ## FAILURE / LEARNING MEMORY
 - `FFB-FP-0001 VERIFICATION_REWORK_REQUIRED` — verifier can force explicit implementation rework.
@@ -145,7 +146,9 @@ Invariant:
 - provider-neutrality must be tested against a real provider contract, not inferred from naming;
 - a specialized proof gate must select only the artifact class whose semantics it actually validates;
 - official publication evidence and official consolidated legal text are distinct proof channels and must not be conflated;
-- a positive statutory duty must not be treated as concretely applicable until explicit exceptions are evaluated.
+- concurrent corpus progress must be re-read before committing a new canonical artifact; a fresher canonical slice wins over a redundant local addition;
+- a positive statutory duty must not be treated as concretely applicable until explicit exceptions are evaluated;
+- repository-wide CI can expose integrity defects outside the narrow changed subsystem and those defects remain part of completion evidence.
 
 ## CURRENT BLOCKERS / OPEN RISKS
 PX00 remains a bounded reference implementation, not production maturity.
@@ -158,18 +161,18 @@ Most relevant:
 - `RISK-0010` — governed rework proven only in bounded in-memory reference harness;
 - `RISK-0011` — **MITIGATING**: Gemini-specific mapping/auth/data-egress behavior is locally tested, but no authorized real provider inference has yet been admitted as evidence.
 
-Security product blocker changed:
-- the baseline zero-strict-VERIFIED requirement blocker is removed for **one narrow Article 22 part 1 slice**;
-- general Security expert readiness remains blocked by corpus breadth, exception atomization, applicability, evidence/control mappings and expert review;
-- Article 22 part 2 must be resolved before asserting a concrete no-notification exception.
+Security product blockers:
+- the zero-strict-VERIFIED baseline is no longer current: the canonical 152-FZ slice has 19 VERIFIED requirements;
+- general expert readiness remains blocked by corpus breadth, primary-source/version-chain strengthening, Article 22 part 2 exception logic, exact KoAP mappings, additional P0 families, applicability/control/evidence mappings and expert review;
+- the run-02 scorecard marks four P0 families NOT_REGISTERED: GOST, classification/categorization, threat methodology/catalogs, and risk methods.
 
 ## PARALLEL ACTIVE PRIORITIES
 
 ### A. Security Knowledge — KNOWLEDGE_CORE
 Immediate evidence-producing action:
-**exercise the new Article 22 part 1 atom through one bounded D3 professional decision path**, including a negative case where unresolved part 2 exceptions force abstention/fail-closed.
+**exercise the current canonical 152-FZ VERIFIED slice through one bounded D3 professional decision path**, including a negative case where unresolved Article 22 part 2 exceptions force abstention/fail-closed.
 
-Then continue atomization of Article 22 parts 2, 3 and 7, and map consequences/evidence without lowering the proof floor.
+Then atomize Article 22 part 2 exception/applicability logic, verify exact current KoAP personal-data offence parts before consequence links are created, and continue the missing P0 families without lowering proof floors.
 
 ### B. SUMMIT-FFB-02 — PX00
 Done:
