@@ -56,6 +56,13 @@ Added exactly one complexity over S6: task executors are selected from an explic
 
 Scenario contract: `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md`.
 
-Verdict at journal update: `S7 VERIFY` pending green Contract Validation for the S7 repository generation. No Tree_F/ADR change is justified by this bounded product proof alone.
+Verdict: `S7 PASS`; S7 generation `PX00 Contract Validation #616` green. No Tree_F/ADR change is justified by this bounded product proof alone.
 
-Next permitted rung only after S7 green: S8 — replaceable executor and failure recovery.
+## 2026-08-14 — FFBJ-0034 — S8 replaceable executor + failure recovery
+Added exactly one complexity over S7: the primary eligible executor deterministically fails and may be explicitly replaced by another eligible executor under the unchanged task/capability/acceptance contract. Primary failure, recovery decision and rejected evidence remain append-only; replacement gets a fresh assignment and result; stale A1 verification cannot accept A2; independent verifier and Socrates review are required after recovery. Recovery cannot silently change scope, acceptance, D2 authority or become an unbounded retry loop.
+
+Scenario contract: `scenarios/S8_REPLACEABLE_EXECUTOR_FAILURE_RECOVERY_2026-08-14.md`.
+
+Verdict at journal update: `S8 VERIFY` pending green Contract Validation for the S8 repository generation. Synthetic capability fixtures are not VERIFIED professional competence. No Gemini/live executor was invoked. No Tree_F/ADR change is justified yet: this is a bounded proof of recovery semantics using existing authority/evidence principles.
+
+Next permitted rung only after S8 green: S9 — bounded external/live executor when explicitly authorized.
