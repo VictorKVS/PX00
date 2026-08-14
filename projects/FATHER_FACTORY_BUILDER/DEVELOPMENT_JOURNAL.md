@@ -49,6 +49,13 @@ Added one complexity: dependent tasks with deterministic first-attempt failure. 
 
 Scenario contract: `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md`.
 
-Verdict at journal update: `S6 VERIFY` pending green Contract Validation for the repository generation containing S6 and status updates. No Tree_F/ADR change is justified: this scenario exercises existing dependency/rework/authority principles and introduces no accepted architectural primitive.
+Verdict: `S6 PASS`; `PX00 Contract Validation #611` green. No Tree_F/ADR change is justified: this scenario exercises existing dependency/rework/authority principles and introduces no accepted architectural primitive.
 
-Next permitted rung only after S6 green: S7 — capability-based team assembly.
+## 2026-08-14 — FFBJ-0033 — S7 capability-based team assembly
+Added exactly one complexity over S6: task executors are selected from an explicit synthetic capability registry against explicit task requirements rather than hard-coded identity. Candidate evaluation and rejected candidates are evidence; missing capabilities, self-verification, Socrates independence collapse, post-hoc capability mutation, stale verification, implicit authority escalation, synthetic-to-VERIFIED promotion and live execution are fail-closed negative cases.
+
+Scenario contract: `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md`.
+
+Verdict at journal update: `S7 VERIFY` pending green Contract Validation for the S7 repository generation. No Tree_F/ADR change is justified by this bounded product proof alone.
+
+Next permitted rung only after S7 green: S8 — replaceable executor and failure recovery.
