@@ -6,8 +6,8 @@ Project: `PROJECT-FFB-0001`
 
 ## Product scenario ladder
 
-Current green proven rung: **S5 — PASS**.
-Current candidate rung: **S6 — VERIFY**.
+Current green proven rung: **S6 — PASS**.
+Current candidate rung: **S7 — VERIFY**.
 
 Evidence chain:
 - S0 `scenarios/S0_SINGLE_BOUNDED_TASK_2026-08-13.md` — PASS;
@@ -16,19 +16,20 @@ Evidence chain:
 - S3 `scenarios/S3_SOCRATES_CHALLENGE_2026-08-13.md` — PASS, Contract Validation #606 green;
 - S4 `scenarios/S4_MULTI_ROLE_HANDOFF_2026-08-13.md` — PASS, Contract Validation #609 green;
 - S5 `scenarios/S5_D2_ALTERNATIVES_TRADEOFF_2026-08-14.md` — PASS, Contract Validation #610 green;
-- S6 `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md` — VERIFY pending green validation of current S6 generation.
+- S6 `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md` — PASS, Contract Validation #611 green;
+- S7 `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md` — VERIFY pending green validation of the S7 generation.
 
-S0–S6 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
+S0–S7 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
 
-### Current gate — S6 dependent tasks + replanning
+### Current gate — S7 capability-based team assembly
 
-One new complexity over S5: a dependent task graph with a deterministic failed build, explicit append-only replan, fresh corrected attempt and fresh independent verification.
+One new complexity over S6: bounded executors are selected from an explicit synthetic capability registry according to task requirements rather than hard-coded identity.
 
-Required proof: dependency gates remain fail-closed; failed evidence survives; replanning does not weaken acceptance; stale verification cannot accept a new attempt; material scope/cost/risk/time changes remain under D2 authority; replay contains failed and accepted paths.
+Required proof: required capabilities are explicit; candidate evaluation and rejected candidates survive replay; missing capability is fail-closed; verifier/Socrates independence survives capability selection; capability match never grants authority; stale capability/verification evidence cannot accept a changed assignment or artifact; synthetic competence is never promoted to VERIFIED professional competence.
 
-Next permitted rung only after S6 green: **S7 — capability-based team assembly**.
+Next permitted rung only after S7 green: **S8 — replaceable executor and failure recovery**.
 
-Not yet proven by this ladder: S7 capability team assembly, S8 executor replacement/failure recovery, S9 authorized live executor, S10 closed project lifecycle.
+Not yet proven by this ladder: S8 executor replacement/failure recovery, S9 authorized live executor, S10 closed project lifecycle.
 
 ## Existing platform state retained
 
