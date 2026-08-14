@@ -6,8 +6,8 @@ Project: `PROJECT-FFB-0001`
 
 ## Product scenario ladder
 
-Current green proven rung: **S6 — PASS**.
-Current candidate rung: **S7 — VERIFY**.
+Current green proven rung: **S7 — PASS**.
+Current candidate rung: **S8 — VERIFY**.
 
 Evidence chain:
 - S0 `scenarios/S0_SINGLE_BOUNDED_TASK_2026-08-13.md` — PASS;
@@ -17,19 +17,20 @@ Evidence chain:
 - S4 `scenarios/S4_MULTI_ROLE_HANDOFF_2026-08-13.md` — PASS, Contract Validation #609 green;
 - S5 `scenarios/S5_D2_ALTERNATIVES_TRADEOFF_2026-08-14.md` — PASS, Contract Validation #610 green;
 - S6 `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md` — PASS, Contract Validation #611 green;
-- S7 `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md` — VERIFY pending green validation of the S7 generation.
+- S7 `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md` — PASS, S7 generation Contract Validation #616 green;
+- S8 `scenarios/S8_REPLACEABLE_EXECUTOR_FAILURE_RECOVERY_2026-08-14.md` — VERIFY pending green validation of the S8 generation.
 
-S0–S7 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
+S0–S8 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
 
-### Current gate — S7 capability-based team assembly
+### Current gate — S8 replaceable executor and failure recovery
 
-One new complexity over S6: bounded executors are selected from an explicit synthetic capability registry according to task requirements rather than hard-coded identity.
+One new complexity over S7: a bounded executor may fail and be explicitly replaced by another eligible executor while preserving the original acceptance contract, authority boundary, failed evidence and replay lineage.
 
-Required proof: required capabilities are explicit; candidate evaluation and rejected candidates survive replay; missing capability is fail-closed; verifier/Socrates independence survives capability selection; capability match never grants authority; stale capability/verification evidence cannot accept a changed assignment or artifact; synthetic competence is never promoted to VERIFIED professional competence.
+Required proof: primary failure is explicit and append-only; replacement is capability-eligible under unchanged requirements; recovery cannot weaken acceptance or mutate authority; fresh assignment/result/verifier/Socrates evidence is required; stale A1 evidence cannot accept A2; retry is bounded; synthetic competence is never promoted to VERIFIED professional competence.
 
-Next permitted rung only after S7 green: **S8 — replaceable executor and failure recovery**.
+Next permitted rung only after S8 green: **S9 — bounded external/live executor when authorized**.
 
-Not yet proven by this ladder: S8 executor replacement/failure recovery, S9 authorized live executor, S10 closed project lifecycle.
+Not yet proven by this ladder: S9 authorized live executor, S10 closed project lifecycle.
 
 ## Existing platform state retained
 
