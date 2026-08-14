@@ -6,8 +6,8 @@ Project: `PROJECT-FFB-0001`
 
 ## Product scenario ladder
 
-Current green proven rung: **S7 — PASS**.
-Current candidate rung: **S8 — VERIFY**.
+Current green proven rung: **S8 — PASS**.
+Current candidate rung: **S9 — BLOCKED** on explicit live authorization/runtime credential proof.
 
 Evidence chain:
 - S0 `scenarios/S0_SINGLE_BOUNDED_TASK_2026-08-13.md` — PASS;
@@ -18,19 +18,22 @@ Evidence chain:
 - S5 `scenarios/S5_D2_ALTERNATIVES_TRADEOFF_2026-08-14.md` — PASS, Contract Validation #610 green;
 - S6 `scenarios/S6_DEPENDENT_TASKS_REPLANNING_2026-08-14.md` — PASS, Contract Validation #611 green;
 - S7 `scenarios/S7_CAPABILITY_BASED_TEAM_ASSEMBLY_2026-08-14.md` — PASS, S7 generation Contract Validation #616 green;
-- S8 `scenarios/S8_REPLACEABLE_EXECUTOR_FAILURE_RECOVERY_2026-08-14.md` — VERIFY pending green validation of the S8 generation.
+- S8 `scenarios/S8_REPLACEABLE_EXECUTOR_FAILURE_RECOVERY_2026-08-14.md` — PASS, S8 generation Contract Validation #619 green;
+- S9 `scenarios/S9_BOUNDED_EXTERNAL_LIVE_EXECUTOR_2026-08-14.md` — BLOCKED: authorized PUBLIC-only live profile/runtime credential availability not proven; no live evidence simulated.
 
-S0–S8 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
+S0–S9 use synthetic/test professional material only where professional KB is not ready. No scenario-ladder artifact promotes synthetic content to VERIFIED professional knowledge.
 
-### Current gate — S8 replaceable executor and failure recovery
+### Current gate — S9 bounded external/live executor
 
-One new complexity over S7: a bounded executor may fail and be explicitly replaced by another eligible executor while preserving the original acceptance contract, authority boundary, failed evidence and replay lineage.
+One new complexity over S8: cross the external/live trust boundary only when explicit D2 authorization, PUBLIC-only payload/profile and actual runtime credential availability are proven before execution.
 
-Required proof: primary failure is explicit and append-only; replacement is capability-eligible under unchanged requirements; recovery cannot weaken acceptance or mutate authority; fresh assignment/result/verifier/Socrates evidence is required; stale A1 evidence cannot accept A2; retry is bounded; synthetic competence is never promoted to VERIFIED professional competence.
+Required proof for PASS: bounded live authorization; PUBLIC-only classification; allowed provider/profile; runtime credential availability without disclosure; fixed scope/cost/timeout/retry bounds; fresh live result/failure evidence; fresh independent verifier and Socrates evidence; append-only replay.
 
-Next permitted rung only after S8 green: **S9 — bounded external/live executor when authorized**.
+Current result is correctly fail-closed: **BLOCKED**. Absence of live authorization/credential evidence is not replaced by mocks and does not unlock S10.
 
-Not yet proven by this ladder: S9 authorized live executor, S10 closed project lifecycle.
+Next permitted rung only after S9 GREEN: **S10 — closed GOAL→PROJECT→PLAN→TASKS→RESULTS→ACCEPTANCE→PROJECT CLOSE with full trace/replay**.
+
+Not yet proven by this ladder: S9 authorized live executor PASS, S10 closed project lifecycle.
 
 ## Existing platform state retained
 
