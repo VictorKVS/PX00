@@ -63,6 +63,15 @@ Added exactly one complexity over S7: the primary eligible executor deterministi
 
 Scenario contract: `scenarios/S8_REPLACEABLE_EXECUTOR_FAILURE_RECOVERY_2026-08-14.md`.
 
-Verdict at journal update: `S8 VERIFY` pending green Contract Validation for the S8 repository generation. Synthetic capability fixtures are not VERIFIED professional competence. No Gemini/live executor was invoked. No Tree_F/ADR change is justified yet: this is a bounded proof of recovery semantics using existing authority/evidence principles.
+Verdict: `S8 PASS`; S8 repository generation `PX00 Contract Validation #619` green. Synthetic capability fixtures are not VERIFIED professional competence. No Gemini/live executor was invoked. No Tree_F/ADR change is justified: this is a bounded proof of recovery semantics using existing authority/evidence principles.
 
-Next permitted rung only after S8 green: S9 — bounded external/live executor when explicitly authorized.
+## 2026-08-14 — FFBJ-0035 — S9 bounded external/live executor gate
+Added exactly one complexity over S8: an external/live executor may be used only after explicit D2 authorization, PUBLIC-only payload/profile classification and actual runtime credential availability are proven. The scenario fixes scope/cost/timeout/retry bounds before execution, requires fresh provider evidence plus independent verifier and Socrates review, and forbids mocks/offline output from being labelled live evidence.
+
+Scenario contract: `scenarios/S9_BOUNDED_EXTERNAL_LIVE_EXECUTOR_2026-08-14.md`.
+
+Observed result: predecessor S8 is GREEN, but this execution context does not contain proof of an explicitly authorized PUBLIC-only Gemini/live profile together with an actually available runtime credential. No provider call was attempted and no live evidence was simulated.
+
+Verdict: `S9 BLOCKED` — correct fail-closed outcome. S10 remains locked. No Tree_F/ADR change is justified by a blocked live-boundary attempt.
+
+Next permitted rung only after S9 green: S10 — closed GOAL→PROJECT→PLAN→TASKS→RESULTS→ACCEPTANCE→PROJECT CLOSE with full trace/replay.
